@@ -8,15 +8,15 @@ import javax.persistence.ManyToOne;
 /**
  * Created by bandr on 05.01.2016.
  */
-@Entity
+//@Entity
 public class Comment {
-    @Id
-    @GeneratedValue
+//    @Id
+//    @GeneratedValue
     private long id;
     private String username;
     private int rating;
     private String message;
-    @ManyToOne
+//    @ManyToOne
     private Book book;
 
     public String getUsername() {

@@ -19,10 +19,10 @@ public class Book {
     private String publisher;
     @Column(columnDefinition = "datetime default NOW()")
     private Date createDate;
-    @ManyToMany
-    private List<Author> authors;
-    @OneToMany
-    private List<Comment> comments;
+//    @ManyToMany
+//    private List<Author> authors;
+//    @OneToMany
+//    private List<Comment> comments;
 
     public String getName() {
         return name;
@@ -62,5 +62,10 @@ public class Book {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    @Override
+    public String toString(){
+        return this.name + " " + this.iSBN + " " + this.yearPublished;
     }
 }

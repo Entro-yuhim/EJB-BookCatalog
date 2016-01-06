@@ -6,7 +6,6 @@ import java.util.List;
 /**
  * Created by bandr on 05.01.2016.
  */
-@Entity
 public class Author {
     private int id;
     private String firstName;
