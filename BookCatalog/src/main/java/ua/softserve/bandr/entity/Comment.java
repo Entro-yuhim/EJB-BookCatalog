@@ -1,22 +1,22 @@
 package ua.softserve.bandr.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+
+import javax.persistence.*;
 
 /**
  * Created by bandr on 05.01.2016.
  */
-//@Entity
+@Entity
 public class Comment {
-//    @Id
-//    @GeneratedValue
+    @Id
+    @GeneratedValue
     private long id;
     private String username;
     private int rating;
     private String message;
-//    @ManyToOne
+    @ManyToOne
     private Book book;
 
     public String getUsername() {

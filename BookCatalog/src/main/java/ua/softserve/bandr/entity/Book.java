@@ -1,5 +1,8 @@
 package ua.softserve.bandr.entity;
 
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -17,12 +20,13 @@ public class Book {
     @Column(unique = true)
     private String iSBN;
     private String publisher;
-    @Column(columnDefinition = "datetime default NOW()")
+    @Column(columnDefinition = "timestamp default NOW()")
     private Date createDate;
-//    @ManyToMany
-//    private List<Author> authors;
-//    @OneToMany
-//    private List<Comment> comments;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Author> authors;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name="book_id")
+    private List<Comment> comments;
 
     public String getName() {
         return name;
@@ -67,5 +71,30 @@ public class Book {
     @Override
     public String toString(){
         return this.name + " " + this.iSBN + " " + this.yearPublished;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public List<Author> getAuthors() {
+
+        return authors;
+    }
+
+    public void setAuthors(List<Author> authors) {
+        this.authors = authors;
     }
 }
