@@ -9,13 +9,14 @@ import java.util.List;
 @Entity
 public class Author {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_id_generator")
+    @SequenceGenerator(name = "author_id_generator", sequenceName = "author_id_seq", allocationSize = 1)
     private int id;
     private String firstName;
     private String lastName;
 
     @ManyToMany(mappedBy = "authors", cascade = CascadeType.ALL)
-    private List<Book> booksAuthored;
+    private List<Book> books;
 
     public int getId() {
         return id;
@@ -41,11 +42,11 @@ public class Author {
         this.lastName = lastName;
     }
 
-    public List<Book> getBooksAuthored() {
-        return booksAuthored;
+    public List<Book> getBooks() {
+        return books;
     }
 
-    public void setBooksAuthored(List<Book> booksAuthored) {
-        this.booksAuthored = booksAuthored;
+    public void setBooks(List<Book> booksAuthored) {
+        this.books = booksAuthored;
     }
 }

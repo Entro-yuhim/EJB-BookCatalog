@@ -8,6 +8,7 @@
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: postgresql:postgresql:9.1-901-1.jdbc4" />
+          <element id="library" level="project" name="Maven: com.google.guava:guava:19.0" />
         </element>
       </element>
       <element id="directory" name="META-INF">

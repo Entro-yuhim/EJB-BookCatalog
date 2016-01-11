@@ -1,39 +1,54 @@
 package ua.softserve.bandr.entity;
 
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
-
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.OptionalDouble;
 
 /**
  * Created by bandr on 05.01.2016.
  */
 @Entity
+@NamedQueries(
+        @NamedQuery(name = "Books.getAll",
+                query = "SELECT b FROM Book b")
+)
 public class Book {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_id_generator")
+    @SequenceGenerator(name = "book_id_generator", sequenceName = "book_id_seq", allocationSize = 1)
     private long id;
-    private String name;
+    private String title;
     private int yearPublished;
-    @Column(unique = true)
+    @Column(length = 14, unique = true)
     private String iSBN;
     private String publisher;
     @Column(columnDefinition = "timestamp default NOW()")
     private Date createDate;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Author> authors;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="book_id")
     private List<Comment> comments;
 
-    public String getName() {
-        return name;
+//    @Transient
+//    private double rating;
+//
+//    private void setRating(double rating){
+//        this.rating = rating;
+//    }
+
+    public double getRating() {
+        return comments.stream().mapToDouble(Comment::getRating).average().orElse(0);
     }
 
-    public void setName(String name) {
-        this.name = name;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public int getYearPublished() {
@@ -70,7 +85,7 @@ public class Book {
 
     @Override
     public String toString(){
-        return this.name + " " + this.iSBN + " " + this.yearPublished;
+        return this.title + " " + this.iSBN + " " + this.yearPublished;
     }
 
     public List<Comment> getComments() {

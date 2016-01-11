@@ -24,6 +24,10 @@ public class BookRepository {
         this.entityManager = entityManager;
     }
 
+    public List<Book> getBooks(){
+        return entityManager.createNamedQuery("Books.getAll", Book.class).getResultList();
+    }
+
     public void saveBook(Book book){
         System.out.println("got a book:");
         System.out.println(book);

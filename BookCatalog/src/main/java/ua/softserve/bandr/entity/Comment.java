@@ -11,7 +11,8 @@ import javax.persistence.*;
 @Entity
 public class Comment {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comment_id_generator")
+    @SequenceGenerator(name = "comment_id_generator", sequenceName = "comment_id_seq", allocationSize = 1)
     private long id;
     private String username;
     private int rating;

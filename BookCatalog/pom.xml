@@ -20,16 +20,8 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>softserve-internal</groupId>
     <artifactId>bandr-ejb</artifactId>
-    <version>10.0.0-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
-
-    <licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <distribution>repo</distribution>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-        </license>
-    </licenses>
 
     <properties>
         <!-- Explicitly declaring the source encoding eliminates the following message: -->
@@ -39,6 +31,8 @@
 
         <!-- JBoss dependency versions -->
 
+
+        <version.org.richfaces>4.5.7.Final</version.org.richfaces>
         <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
 
         <!-- Define the version of the JBoss BOMs we want to import to specify tested stacks. -->
@@ -72,6 +66,22 @@
                 <version>${version.jboss.bom}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.richfaces</groupId>
+                <artifactId>richfaces</artifactId>
+                <version>${version.org.richfaces}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.richfaces.ui</groupId>
+                <artifactId>richfaces-components-ui</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.richfaces.core</groupId>
+                <artifactId>richfaces-core-impl</artifactId>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -135,6 +145,17 @@
             <groupId>postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>9.1-901-1.jdbc4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>19.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.richfaces.ui</groupId>
+            <artifactId>richfaces-components-ui</artifactId>
+            <version>4.3.7.Final</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
