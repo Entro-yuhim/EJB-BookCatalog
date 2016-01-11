@@ -1,5 +1,6 @@
 package ua.softserve.bandr.entity;
 
+import com.google.common.base.Objects;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
@@ -58,5 +59,22 @@ public class Comment {
 
     public void setBook(Book book) {
         this.book = book;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Comment comment = (Comment) o;
+        return id == comment.id &&
+                rating == comment.rating &&
+                Objects.equal(username, comment.username) &&
+                Objects.equal(message, comment.message) &&
+                Objects.equal(book, comment.book);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, username, rating, message, book);
     }
 }

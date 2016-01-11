@@ -1,5 +1,7 @@
 package ua.softserve.bandr.entity;
 
+import com.google.common.base.Objects;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -111,5 +113,23 @@ public class Book {
 
     public void setAuthors(List<Author> authors) {
         this.authors = authors;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return id == book.id &&
+                yearPublished == book.yearPublished &&
+                Objects.equal(title, book.title) &&
+                Objects.equal(iSBN, book.iSBN) &&
+                Objects.equal(publisher, book.publisher) &&
+                Objects.equal(createDate, book.createDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, title, yearPublished, iSBN, publisher, createDate);
     }
 }

@@ -1,5 +1,7 @@
 package ua.softserve.bandr.entity;
 
+import com.google.common.base.Objects;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -48,5 +50,20 @@ public class Author {
 
     public void setBooks(List<Book> booksAuthored) {
         this.books = booksAuthored;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Author author = (Author) o;
+        return id == author.id &&
+                Objects.equal(firstName, author.firstName) &&
+                Objects.equal(lastName, author.lastName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, firstName, lastName);
     }
 }

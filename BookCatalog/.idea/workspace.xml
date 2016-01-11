@@ -2,76 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d55a9a85-244d-4345-a740-66322e3932f9" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/WEB-INF/classes/ua/softserve/bandr/controller/BookController.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/WEB-INF/classes/ua/softserve/bandr/controller/BookFetcher.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/WEB-INF/classes/ua/softserve/bandr/controller/Greeter.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/WEB-INF/classes/ua/softserve/bandr/controller/NavController.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/WEB-INF/classes/ua/softserve/bandr/controller/TestController.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/WEB-INF/classes/ua/softserve/bandr/ejb/GreeterEJB.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/WEB-INF/classes/ua/softserve/bandr/ejb/persistence/BookRepository.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/WEB-INF/classes/ua/softserve/bandr/entity/Author.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/WEB-INF/classes/ua/softserve/bandr/entity/Book.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/WEB-INF/classes/ua/softserve/bandr/entity/Comment.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/WEB-INF/lib/guava-19.0.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/WEB-INF/lib/postgresql-9.1-901-1.jdbc4.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/ua/softserve/bandr/controller/BookController.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/ua/softserve/bandr/controller/BookFetcher.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/ua/softserve/bandr/controller/Greeter.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/ua/softserve/bandr/controller/NavController.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/ua/softserve/bandr/controller/TestController.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/ua/softserve/bandr/ejb/GreeterEJB.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/ua/softserve/bandr/ejb/persistence/BookRepository.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/ua/softserve/bandr/entity/Author.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/ua/softserve/bandr/entity/Book.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/ua/softserve/bandr/entity/Comment.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_guava_guava_19_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_richfaces_core_richfaces_core_api_4_3_7_Final.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_richfaces_ui_richfaces_components_api_4_3_7_Final.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_richfaces_ui_richfaces_components_ui_4_3_7_Final.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/webContexts.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/WEB-INF/web.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/database/books_authors.sql" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/database/comments.sql" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/ua/softserve/bandr/controller/BookFetcher.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/webapp/bookQuery.xhtml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/META-INF/MANIFEST.MF" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/WEB-INF/beans.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/WEB-INF/classes/META-INF/persistence.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/WEB-INF/classes/books_authors.sql" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/WEB-INF/classes/comments.sql" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/WEB-INF/faces-config.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/WEB-INF/hibernate-ds.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/WEB-INF/hibernatePG-ds.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/WEB-INF/table_schema.sql" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/WEB-INF/web.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/bookPage.xhtml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/bookQuery.xhtml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/bookSubmit.xhtml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/greeter.xhtml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/index.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/page1.xhtml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/page2.xhtml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/bandr-ejb/table_schema.sql" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/META-INF/persistence.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/books_authors.sql" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/comments.sql" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/test-classes/arquillian.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/artifacts/wildfly_ejb_in_war_war_exploded.xml" afterPath="$PROJECT_DIR$/.idea/artifacts/wildfly_ejb_in_war_war_exploded.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ua/softserve/bandr/ejb/persistence/BookRepository.java" afterPath="$PROJECT_DIR$/src/main/java/ua/softserve/bandr/ejb/persistence/BookRepository.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ua/softserve/bandr/entity/Author.java" afterPath="$PROJECT_DIR$/src/main/java/ua/softserve/bandr/entity/Author.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ua/softserve/bandr/entity/Book.java" afterPath="$PROJECT_DIR$/src/main/java/ua/softserve/bandr/entity/Book.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ua/softserve/bandr/entity/Comment.java" afterPath="$PROJECT_DIR$/src/main/java/ua/softserve/bandr/entity/Comment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/hibernatePG-ds.xml" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/hibernatePG-ds.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/bookPage.xhtml" afterPath="$PROJECT_DIR$/src/main/webapp/bookPage.xhtml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/bookSubmit.xhtml" afterPath="$PROJECT_DIR$/src/main/webapp/bookSubmit.xhtml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/greeter.xhtml" afterPath="$PROJECT_DIR$/src/main/webapp/greeter.xhtml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/urllib2.py" afterPath="$PROJECT_DIR$/urllib2.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wildfly-ejb-in-war.iml" afterPath="$PROJECT_DIR$/wildfly-ejb-in-war.iml" />
     </list>
     <ignored path="BookCatalog.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -121,8 +55,11 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/ua/softserve/bandr/entity/Author.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-              <folding />
+              <caret line="48" column="5" selection-start-line="48" selection-start-column="5" selection-end-line="48" selection-end-column="5" />
+              <folding>
+                <element signature="e#1559#1560#0" expanded="true" />
+                <element signature="e#1623#1624#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -141,30 +78,34 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/ua/softserve/bandr/entity/Book.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+              <caret line="118" column="37" selection-start-line="118" selection-start-column="37" selection-end-line="118" selection-end-column="37" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#3168#3169#0" expanded="true" />
+                <element signature="e#3262#3263#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Comment.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Comment.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/ua/softserve/bandr/entity/Comment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.8277027">
+              <caret line="77" column="27" selection-start-line="77" selection-start-column="27" selection-end-line="77" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#1789#1790#0" expanded="true" />
+                <element signature="e#1865#1866#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="books_authors.sql" pinned="false" current-in-tab="true">
+      <file leaf-file-name="books_authors.sql" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/database/books_authors.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.33277026">
+            <state vertical-scroll-proportion="0.0">
               <caret line="122" column="2" selection-start-line="122" selection-start-column="2" selection-end-line="122" selection-end-column="2" />
               <folding />
             </state>
@@ -226,16 +167,16 @@
         <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/table_schema.sql" />
         <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/hibernatePG-ds.xml" />
         <option value="$PROJECT_DIR$/urllib2.py" />
-        <option value="$PROJECT_DIR$/src/main/java/ua/softserve/bandr/entity/Comment.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ua/softserve/bandr/entity/Author.java" />
         <option value="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" />
         <option value="$PROJECT_DIR$/src/main/webapp/greeter.xhtml" />
-        <option value="$PROJECT_DIR$/src/main/java/ua/softserve/bandr/entity/Book.java" />
         <option value="$PROJECT_DIR$/src/main/java/ua/softserve/bandr/ejb/persistence/BookRepository.java" />
         <option value="$PROJECT_DIR$/src/main/java/ua/softserve/bandr/controller/BookFetcher.java" />
         <option value="$PROJECT_DIR$/database/comments.sql" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/webapp/bookQuery.xhtml" />
+        <option value="$PROJECT_DIR$/src/main/java/ua/softserve/bandr/entity/Author.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ua/softserve/bandr/entity/Book.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ua/softserve/bandr/entity/Comment.java" />
       </list>
     </option>
   </component>
@@ -990,12 +931,19 @@
       <workItem from="1452094370265" duration="100000" />
       <workItem from="1452244448163" duration="14466000" />
       <workItem from="1452271368360" duration="932000" />
-      <workItem from="1452501975756" duration="15058000" />
+      <workItem from="1452501975756" duration="15889000" />
     </task>
+    <task id="LOCAL-00001" summary="Implemented basic fetching, attempted to use RF table.">
+      <created>1452527903098</created>
+      <option name="number" value="00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1452527903098</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="54892000" />
+    <option name="totallyTimeSpent" value="55723000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1008,7 +956,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32467532" sideWeight="0.5021322" order="7" side_tool="true" content_ui="tabs" />
@@ -1023,17 +971,17 @@
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44588745" sideWeight="0.4978678" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32900432" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32900432" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32900432" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32900432" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39935064" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25324675" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32900432" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19509594" sideWeight="0.4931973" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19509594" sideWeight="0.4931973" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19509594" sideWeight="0.50680274" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32900432" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32900432" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="EJB" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1055,14 +1003,15 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <option name="LAST_COMMIT_MESSAGE" value="" />
+    <MESSAGE value="Implemented basic fetching, attempted to use RF table." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented basic fetching, attempted to use RF table." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/ua/softserve/bandr/entity/Book.java</url>
-          <line>46</line>
+          <line>48</line>
           <properties />
           <option name="timeStamp" value="21" />
         </line-breakpoint>
@@ -1079,23 +1028,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/greeter.xhtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="32" column="30" selection-start-line="32" selection-start-column="30" selection-end-line="32" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ua/softserve/bandr/entity/Book.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/hibernate/javax/persistence/hibernate-jpa-2.1-api/1.0.0.Final/hibernate-jpa-2.1-api-1.0.0.Final.jar!/javax/persistence/FetchType.class">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-2.5185184">
@@ -1441,6 +1373,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/database/books_authors.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="122" column="2" selection-start-line="122" selection-start-column="2" selection-end-line="122" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/bookQuery.xhtml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-5.8846154">
@@ -1452,36 +1392,54 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/ua/softserve/bandr/entity/Author.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-          <folding />
+          <caret line="48" column="5" selection-start-line="48" selection-start-column="5" selection-end-line="48" selection-end-column="5" />
+          <folding>
+            <element signature="e#1559#1560#0" expanded="true" />
+            <element signature="e#1623#1624#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ua/softserve/bandr/entity/Book.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+          <caret line="118" column="37" selection-start-line="118" selection-start-column="37" selection-end-line="118" selection-end-column="37" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#3168#3169#0" expanded="true" />
+            <element signature="e#3262#3263#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_65/src.zip!/java/util/Arrays.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33277026">
+          <caret line="4138" column="22" selection-start-line="4138" selection-start-column="22" selection-end-line="4138" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/19.0/guava-19.0.jar!/com/google/common/base/Objects.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.49911505">
+          <caret line="30" column="12" selection-start-line="30" selection-start-column="12" selection-end-line="30" selection-end-column="12" />
+          <folding>
+            <element signature="e#692#693#0" expanded="true" />
+            <element signature="e#739#740#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ua/softserve/bandr/entity/Comment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.8277027">
+          <caret line="77" column="27" selection-start-line="77" selection-start-column="27" selection-end-line="77" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#1789#1790#0" expanded="true" />
+            <element signature="e#1865#1866#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/books_authors.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33277026">
-          <caret line="122" column="2" selection-start-line="122" selection-start-column="2" selection-end-line="122" selection-end-column="2" />
-          <folding />
         </state>
       </provider>
     </entry>
