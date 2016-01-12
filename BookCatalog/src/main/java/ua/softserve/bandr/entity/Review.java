@@ -1,8 +1,6 @@
 package ua.softserve.bandr.entity;
 
 import com.google.common.base.Objects;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
 
@@ -10,7 +8,7 @@ import javax.persistence.*;
  * Created by bandr on 05.01.2016.
  */
 @Entity
-public class Comment {
+public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comment_id_generator")
     @SequenceGenerator(name = "comment_id_generator", sequenceName = "comment_id_seq", allocationSize = 1)
@@ -65,12 +63,12 @@ public class Comment {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Comment comment = (Comment) o;
-        return id == comment.id &&
-                rating == comment.rating &&
-                Objects.equal(username, comment.username) &&
-                Objects.equal(message, comment.message) &&
-                Objects.equal(book, comment.book);
+        Review review = (Review) o;
+        return id == review.id &&
+                rating == review.rating &&
+                Objects.equal(username, review.username) &&
+                Objects.equal(message, review.message) &&
+                Objects.equal(book, review.book);
     }
 
     @Override
