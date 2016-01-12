@@ -194,10 +194,10 @@ SELECT pg_catalog.setval('book_id_seq', 49, true);
 --
 -- TOC entry 1953 (class 0 OID 42758856)
 -- Dependencies: 171
--- Data for Name: comment; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: review; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY comment (id, message, rating, username, book_id) FROM stdin;
+COPY review (id, message, rating, username, book_id) FROM stdin;
 \.
 
 

@@ -5,11 +5,11 @@
     <datasource jndi-name="java:jboss/datasources/Hibernate4DSPG"
                 pool-name="hibernate4-postgres" enabled="true"
                 use-java-context="true">
-        <connection-url>jdbc:postgresql://localhost:5432/book_catalog</connection-url>
-        <driver>bandr-ejb.war_org.postgresql.Driver_9_1</driver>
+        <connection-url>jdbc:oracle:thin:@localhost:1521:oracle</connection-url>
+        <driver>oracle</driver>
         <security>
-            <user-name>postgres</user-name>
-            <password>postgres</password>
+            <user-name>oracle</user-name>
+            <password>oracle</password>
         </security>
     </datasource>
 </datasources>

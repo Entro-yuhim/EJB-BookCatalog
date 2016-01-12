@@ -3,9 +3,9 @@ package ua.softserve.bandr.entity;
 import com.google.common.base.Objects;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.OptionalDouble;
 
 /**
  * Created by bandr on 05.01.2016.
@@ -21,17 +21,20 @@ public class Book {
     @SequenceGenerator(name = "book_id_generator", sequenceName = "book_id_seq", allocationSize = 1)
     private long id;
     private String title;
-    private int yearPublished;
+    @Temporal(TemporalType.DATE)
+    private Date yearPublished;
+
     @Column(length = 14, unique = true)
     private String iSBN;
+
     private String publisher;
-    @Column(columnDefinition = "timestamp default NOW()")
+    @Column(columnDefinition = "timestamp default CURRENT_DATE", updatable = false, insertable = false)
     private Date createDate;
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "books")
     private List<Author> authors;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="book_id")
-    private List<Comment> comments;
+    private List<Review> reviews;
 
 //    @Transient
 //    private double rating;
@@ -41,7 +44,7 @@ public class Book {
 //    }
 
     public double getRating() {
-        return comments.stream().mapToDouble(Comment::getRating).average().orElse(0);
+        return reviews.stream().mapToDouble(Review::getRating).average().orElse(0);
     }
 
 
@@ -53,11 +56,11 @@ public class Book {
         this.title = title;
     }
 
-    public int getYearPublished() {
+    public Date getYearPublished() {
         return yearPublished;
     }
 
-    public void setYearPublished(int yearPublished) {
+    public void setYearPublished(Date yearPublished) {
         this.yearPublished = yearPublished;
     }
 
@@ -90,12 +93,12 @@ public class Book {
         return this.title + " " + this.iSBN + " " + this.yearPublished;
     }
 
-    public List<Comment> getComments() {
-        return comments;
+    public List<Review> getReviews() {
+        return reviews;
     }
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 
     public long getId() {
@@ -131,5 +134,16 @@ public class Book {
     @Override
     public int hashCode() {
         return Objects.hashCode(id, title, yearPublished, iSBN, publisher, createDate);
+    }
+
+    @OneToMany(mappedBy = "book")
+    private Collection<Review> review;
+
+    public Collection<Review> getReview() {
+        return review;
+    }
+
+    public void setReview(Collection<Review> review) {
+        this.review = review;
     }
 }

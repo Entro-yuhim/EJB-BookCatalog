@@ -46,7 +46,7 @@ WITH (
 ALTER TABLE book_author
   OWNER TO postgres;
 
-CREATE TABLE comment
+CREATE TABLE review
 (
   id serial NOT NULL,
   message character varying(255),
@@ -61,5 +61,5 @@ CREATE TABLE comment
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE comment
+ALTER TABLE review
   OWNER TO postgres;

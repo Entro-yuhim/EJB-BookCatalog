@@ -7,8 +7,8 @@
     <persistence-unit name="pg_BC">
         <jta-data-source>java:jboss/datasources/Hibernate4DSPG</jta-data-source>
         <properties>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL9Dialect" />
-            <property name="hibernate.hbm2ddl.auto" value="update" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect" />
+            <property name="hibernate.hbm2ddl.auto" value="create" />
             <property name="hibernate.show_sql" value="false" />
             <property name="show_sql" value="true" />
         </properties>

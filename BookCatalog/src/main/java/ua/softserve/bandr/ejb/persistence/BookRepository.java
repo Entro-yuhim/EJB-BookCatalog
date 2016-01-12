@@ -2,10 +2,9 @@ package ua.softserve.bandr.ejb.persistence;
 
 import ua.softserve.bandr.entity.Author;
 import ua.softserve.bandr.entity.Book;
-import ua.softserve.bandr.entity.Comment;
+import ua.softserve.bandr.entity.Review;
 
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
@@ -31,20 +30,20 @@ public class BookRepository {
     public void saveBook(Book book){
         System.out.println("got a book:");
         System.out.println(book);
-        Comment comment1 = new Comment();
-        comment1.setMessage("message1");
-        comment1.setRating(1);
-        comment1.setUsername("user1");
+        Review review1 = new Review();
+        review1.setMessage("message1");
+        review1.setRating(1);
+        review1.setUsername("user1");
 
-        Comment comment2 = new Comment();
-        comment2.setMessage("message1");
-        comment2.setRating(1);
-        comment2.setUsername("user1");
+        Review review2 = new Review();
+        review2.setMessage("message1");
+        review2.setRating(1);
+        review2.setUsername("user1");
 
-        List<Comment> comments = new ArrayList<>();
-        comments.add(comment1);
-        comments.add(comment2);
-        book.setComments(comments);
+        List<Review> reviews = new ArrayList<>();
+        reviews.add(review1);
+        reviews.add(review2);
+        book.setReviews(reviews);
         Author author1 = new Author();
         author1.setFirstName("a first name 1");
         Author author2 = new Author();

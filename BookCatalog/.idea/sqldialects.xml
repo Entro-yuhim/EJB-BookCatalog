@@ -3,5 +3,7 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/database/books_authors.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/database/comments.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/database/schema.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/table_schema.sql" dialect="Oracle" />
   </component>
 </project>
