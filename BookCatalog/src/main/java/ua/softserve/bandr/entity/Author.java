@@ -9,15 +9,27 @@ import java.util.List;
  * Created by bandr on 05.01.2016.
  */
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Author.getAll",
+                query="SELECT a FROM Author a"),
+        @NamedQuery(name = "Author.getByLastName",
+                query="SELECT a FROM Author a WHERE a.lastName = :lastName")
+        })
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_id_generator")
     @SequenceGenerator(name = "author_id_generator", sequenceName = "author_id_seq", allocationSize = 1)
     private long id;
+    @Column(length = 25, nullable = false)
     private String firstName;
+    @Column(length = 40)
     private String lastName;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    public enum AuthorSorting{
+        ID, FIRST_NAME, LAST_NAME, RATING
+    }
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},mappedBy = "authors")
     private List<Book> books;
 
     public long getId() {

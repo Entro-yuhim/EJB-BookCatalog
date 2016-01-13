@@ -7,5 +7,11 @@
       <schema-pattern>book_catalog.pg_catalog book_catalog.public</schema-pattern>
       <default-schemas>book_catalog.public</default-schemas>
     </data-source>
+    <data-source name="Oracle - @localhost" uuid="eda33b80-8c25-4db7-a1b3-6646997dd2a7">
+      <secret-storage>master_key</secret-storage>
+      <user-name>oracle</user-name>
+      <schema-pattern>*.ORACLE *.PUBLIC *.SYS *.SYSTEM</schema-pattern>
+      <default-schemas>*.ORACLE *.PUBLIC</default-schemas>
+    </data-source>
   </component>
 </project>

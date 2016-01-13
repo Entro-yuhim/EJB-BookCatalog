@@ -31,12 +31,12 @@ public class BookRepository {
         System.out.println("got a book:");
         System.out.println(book);
         Review review1 = new Review();
-        review1.setMessage("message1");
+        review1.setReviewText("message1");
         review1.setRating(1);
         review1.setUsername("user1");
 
         Review review2 = new Review();
-        review2.setMessage("message1");
+        review2.setReviewText("message1");
         review2.setRating(1);
         review2.setUsername("user1");
 

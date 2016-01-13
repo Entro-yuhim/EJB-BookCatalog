@@ -1,6 +1,7 @@
 package ua.softserve.bandr.entity;
 
 import com.google.common.base.Objects;
+import org.hibernate.annotations.Check;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -12,41 +13,59 @@ import java.util.List;
  */
 @Entity
 @NamedQueries(
-        @NamedQuery(name = "Books.getAll",
-                query = "SELECT b FROM Book b")
-)
+        {@NamedQuery(name = "Books.getAll",
+                query = "SELECT b FROM Book b"),
+         @NamedQuery(name= "Books.getByAuthorLastName",
+                query="SELECT b FROM Book b " +
+                        "JOIN b.authors a " +
+                        "WHERE a.lastName = :lastName"),
+         @NamedQuery(name="Book.getById",
+                 query="SELECT b FROM Book b " +
+                         "WHERE b.id=:id")
+
+        })
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_id_generator")
     @SequenceGenerator(name = "book_id_generator", sequenceName = "book_id_seq", allocationSize = 1)
     private long id;
+    @Column(length = 50)
     private String title;
     @Temporal(TemporalType.DATE)
     private Date yearPublished;
 
     @Column(length = 14, unique = true)
     private String iSBN;
-
+    @Column(length = 30)
     private String publisher;
-    @Column(columnDefinition = "timestamp default CURRENT_DATE", updatable = false, insertable = false)
+
+    @Column(updatable = false, insertable = false)
+    @Temporal(TemporalType.DATE)
     private Date createDate;
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "books")
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "book_author",
+            //TODO: not crucial, but doesn't work. Need to figure out why.
+            joinColumns = @JoinColumn(name = "book_id",
+                    foreignKey = @ForeignKey(name = "book_author_fk")),
+            inverseJoinColumns = @JoinColumn(name = "author_id",
+                    foreignKey = @ForeignKey(name = "author_book_fk", foreignKeyDefinition = "ON DELETE No Action"))
+    )
     private List<Author> authors;
+
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="book_id")
+    @JoinColumn(name = "book_id",
+            foreignKey = @ForeignKey(name = "review_book_fk"))
     private List<Review> reviews;
 
-//    @Transient
-//    private double rating;
-//
-//    private void setRating(double rating){
-//        this.rating = rating;
-//    }
-
     public double getRating() {
+        //TODO: Change this.
         return reviews.stream().mapToDouble(Review::getRating).average().orElse(0);
     }
 
+    public enum BookSorting{
+        ID, TITLE, PUBLISHED_DATE, PUBLISHER, RATING, AUTHOR
+    }
 
     public String getTitle() {
         return title;
@@ -89,7 +108,7 @@ public class Book {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return this.title + " " + this.iSBN + " " + this.yearPublished;
     }
 

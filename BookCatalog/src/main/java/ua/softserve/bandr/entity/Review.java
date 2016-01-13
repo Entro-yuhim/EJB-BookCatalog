@@ -1,24 +1,32 @@
 package ua.softserve.bandr.entity;
 
 import com.google.common.base.Objects;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.Check;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
 
 /**
  * Created by bandr on 05.01.2016.
  */
 @Entity
+@Check(constraints = "rating BETWEEN 1 AND 5")
+@NamedQueries({
+        @NamedQuery(name="Reviews.getAll", query="SELECT r FROM Review r"),
+        @NamedQuery(name="Reviews.getById", query="SELECT r FROM Review r WHERE r.id = :id")
+})
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "review_id_generator")
     @SequenceGenerator(name = "review_id_generator", sequenceName = "review_id_seq", allocationSize = 1)
     private long id;
+    @Column(length = 15)
     private String username;
+    @Column(length=1, nullable = false)
+
     private int rating;
-    private String message;
+    @Column(name="review_text", nullable = false)
+    private String reviewText;
     @ManyToOne
     private Book book;
 
@@ -38,12 +46,12 @@ public class Review {
         this.rating = rating;
     }
 
-    public String getMessage() {
-        return message;
+    public String getReviewText() {
+        return reviewText;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setReviewText(String message) {
+        this.reviewText = message;
     }
 
     public long getId() {
@@ -70,12 +78,12 @@ public class Review {
         return id == review.id &&
                 rating == review.rating &&
                 Objects.equal(username, review.username) &&
-                Objects.equal(message, review.message) &&
+                Objects.equal(reviewText, review.reviewText) &&
                 Objects.equal(book, review.book);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, username, rating, message, book);
+        return Objects.hashCode(id, username, rating, reviewText, book);
     }
 }
