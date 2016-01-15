@@ -11,10 +11,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Set;
 
-/**
- * Created by bandr on 06.01.2016.
- */
 @ManagedBean(name = "bookController")
 @RequestScoped
 public class BookController {
@@ -39,7 +37,8 @@ public class BookController {
         System.out.println("Got a book:");
         System.out.println(book);
         List<Book> testBooks = bookFacade.getAll();
-        testBooks = null;
+        Set<Author> tAuthors = testBooks.get(0).getAuthors();
+        System.out.println(tAuthors);
         testBooks = bookFacade.getAllByFirstName("Slade");
         testBooks = bookFacade.getPaged(5, 20);
 

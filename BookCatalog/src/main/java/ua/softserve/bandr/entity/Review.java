@@ -1,14 +1,9 @@
 package ua.softserve.bandr.entity;
 
-import com.google.common.base.Objects;
 import org.hibernate.annotations.Check;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
 
-/**
- * Created by bandr on 05.01.2016.
- */
 @Entity
 @Check(constraints = "rating BETWEEN 1 AND 5")
 @NamedQueries({
@@ -19,14 +14,18 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "review_id_generator")
     @SequenceGenerator(name = "review_id_generator", sequenceName = "review_id_seq", allocationSize = 1)
-    private long id;
+    private Long id;
+
     @Column(length = 15)
     private String username;
-    @Column(length=1, nullable = false)
 
-    private int rating;
+    @Column(length=1, nullable = false)
+    private Integer rating;
+
+    @Lob
     @Column(name="review_text", nullable = false)
     private String reviewText;
+
     @ManyToOne
     private Book book;
 
@@ -38,11 +37,11 @@ public class Review {
         this.username = username;
     }
 
-    public int getRating() {
+    public Integer getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(Integer rating) {
         this.rating = rating;
     }
 
@@ -58,7 +57,7 @@ public class Review {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -68,22 +67,5 @@ public class Review {
 
     public void setBook(Book book) {
         this.book = book;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Review review = (Review) o;
-        return id == review.id &&
-                rating == review.rating &&
-                Objects.equal(username, review.username) &&
-                Objects.equal(reviewText, review.reviewText) &&
-                Objects.equal(book, review.book);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id, username, rating, reviewText, book);
     }
 }

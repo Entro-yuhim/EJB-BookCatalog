@@ -1,16 +1,9 @@
 package ua.softserve.bandr.entity;
 
-import com.google.common.base.Objects;
-import org.hibernate.annotations.Check;
-
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
-/**
- * Created by bandr on 05.01.2016.
- */
 @Entity
 @NamedQueries(
         {@NamedQuery(name = "Books.getAll",
@@ -28,18 +21,17 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_id_generator")
     @SequenceGenerator(name = "book_id_generator", sequenceName = "book_id_seq", allocationSize = 1)
-    private long id;
-    @Column(length = 50)
+    private Long id;
     private String title;
+    @Column(name = "year_published")
     @Temporal(TemporalType.DATE)
     private Date yearPublished;
 
-    @Column(length = 14, unique = true)
+    @Column(unique = true)
     private String iSBN;
-    @Column(length = 30)
     private String publisher;
 
-    @Column(updatable = false, insertable = false)
+    @Column(name = "create_date", updatable = false, insertable = false)
     @Temporal(TemporalType.DATE)
     private Date createDate;
 
@@ -51,12 +43,12 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "author_id",
                     foreignKey = @ForeignKey(name = "author_book_fk", foreignKeyDefinition = "ON DELETE No Action"))
     )
-    private List<Author> authors;
+    private Set<Author> authors;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "book_id",
             foreignKey = @ForeignKey(name = "review_book_fk"))
-    private List<Review> reviews;
+    private Set<Review> reviews;
 
     public double getRating() {
         //TODO: Change this.
@@ -112,14 +104,6 @@ public class Book {
         return this.title + " " + this.iSBN + " " + this.yearPublished;
     }
 
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
-
     public long getId() {
         return id;
     }
@@ -128,41 +112,20 @@ public class Book {
         this.id = id;
     }
 
-    public List<Author> getAuthors() {
-
+    public Set<Author> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(List<Author> authors) {
+    public void setAuthors(Set<Author> authors) {
         this.authors = authors;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Book book = (Book) o;
-        return id == book.id &&
-                yearPublished == book.yearPublished &&
-                Objects.equal(title, book.title) &&
-                Objects.equal(iSBN, book.iSBN) &&
-                Objects.equal(publisher, book.publisher) &&
-                Objects.equal(createDate, book.createDate);
+
+    public Set<Review> getReviews() {
+        return reviews;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id, title, yearPublished, iSBN, publisher, createDate);
-    }
-
-    @OneToMany(mappedBy = "book")
-    private Collection<Review> review;
-
-    public Collection<Review> getReview() {
-        return review;
-    }
-
-    public void setReview(Collection<Review> review) {
-        this.review = review;
+    public void setReviews(Set<Review> review) {
+        this.reviews = review;
     }
 }

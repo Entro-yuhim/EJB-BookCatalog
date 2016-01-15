@@ -1,13 +1,8 @@
 package ua.softserve.bandr.entity;
 
-import com.google.common.base.Objects;
-
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
-/**
- * Created by bandr on 05.01.2016.
- */
 @Entity
 @NamedQueries({
         @NamedQuery(name = "Author.getAll",
@@ -19,10 +14,10 @@ public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_id_generator")
     @SequenceGenerator(name = "author_id_generator", sequenceName = "author_id_seq", allocationSize = 1)
-    private long id;
-    @Column(length = 25, nullable = false)
+    private Long id;
+    @Column(name = "first_name", nullable = false)
     private String firstName;
-    @Column(length = 40)
+    @Column(name = "last_name")
     private String lastName;
 
     public enum AuthorSorting{
@@ -30,13 +25,13 @@ public class Author {
     }
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},mappedBy = "authors")
-    private List<Book> books;
+    private Set<Book> books;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -56,26 +51,11 @@ public class Author {
         this.lastName = lastName;
     }
 
-    public List<Book> getBooks() {
+    public Set<Book> getBooks() {
         return books;
     }
 
-    public void setBooks(List<Book> booksAuthored) {
-        this.books = booksAuthored;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Author author = (Author) o;
-        return id == author.id &&
-                Objects.equal(firstName, author.firstName) &&
-                Objects.equal(lastName, author.lastName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id, firstName, lastName);
+    public void setBooks(Set<Book> books) {
+        this.books = books;
     }
 }

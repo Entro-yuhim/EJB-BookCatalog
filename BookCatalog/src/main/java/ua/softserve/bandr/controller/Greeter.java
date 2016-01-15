@@ -1,16 +1,13 @@
 package ua.softserve.bandr.controller;
 
 import ua.softserve.bandr.ejb.GreeterEJB;
-import ua.softserve.bandr.ejb.persistence.BookRepository;
 import ua.softserve.bandr.entity.Book;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 
@@ -20,9 +17,6 @@ public class Greeter implements Serializable{
 
     @EJB
     private GreeterEJB greeterEJB;
-
-    @EJB
-    private BookRepository repository;
 
     private String message;
 
@@ -35,7 +29,6 @@ public class Greeter implements Serializable{
     }
 
     public void save(){
-        repository.saveBook(book);
         createNewBookContainer();
     }
 
