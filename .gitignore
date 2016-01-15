@@ -1,0 +1,3 @@
+# ignore IDEA files:
+BookCatalog/.idea/
+BookCatalog/*.iml
