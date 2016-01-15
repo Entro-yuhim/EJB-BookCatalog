@@ -75,14 +75,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>org.richfaces.ui</groupId>
-                <artifactId>richfaces-components-ui</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>org.richfaces.core</groupId>
-                <artifactId>richfaces-core-impl</artifactId>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -147,15 +139,18 @@
             <version>19.0</version>
         </dependency>
         <dependency>
-            <groupId>org.richfaces.ui</groupId>
-            <artifactId>richfaces-components-ui</artifactId>
-            <version>4.3.7.Final</version>
-            <scope>provided</scope>
+            <groupId>org.richfaces</groupId>
+            <artifactId>richfaces</artifactId>
         </dependency>
         <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc14</artifactId>
             <version>10.2.0.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.4</version>
         </dependency>
     </dependencies>
 

@@ -1,37 +1,29 @@
 package ua.softserve.bandr.ejb.facades;
 
 import com.google.common.base.Optional;
+import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.cfg.NotYetImplementedException;
 import ua.softserve.bandr.entity.Book;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.inject.Inject;
 import java.util.List;
 
 @Stateless
 public class BookFacade {
-    @PersistenceContext(name = "pg_BC")
-    private EntityManager entityManager;
-
+    @Inject
+    private QueryManager<Book> bookQueryManager;
     public List<Book> getAll() {
-        return entityManager
-                .createNamedQuery("Books.getAll", Book.class)
-                .getResultList();
+        return bookQueryManager.executeQuery("Books.getAll", Book.class);
     }
 
     public List<Book> getAllByFirstName(String firstName) {
-        return entityManager
-                .createNamedQuery("Books.getByAuthorLastName", Book.class)
-                .setParameter("lastName", firstName)
-                .getResultList();
+        return bookQueryManager.executeQuery("Books.getByAuthorLastName", Book.class,
+                Pair.of("lastName", firstName));
     }
 
     public List<Book> getPaged(int startWith, int pageSize) {
-        return entityManager.createNamedQuery("Books.getAll", Book.class)
-                .setFirstResult(startWith)
-                .setMaxResults(pageSize)
-                .getResultList();
+        return bookQueryManager.executeQuery("Books.getAll", Book.class, Optional.of(startWith), Optional.of(pageSize));
     }
     //TODO: discuss this API
     public List<Book> getPagedFilteredSorted(Optional<Integer> startWith, Optional<Integer> pageSize,

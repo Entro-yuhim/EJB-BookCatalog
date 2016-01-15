@@ -99,11 +99,6 @@ public class Book {
         this.createDate = createDate;
     }
 
-    @Override
-    public String toString() {
-        return this.title + " " + this.iSBN + " " + this.yearPublished;
-    }
-
     public long getId() {
         return id;
     }
