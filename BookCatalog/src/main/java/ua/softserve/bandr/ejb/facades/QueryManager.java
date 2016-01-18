@@ -19,23 +19,17 @@ import java.util.List;
 @Stateless
 //TODO: think of a better name for class. Srsly.
 public class QueryManager<T> {
-    @PersistenceContext(name="pg_BC")
-    private EntityManager entityManager;
-
-
     //TODO: Probably need to make this into generic.
-    public List<T> executeQuery(String queryName, Class<T> targetEntityClass, Pair<String, String>... args) {
-        TypedQuery query = entityManager.createNamedQuery(queryName, targetEntityClass);
+    public List<T> executeQuery(TypedQuery query, Pair<String, String>... args) {
         for (Pair<String, String> arg : args){
             query = query.setParameter(arg.getKey(), arg.getValue());
         }
         return query.getResultList();
     }
 
-    public List<T> executeQuery(String queryName, Class<T> targetEntityClass,
+    public List<T> executeQuery(TypedQuery query,
                                 Optional<Integer> firstResult, Optional<Integer> maxResults,
                                 Pair<String, String>... args) {
-        TypedQuery query = entityManager.createNamedQuery(queryName, targetEntityClass);
         for (Pair<String, String> arg : args){
             query = query.setParameter(arg.getKey(), arg.getValue());
         }

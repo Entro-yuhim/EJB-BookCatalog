@@ -10,6 +10,7 @@ public class ReviewFacade {
     private QueryManager<Review> reviewQueryManager;
 
     public List<Review> getAll(){
-        return reviewQueryManager.executeQuery("Reviews.getAll", Review.class);
+        return null;
+        //return reviewQueryManager.executeQuery("Reviews.getAll", Review.class);
     }
 }

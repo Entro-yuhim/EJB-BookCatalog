@@ -14,12 +14,14 @@ public class AuthorFacade {
     @Inject
     private QueryManager<Author> authorQueryManager;
     public List<Author> getAll(){
-        return authorQueryManager.executeQuery("Author.getByLastName", Author.class);
+        return null;
+        //return authorQueryManager.executeQuery("Author.getByLastName", Author.class);
     }
 
     public List<Author> getByLastName(String lastName) {
-        return authorQueryManager.executeQuery("Author.getByLastName", Author.class,
-                Pair.of("lastName", lastName));
+        return null;
+//        return authorQueryManager.executeQuery("Author.getByLastName", Author.class,
+//                Pair.of("lastName", lastName));
     }
 
     public List<Author> getPagedFilteredSorted(Optional<Integer> startWith, Optional<Integer> pageSize,
