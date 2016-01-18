@@ -44,10 +44,10 @@ public class BookFacade {
         //Predicate authorLN = getPredicate(joinAuthor.get("lastName"), "alias", criteriaBuilder);
         CriteriaQuery<Book> finalQuery = criteria.select(book).where(bookName);
 
-        return bookQueryManager.executeQuery(entityManager.createQuery(finalQuery),startWith, pageSize, Pair.of("alias", filterText.get()));
+        return bookQueryManager.executeQuery(entityManager.createQuery(finalQuery),startWith, pageSize, Pair.of("alias", "%" + filterText.get().toUpperCase() + "%"));
     }
 
     private Predicate getPredicate(Path fieldParam, String alias, CriteriaBuilder criteriaBuilder) {
-        return criteriaBuilder.like(fieldParam, criteriaBuilder.parameter(String.class, alias));
+        return criteriaBuilder.like(criteriaBuilder.upper(fieldParam), criteriaBuilder.parameter(String.class, alias));
     }
 }
