@@ -10,7 +10,9 @@ DROP SEQUENCE review_id_seq;
 CREATE TABLE author(
  id         INTEGER PRIMARY KEY,
  first_name VARCHAR2(255) NOT NULL,
- last_name  VARCHAR(255)
+ last_name  VARCHAR(255),
+
+  CONSTRAINT unique_author UNIQUE(last_name, first_name)
 );
 
 CREATE SEQUENCE author_id_seq;
@@ -20,7 +22,7 @@ CREATE TABLE book(
  create_date    DATE DEFAULT CURRENT_DATE,
  isbn           VARCHAR2(14) UNIQUE NOT NULL,
  publisher      VARCHAR2(255),
- title          VARCHAR(255)        NOT NULL,
+ title          VARCHAR(255) NOT NULL,
  year_published DATE
 
 );
@@ -42,7 +44,7 @@ CREATE TABLE review(
  rating      NUMBER(1) NOT NULL,
  book_id     INTEGER   NOT NULL,
 
- CONSTRAINT review_fk FOREIGN KEY (id) REFERENCES book (id) ON DELETE CASCADE,
+ CONSTRAINT review_fk FOREIGN KEY (book_id) REFERENCES book (id) ON DELETE CASCADE,
  CONSTRAINT rating_values CHECK(rating BETWEEN 1 AND 5)
 );
 

@@ -93,7 +93,7 @@ INSERT INTO book(id, isbn, publisher, title, year_published) VALUES (47, '978189
 INSERT INTO book(id, isbn, publisher, title, year_published) VALUES (48, '9781891830457', 'Top Shelf Productions', 'The mirror of love', to_date('2003', 'YYYY'));
 INSERT INTO book(id, isbn, publisher, title, year_published) VALUES (49, '9781891830297', 'Top Shelf Productions', 'Pinky '||chr(38) ||' Stinky', to_date('2002', 'YYYY'));
 
-ALTER SEQUENCE BOOK_ID_SEQ INCREMENT BY 30;
+ALTER SEQUENCE BOOK_ID_SEQ INCREMENT BY 49;
 
 select BOOK_ID_SEQ.nextval from dual;
 
