@@ -1,13 +1,10 @@
 package ua.softserve.bandr.entity;
 
-import org.hibernate.annotations.Check;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Check(constraints = "(first_name, last_name) UNIQUE")
 @NamedQueries({
         @NamedQuery(name = "Author.getAll",
                 query="SELECT a FROM Author a"),
@@ -18,15 +15,9 @@ import java.util.Set;
                         "JOIN b.reviews r " +
                         "group by b.id")
         })
-@NamedNativeQueries({
-        @NamedNativeQuery(name = "Author.getAllBooksByRating",
-                query = "SELECT rating, count(id) " +
-                        "FROM (SELECT b.id, round(avg(r.rating)) rating FROM book b " +
-                        "JOIN review r ON " +
-                        "b.id = r.book_id " +
-                        "group by b.id) subq " +
-                        "group by rating")
-})
+@Table(name="author",
+        uniqueConstraints = @UniqueConstraint(name="unique_author",
+                columnNames = {"first_name", "last_name"}))
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_id_generator")
@@ -41,7 +32,7 @@ public class Author {
         FIRST_NAME, LAST_NAME, RATING
     }
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},mappedBy = "authors", fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},mappedBy = "authors")
     private Set<Book> books = new HashSet<>();
 
     public Long getId() {

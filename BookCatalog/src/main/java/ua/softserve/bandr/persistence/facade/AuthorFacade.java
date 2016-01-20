@@ -1,4 +1,4 @@
-package ua.softserve.bandr.persistance.facades;
+package ua.softserve.bandr.persistence.facade;
 
 import com.google.common.base.Optional;
 import org.apache.commons.lang3.tuple.Pair;
@@ -19,19 +19,18 @@ import java.util.List;
 
 @Stateless
 public class AuthorFacade {
-
     @Inject
-    private QueryManager queryManager;
+    private PersistenceManager persistenceManager;
 
     @PersistenceContext(name="pg_BC")
     private EntityManager entityManager;
 
     public List<Author> getAll(){
-        return queryManager.executeQuery(entityManager.createNamedQuery("Author.getAll", Author.class));
+        return persistenceManager.executeQuery(entityManager.createNamedQuery("Author.getAll", Author.class));
     }
 
     public List<Author> getByLastName(String lastName) {
-        return queryManager.executeQuery(entityManager.createNamedQuery("Author.getByLastName", Author.class),
+        return persistenceManager.executeQuery(entityManager.createNamedQuery("Author.getByLastName", Author.class),
                 Pair.of("lastName", lastName), Pair.of("firstName", lastName));
     }
 
@@ -41,10 +40,10 @@ public class AuthorFacade {
         CriteriaQuery<Author> criteriaQuery = cb.createQuery(Author.class);
         Root<Author> author = criteriaQuery.from(Author.class);
         criteriaQuery = criteriaQuery.select(author)
-                                .where(cb.or(queryManager.getLike(cb, "name", author),
-                                        queryManager.getLike(cb, "name", author))).orderBy();
+                                .where(cb.or(persistenceManager.getLike(cb, "name", author),
+                                        persistenceManager.getLike(cb, "name", author))).orderBy();
         List<Order> order = createOrder(sorting.get(), cb, author);
-        return queryManager.executeQuery(entityManager.createQuery(criteriaQuery), Pair.of("name", filterText.get()));
+        return persistenceManager.executeQuery(entityManager.createQuery(criteriaQuery), Pair.of("name", filterText.get()));
     }
 
     private List<Order> createOrder(List<Author.AuthorSorting> sorting, CriteriaBuilder cb, Root root) {
@@ -56,17 +55,15 @@ public class AuthorFacade {
                 case LAST_NAME: ee.add(cb.asc(root.get("lastName")));
                                 break;
             }
-
         }
-        return null;
+        return ee;
     }
-
+    //TODO: redo this
     public List<BookRatingDTO> getBooksByRating(Integer id){
         List<BookRatingDTO> dtoList = new ArrayList<>();
         for (Object[] o : (List<Object[]>) entityManager.createNamedQuery("Author.getAllBooksByRating").getResultList()){
             dtoList.add(new BookRatingDTO(((BigDecimal) o[0]).intValue(), ((BigDecimal) o[1]).longValue()));
         }
-
         return dtoList;
     }
 }

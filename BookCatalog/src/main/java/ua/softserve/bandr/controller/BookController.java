@@ -1,13 +1,12 @@
 package ua.softserve.bandr.controller;
 
-import com.google.common.base.Optional;
-import ua.softserve.bandr.dto.BookRatingDTO;
-import ua.softserve.bandr.entity.Author;
-import ua.softserve.bandr.entity.Review;
-import ua.softserve.bandr.persistance.facades.AuthorFacade;
-import ua.softserve.bandr.persistance.facades.BookFacade;
-import ua.softserve.bandr.persistance.facades.ReviewFacade;
 import ua.softserve.bandr.entity.Book;
+import ua.softserve.bandr.entity.Review;
+import ua.softserve.bandr.persistence.facade.AuthorFacade;
+import ua.softserve.bandr.persistence.facade.BookFacade;
+import ua.softserve.bandr.persistence.facade.ReviewFacade;
+import ua.softserve.bandr.persistence.home.ReviewHome;
+import ua.softserve.bandr.persistence.manager.ReviewManager;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -24,6 +23,10 @@ public class BookController {
     private AuthorFacade authorFacade;
     @Inject
     private ReviewFacade reviewFacade;
+    @Inject
+    private ReviewManager reviewManager;
+    @Inject
+    private ReviewHome reviewHome;
 
     public BookController() {
         book = new Book();
@@ -37,7 +40,14 @@ public class BookController {
     public String save(){
         System.out.println("Got a book:");
         System.out.println(book);
-        List<BookRatingDTO> books2 = authorFacade.getBooksByRating(27);
+        //List<BookRatingDTO> books2 = authorFacade.getBooksByRating(27);
+        Review review = reviewFacade.getById(1L);
+        reviewHome.removeReview(review);
+        review.setReviewText("HEY I UPDATED TEXT BOYZ111111");
+        reviewHome.updateReview(review);
+        reviewHome.removeReview(review);
+        List<Review> reviews = reviewFacade.getAll();
+        reviewManager.deleteBulk(reviews);
 //        List<Book> testBooks = bookFacade.getAll();
 //        List<Book> someBooks = bookFacade.getPagedFilteredSorted(Optional.of(0), Optional.of(10), Optional.of(book.getTitle()));
 //        List<Author> testAuthors = authorFacade.getAll();

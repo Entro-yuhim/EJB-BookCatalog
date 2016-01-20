@@ -11,16 +11,25 @@ import java.util.Set;
 @NamedQueries(value = {
         @NamedQuery(name = "Book.getAll",
                 query = "SELECT b FROM Book b"),
-        @NamedQuery(name = "Book.getByAuthorLastName",
+        @NamedQuery(name = "Book.getByAuthorName",
                 query = "SELECT b FROM Book b " +
                         "JOIN b.authors a " +
-                        "WHERE a.lastName = :lastName"),
+                        "WHERE a.lastName = :name OR a.firstName = :name"),
         @NamedQuery(name = "Book.getById",
                 query = "SELECT b FROM Book b " +
                         "WHERE b.id=:id"),
         @NamedQuery(name = "Book.getByRating",
                 query = "SELECT b FROM Book b " +
                         "WHERE b.rating > :rating")
+})
+@NamedNativeQueries({
+        @NamedNativeQuery(name = "Book.getAllBooksByRating",
+                query = "SELECT rating, count(id) " +
+                        "FROM (SELECT b.id, round(avg(r.rating)) rating FROM book b " +
+                        "JOIN review r ON " +
+                        "b.id = r.book_id " +
+                        "group by b.id) subq " +
+                        "group by rating")
 })
 public class Book {
     @Id
@@ -43,9 +52,8 @@ public class Book {
     @Formula("(SELECT avg(r.rating) FROM review r WHERE r.book_id = id)")
     private Integer rating;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "book_author",
-            //TODO: not crucial, but doesn't work. Need to figure out why.
             joinColumns = @JoinColumn(name = "book_id",
                     foreignKey = @ForeignKey(name = "book_author_fk")),
             inverseJoinColumns = @JoinColumn(name = "author_id",
@@ -53,7 +61,7 @@ public class Book {
     )
     private Set<Author> authors = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id",
             foreignKey = @ForeignKey(name = "review_book_fk"))
     private Set<Review> reviews = new HashSet<>();

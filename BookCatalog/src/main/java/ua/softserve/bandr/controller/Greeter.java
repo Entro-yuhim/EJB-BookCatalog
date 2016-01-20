@@ -1,7 +1,7 @@
 package ua.softserve.bandr.controller;
 
-import ua.softserve.bandr.persistance.GreeterEJB;
 import ua.softserve.bandr.entity.Book;
+import ua.softserve.bandr.persistence.GreeterEJB;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ua.softserve.bandr.persistance;
+package ua.softserve.bandr.persistence;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
