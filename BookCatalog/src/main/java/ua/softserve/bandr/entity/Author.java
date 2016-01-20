@@ -1,6 +1,7 @@
 package ua.softserve.bandr.entity;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -8,8 +9,15 @@ import java.util.Set;
         @NamedQuery(name = "Author.getAll",
                 query="SELECT a FROM Author a"),
         @NamedQuery(name = "Author.getByLastName",
-                query="SELECT a FROM Author a WHERE a.lastName = :lastName")
+                query="SELECT a FROM Author a WHERE a.lastName = :lastName"),
+        @NamedQuery(name = "doStuff",
+                query = "SELECT b.id, avg(r.rating) FROM Book b " +
+                        "JOIN b.reviews r " +
+                        "group by b.id")
         })
+@Table(name="author",
+        uniqueConstraints = @UniqueConstraint(name="unique_author",
+                columnNames = {"first_name", "last_name"}))
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_id_generator")
@@ -21,11 +29,11 @@ public class Author {
     private String lastName;
 
     public enum AuthorSorting{
-        ID, FIRST_NAME, LAST_NAME, RATING
+        FIRST_NAME, LAST_NAME, RATING
     }
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},mappedBy = "authors")
-    private Set<Book> books;
+    private Set<Book> books = new HashSet<>();
 
     public Long getId() {
         return id;

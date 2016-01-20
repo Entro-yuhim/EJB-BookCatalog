@@ -8,7 +8,8 @@ import javax.persistence.*;
 @Check(constraints = "rating BETWEEN 1 AND 5")
 @NamedQueries({
         @NamedQuery(name="Reviews.getAll", query="SELECT r FROM Review r"),
-        @NamedQuery(name="Reviews.getById", query="SELECT r FROM Review r WHERE r.id = :id")
+        @NamedQuery(name="Reviews.getById", query="SELECT r FROM Review r WHERE r.id = :id"),
+        @NamedQuery(name="Reviews.getByBook", query="SELECT r FROM Review r WHERE r.book.id = :id")
 })
 public class Review {
     @Id
@@ -16,7 +17,7 @@ public class Review {
     @SequenceGenerator(name = "review_id_generator", sequenceName = "review_id_seq", allocationSize = 1)
     private Long id;
 
-    @Column(length = 15)
+    @Column(length = 255)
     private String username;
 
     @Column(length=1, nullable = false)

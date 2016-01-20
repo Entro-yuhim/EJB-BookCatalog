@@ -1,22 +1,36 @@
 package ua.softserve.bandr.entity;
 
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@NamedQueries(
-        {@NamedQuery(name = "Books.getAll",
+@NamedQueries(value = {
+        @NamedQuery(name = "Book.getAll",
                 query = "SELECT b FROM Book b"),
-         @NamedQuery(name= "Books.getByAuthorLastName",
-                query="SELECT b FROM Book b " +
+        @NamedQuery(name = "Book.getByAuthorName",
+                query = "SELECT b FROM Book b " +
                         "JOIN b.authors a " +
-                        "WHERE a.lastName = :lastName"),
-         @NamedQuery(name="Book.getById",
-                 query="SELECT b FROM Book b " +
-                         "WHERE b.id=:id")
-
-        })
+                        "WHERE a.lastName = :name OR a.firstName = :name"),
+        @NamedQuery(name = "Book.getById",
+                query = "SELECT b FROM Book b " +
+                        "WHERE b.id=:id"),
+        @NamedQuery(name = "Book.getByRating",
+                query = "SELECT b FROM Book b " +
+                        "WHERE b.rating > :rating")
+})
+@NamedNativeQueries({
+        @NamedNativeQuery(name = "Book.getAllBooksByRating",
+                query = "SELECT rating, count(id) " +
+                        "FROM (SELECT b.id, round(avg(r.rating)) rating FROM book b " +
+                        "JOIN review r ON " +
+                        "b.id = r.book_id " +
+                        "group by b.id) subq " +
+                        "group by rating")
+})
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_id_generator")
@@ -27,7 +41,7 @@ public class Book {
     @Temporal(TemporalType.DATE)
     private Date yearPublished;
 
-    @Column(unique = true)
+    @Column(unique = true, name = "isbn")
     private String iSBN;
     private String publisher;
 
@@ -35,25 +49,22 @@ public class Book {
     @Temporal(TemporalType.DATE)
     private Date createDate;
 
+    @Formula("(SELECT avg(r.rating) FROM review r WHERE r.book_id = id)")
+    private Integer rating;
+
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "book_author",
-            //TODO: not crucial, but doesn't work. Need to figure out why.
             joinColumns = @JoinColumn(name = "book_id",
                     foreignKey = @ForeignKey(name = "book_author_fk")),
             inverseJoinColumns = @JoinColumn(name = "author_id",
                     foreignKey = @ForeignKey(name = "author_book_fk", foreignKeyDefinition = "ON DELETE No Action"))
     )
-    private Set<Author> authors;
+    private Set<Author> authors = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id",
             foreignKey = @ForeignKey(name = "review_book_fk"))
-    private Set<Review> reviews;
-
-    public double getRating() {
-        //TODO: Change this.
-        return reviews.stream().mapToDouble(Review::getRating).average().orElse(0);
-    }
+    private Set<Review> reviews = new HashSet<>();
 
     public enum BookSorting{
         ID, TITLE, PUBLISHED_DATE, PUBLISHER, RATING, AUTHOR
@@ -99,11 +110,6 @@ public class Book {
         this.createDate = createDate;
     }
 
-    @Override
-    public String toString() {
-        return this.title + " " + this.iSBN + " " + this.yearPublished;
-    }
-
     public long getId() {
         return id;
     }
@@ -120,12 +126,19 @@ public class Book {
         this.authors = authors;
     }
 
-
     public Set<Review> getReviews() {
         return reviews;
     }
 
     public void setReviews(Set<Review> review) {
         this.reviews = review;
+    }
+
+    public Integer getRating() {
+        return rating;
+    }
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
     }
 }
