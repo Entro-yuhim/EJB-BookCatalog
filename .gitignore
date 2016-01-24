@@ -2,3 +2,4 @@
 BookCatalog/.idea/
 BookCatalog/target/
 BookCatalog/*.iml
+*.iml
