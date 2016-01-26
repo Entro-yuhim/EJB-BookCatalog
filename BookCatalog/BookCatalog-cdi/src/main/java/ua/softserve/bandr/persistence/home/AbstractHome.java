@@ -10,13 +10,14 @@ import javax.persistence.PersistenceContext;
 
 public abstract class AbstractHome<T> {
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+    protected final Logger LOG = LoggerFactory.getLogger(getClass());
 
     @PersistenceContext(name = "pg_BC")
     protected EntityManager entityManager;
 
     public void persist(T entity) {
         entityManager.persist(entity);
+        LOG.info("Persisted Entity of class = {} with id = {}", entity.getClass(), entity);
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -26,6 +27,7 @@ public abstract class AbstractHome<T> {
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void delete(T entity) {
+        LOG.info("Attempting to remove entity {} with id = {}", entity.getClass(), entity);
         entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
     }
 }

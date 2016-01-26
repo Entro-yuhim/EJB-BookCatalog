@@ -33,7 +33,6 @@ ALTER SEQUENCE AUTHOR_ID_SEQ INCREMENT BY 30;
 select AUTHOR_ID_SEQ.nextval from dual;
 
 ALTER SEQUENCE AUTHOR_ID_SEQ INCREMENT BY 1;
--- TODO: alter sequence next value after restoring author
 --SELECT pg_catalog.setval('author_id_seq', 30, true);
 
 
@@ -149,7 +148,6 @@ INSERT INTO book_author(book_id, author_id) VALUES (47, 30);
 INSERT INTO book_author(book_id, author_id) VALUES (48, 9);
 INSERT INTO book_author(book_id, author_id) VALUES (49, 27);
 
---TODO: alter sequence of book
 --SELECT pg_catalog.setval('book_id_seq', 49, true);
 
 

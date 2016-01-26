@@ -1,5 +1,6 @@
 package ua.softserve.bandr.persistence.manager;
 
+import ua.softserve.bandr.entity.Review;
 import ua.softserve.bandr.persistence.facade.AbstractFacadeInt;
 import ua.softserve.bandr.persistence.home.AbstractHome;
 
@@ -36,4 +37,9 @@ public abstract class AbstractManager<T> {
     public List<T> getPaged(Integer startWith, Integer pageSize){
         return getFacade().getPaged(startWith, pageSize);
     }
+
+    public void persist(T entity) {
+        getHome().persist(entity);
+    }
+
 }

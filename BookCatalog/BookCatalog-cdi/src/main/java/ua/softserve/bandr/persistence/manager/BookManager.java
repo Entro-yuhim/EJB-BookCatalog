@@ -31,4 +31,12 @@ public class BookManager extends AbstractManager<Book> {
     protected AbstractFacadeInt<Book> getFacade() {
         return bookFacade;
     }
+
+    public void update(Book book) {
+        bookHome.update(book);
+    }
+
+    public void delete(Book book) {
+        bookHome.delete(book);
+    }
 }

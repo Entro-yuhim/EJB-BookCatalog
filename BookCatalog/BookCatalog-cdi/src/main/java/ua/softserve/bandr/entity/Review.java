@@ -1,8 +1,14 @@
 package ua.softserve.bandr.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.Check;
+import ua.softserve.bandr.entity.json.Views;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Check(constraints = "rating BETWEEN 1 AND 5")
@@ -16,16 +22,20 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "review_id_generator")
     @SequenceGenerator(name = "review_id_generator", sequenceName = "review_id_seq", allocationSize = 1)
+    @JsonIgnore //Shouldn't accept or give id in JSON data
     private Long id;
 
     @Column(length = 255)
     private String username;
 
     @Column(length=1, nullable = false)
+    @Min(value = 1, message = "Rating should be between 1 and 5.")
+    @Max(value = 5, message = "Rating should be between 1 and 5.")
     private Integer rating;
 
     @Lob
     @Column(name="review_text", nullable = false)
+    @NotNull(message = "Text of review cannot be null.")
     private String reviewText;
 
     @ManyToOne

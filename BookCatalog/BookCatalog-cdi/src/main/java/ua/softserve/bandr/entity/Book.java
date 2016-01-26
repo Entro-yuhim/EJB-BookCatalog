@@ -1,6 +1,10 @@
 package ua.softserve.bandr.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.Formula;
+import ua.softserve.bandr.entity.json.Views;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -37,6 +41,7 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_id_generator")
     @SequenceGenerator(name = "book_id_generator", sequenceName = "book_id_seq", allocationSize = 1)
+    @JsonIgnore
     private Long id;
     private String title;
     @Column(name = "year_published")
@@ -61,11 +66,13 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "author_id",
                     foreignKey = @ForeignKey(name = "author_book_fk", foreignKeyDefinition = "ON DELETE No Action"))
     )
+    @JsonIgnore
     private Set<Author> authors = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id",
             foreignKey = @ForeignKey(name = "review_book_fk"))
+    @JsonIgnore
     private Set<Review> reviews = new HashSet<>();
 
     public enum BookSorting{
