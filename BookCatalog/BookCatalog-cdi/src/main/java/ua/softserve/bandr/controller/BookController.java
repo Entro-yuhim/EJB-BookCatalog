@@ -35,12 +35,9 @@ public class BookController {
     @Inject
     private AuthorHome authorHome;
 
-    private static final Logger LOG = LoggerFactory.getLogger(BookController.class);
-
     public BookController() {
         book = new Book();
         System.out.println("Building BookController");
-        LOG.error("Building BookController");
     }
 
     public Book getBook() {
