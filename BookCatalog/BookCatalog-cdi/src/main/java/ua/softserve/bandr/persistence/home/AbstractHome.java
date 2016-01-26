@@ -1,11 +1,16 @@
 package ua.softserve.bandr.persistence.home;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 public abstract class AbstractHome<T> {
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PersistenceContext(name = "pg_BC")
     protected EntityManager entityManager;

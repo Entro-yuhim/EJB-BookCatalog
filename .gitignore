@@ -3,3 +3,4 @@ BookCatalog/.idea/
 BookCatalog/target/
 BookCatalog/*.iml
 *.iml
+BookCatalog/BookCatalog-cdi/target/

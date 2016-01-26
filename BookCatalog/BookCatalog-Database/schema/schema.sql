@@ -9,8 +9,8 @@ DROP SEQUENCE review_id_seq;
 
 CREATE TABLE author(
  id         INTEGER PRIMARY KEY,
- first_name VARCHAR2(255) NOT NULL,
- last_name  VARCHAR(255),
+ first_name VARCHAR(255) NOT NULL,
+ last_name  VARCHAR2(255),
 
   CONSTRAINT unique_author UNIQUE(last_name, first_name)
 );
@@ -20,7 +20,7 @@ CREATE SEQUENCE author_id_seq;
 CREATE TABLE book(
  id             INTEGER PRIMARY KEY,
  create_date    DATE DEFAULT CURRENT_DATE,
- isbn           VARCHAR2(14) UNIQUE NOT NULL,
+ isbn           VARCHAR(14) UNIQUE NOT NULL,
  publisher      VARCHAR2(255),
  title          VARCHAR(255) NOT NULL,
  year_published DATE
