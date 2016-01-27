@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:rich="http://richfaces.org/rich">
+<h:head>
+    <title>Book Catalog (working title)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <h:outputStylesheet library="stylesheets" name="general.css" />
+</h:head>
+<h:body>
+    <div class="container">
+        <rich:toolbar styleClass="navbar">
+                <h:form style="float:left;">
+                    <h:commandLink styleClass="navbutton" action="index" value="Home"/>
+                    <h:commandLink styleClass="navbutton" action="bookPage" value="Book Page1"/>
+                    <h:commandLink styleClass="navbutton" action="bookPage" value="Book Page2"/>
+                    <h:commandLink styleClass="navbutton" action="bookPage" value="Book Page3"/>
+                    <h:commandLink styleClass="navbutton" action="bookPage" value="Book Page4"/>
+                </h:form>
+        </rich:toolbar>
+    </div>
+    <div class="container container-body">
+
+        <ui:insert name="page-body">
+            [For future content] <br/>
+            Add tag &#60;ui:define name="page-body" / &#62; in your page to integrate with this page
+        </ui:insert>
+    </div>
+</h:body>
+</html>

@@ -1,0 +1,34 @@
+.basicTable {
+    width: 60%;
+    margin: auto;
+    border: none !important;
+    font-size: 14px !important;
+}
+
+body {
+    margin: 0;
+    background-color: #eeeeee;
+}
+
+.container {
+    width: 1170px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.container-body {
+    min-height: 800px;
+}
+
+.navbar {
+    height: 50px;
+}
+
+a.navbutton {
+    text-decoration: none;
+    padding:15px 15px;
+    color: #000;
+}
+a.navbutton:hover {
+    background-color: #ebe6de;
+}

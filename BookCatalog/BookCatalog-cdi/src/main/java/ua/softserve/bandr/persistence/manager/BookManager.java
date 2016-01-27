@@ -1,5 +1,6 @@
 package ua.softserve.bandr.persistence.manager;
 
+import ua.softserve.bandr.dto.BookRatingDTO;
 import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.persistence.facade.AbstractFacadeInt;
 import ua.softserve.bandr.persistence.facade.BookFacade;
@@ -38,5 +39,10 @@ public class BookManager extends AbstractManager<Book> {
 
     public void delete(Book book) {
         bookHome.delete(book);
+    }
+
+    public List<BookRatingDTO> getBookRatingData() {
+        List<BookRatingDTO> list = bookFacade.getBookCountByRating();
+        return list;
     }
 }

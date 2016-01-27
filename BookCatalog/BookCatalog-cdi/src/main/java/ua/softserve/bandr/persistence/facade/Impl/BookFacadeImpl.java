@@ -13,6 +13,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -54,6 +56,11 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
     }
 
     public List<BookRatingDTO> getBookCountByRating() {
-        return entityManager.createNativeQuery("Book.getAllBooksByRating").getResultList();
+        List<Object[]> data = entityManager.createNamedQuery(Book.GET_COUNT_BY_RATING).getResultList();
+        List<BookRatingDTO> dtoList = new ArrayList<>();
+        for (Object[] a : data){
+            dtoList.add(new BookRatingDTO(((BigDecimal) a[0]).intValue(), ((BigDecimal) a[1]).longValue()));
+        }
+        return dtoList;
     }
 }

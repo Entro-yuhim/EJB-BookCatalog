@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.Formula;
+import ua.softserve.bandr.dto.BookRatingDTO;
 import ua.softserve.bandr.entity.json.Views;
 
 import javax.persistence.*;
@@ -25,18 +26,19 @@ import java.util.Set;
 })
 @NamedNativeQueries({
         @NamedNativeQuery(name = Book.GET_COUNT_BY_RATING,
-                query = "SELECT rating, count(id) " +
+                query = "SELECT subq.rating as rating, count(subq.id) as data_count " +
                         "FROM (SELECT b.id, round(avg(r.rating)) rating FROM book b " +
                         "JOIN review r ON " +
                         "b.id = r.book_id " +
                         "group by b.id) subq " +
-                        "group by rating")
+                        "GROUP by subq.rating " +
+                        "ORDER by subq.rating")
 })
 public class Book {
     public static final String GET_ALL = "Book.getAll";
     public static final String GET_BY_AUTHOR_NAME = "Book.getByAuthorName";
     public static final String GET_BY_RATING = "Book.getByRating";
-    public static final String GET_COUNT_BY_RATING = "Book.get";
+    public static final String GET_COUNT_BY_RATING = "Book.ratingDistribution";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_id_generator")
