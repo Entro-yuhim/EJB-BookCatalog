@@ -8,22 +8,21 @@
 <h:head>
     <title>Book Catalog (working title)</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <h:outputStylesheet library="stylesheets" name="general.css" />
+    <h:outputStylesheet library="stylesheets" name="general.css"/>
 </h:head>
 <h:body>
     <div class="container">
         <rich:toolbar styleClass="navbar">
-                <h:form style="float:left;">
-                    <h:commandLink styleClass="navbutton" action="index" value="Home"/>
-                    <h:commandLink styleClass="navbutton" action="bookPage" value="Book Page1"/>
-                    <h:commandLink styleClass="navbutton" action="bookPage" value="Book Page2"/>
-                    <h:commandLink styleClass="navbutton" action="bookPage" value="Book Page3"/>
-                    <h:commandLink styleClass="navbutton" action="bookPage" value="Book Page4"/>
-                </h:form>
+            <h:form style="float:left;">
+                <h:commandLink styleClass="navbutton" action="index" value="Home"/>
+                <h:commandLink styleClass="navbutton" action="bookPage" value="Book Page1"/>
+                <h:commandLink styleClass="navbutton" action="bookPage" value="Book Page2"/>
+                <h:commandLink styleClass="navbutton" action="bookPage" value="Book Page3"/>
+                <h:commandLink styleClass="navbutton" action="bookPage" value="Book Page4"/>
+            </h:form>
         </rich:toolbar>
     </div>
     <div class="container container-body">
-
         <ui:insert name="page-body">
             [For future content] <br/>
             Add tag &#60;ui:define name="page-body" / &#62; in your page to integrate with this page

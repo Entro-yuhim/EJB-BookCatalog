@@ -1,4 +1,4 @@
-package ua.softserve.bandr.controller;
+package ua.softserve.bandr.web.controller;
 
 import ua.softserve.bandr.dto.BookRatingDTO;
 import ua.softserve.bandr.persistence.manager.BookManager;
