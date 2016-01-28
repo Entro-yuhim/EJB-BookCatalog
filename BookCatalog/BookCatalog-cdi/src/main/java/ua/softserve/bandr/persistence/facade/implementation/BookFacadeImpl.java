@@ -34,6 +34,11 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
         return executeNamedQuery(Book.GET_ALL, Optional.of(startWith), Optional.of(pageSize));
     }
 
+    @Override
+    public Integer getRecordCount() {
+        return executeNamedQueryToCount(Book.GET_RECORD_COUNT);
+    }
+
     public List<Book> getAllByAuthor(String authorFilter) {
         return executeNamedQuery(Book.GET_BY_AUTHOR_NAME,
                 Pair.of("name", authorFilter));

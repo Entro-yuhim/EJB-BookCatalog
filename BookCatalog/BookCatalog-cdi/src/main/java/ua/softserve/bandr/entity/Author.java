@@ -13,7 +13,9 @@ import java.util.StringJoiner;
         @NamedQuery(name = Author.GET_ALL,
                 query = "SELECT a FROM Author a"),
         @NamedQuery(name = Author.GET_BY_NAME,
-                query = "SELECT a FROM Author a WHERE a.lastName = :lastName")
+                query = "SELECT a FROM Author a WHERE a.lastName = :lastName"),
+        @NamedQuery(name = Author.GET_RECORD_COUNT,
+                query = "SELECT count(a.id) FROM Author a")
 
 })
 @Table(name = "author",
@@ -23,6 +25,7 @@ public class Author implements Persistable {
 
     public static final String GET_ALL = "Author.getAll";
     public static final String GET_BY_NAME = "Author.getByLastName";
+    public static final String GET_RECORD_COUNT = "Author.getCount";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_id_generator")

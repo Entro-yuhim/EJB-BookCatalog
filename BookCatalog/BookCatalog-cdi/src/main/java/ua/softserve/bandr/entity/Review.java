@@ -12,11 +12,13 @@ import javax.validation.constraints.NotNull;
 @Check(constraints = "rating BETWEEN 1 AND 5")
 @NamedQueries({
         @NamedQuery(name = Review.GET_ALL, query = "SELECT r FROM Review r"),
-        @NamedQuery(name = Review.GET_BY_BOOK, query = "SELECT r FROM Review r WHERE r.book.id = :id")
+        @NamedQuery(name = Review.GET_BY_BOOK, query = "SELECT r FROM Review r WHERE r.book.id = :id"),
+        @NamedQuery(name = Review.GET_RECORD_COUNT, query = "SELECT count(r.id) FROM Review r")
 })
 public class Review implements Persistable {
     public static final String GET_ALL = "Reviews.getAll";
     public static final String GET_BY_BOOK = "Reviews.getByBook";
+    public static final String GET_RECORD_COUNT = "Reviews.getRecordCount";
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "review_id_generator")
     @SequenceGenerator(name = "review_id_generator", sequenceName = "review_id_seq", allocationSize = 1)

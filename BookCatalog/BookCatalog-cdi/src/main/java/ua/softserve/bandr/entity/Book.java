@@ -18,7 +18,9 @@ import java.util.Set;
                         "WHERE a.lastName = :name OR a.firstName = :name"),
         @NamedQuery(name = Book.GET_BY_RATING,
                 query = "SELECT b FROM Book b " +
-                        "WHERE b.rating = :rating")
+                        "WHERE b.rating = :rating"),
+        @NamedQuery(name = Book.GET_RECORD_COUNT,
+        query = "SELECT count(b.id) FROM Book b")
 })
 @NamedNativeQueries({
         @NamedNativeQuery(name = Book.GET_COUNT_BY_RATING,
@@ -35,6 +37,7 @@ public class Book implements Persistable {
     public static final String GET_BY_AUTHOR_NAME = "Book.getByAuthorName";
     public static final String GET_BY_RATING = "Book.getByRating";
     public static final String GET_COUNT_BY_RATING = "Book.ratingDistribution";
+    public static final String GET_RECORD_COUNT = "Book.getRecordCount";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_id_generator")

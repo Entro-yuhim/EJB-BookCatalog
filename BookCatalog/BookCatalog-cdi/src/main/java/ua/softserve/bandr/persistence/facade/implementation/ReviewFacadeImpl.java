@@ -32,4 +32,9 @@ public class ReviewFacadeImpl extends AbstractFacade<Review> implements ReviewFa
         LOG.debug("Got paged reviews, first restult at {} max results {}", startWith, pageSize);
         return executeNamedQuery(Review.GET_ALL, Optional.of(startWith), Optional.of(pageSize));
     }
+
+    @Override
+    public Integer getRecordCount() {
+        return executeNamedQueryToCount(Review.GET_RECORD_COUNT);
+    }
 }

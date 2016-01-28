@@ -17,7 +17,9 @@ public class HomeController {
     @Inject
     private BookManager bookManager;
 
-    public List<BookRatingDTO> getBookData(){
+    public List<BookRatingDTO> getBookData() {
+        int a = bookManager.getRecordCount();
+        System.out.println(a);
         return bookManager.getBookRatingData();
     }
 

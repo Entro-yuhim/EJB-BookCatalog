@@ -14,4 +14,6 @@ public interface AbstractFacadeInt<T extends Persistable> {
     T getById(Long id);
 
     List<T> getPaged(Integer startWith, Integer pageSize);
+
+    Integer getRecordCount();
 }

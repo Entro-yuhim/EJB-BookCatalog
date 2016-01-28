@@ -74,4 +74,7 @@ public abstract class AbstractManager<T extends Persistable> {
         getHome().delete(entity);
     }
 
+    public int getRecordCount() {
+        return getFacade().getRecordCount();
+    }
 }
