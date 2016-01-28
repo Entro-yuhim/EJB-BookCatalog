@@ -33,14 +33,6 @@ ALTER SEQUENCE AUTHOR_ID_SEQ INCREMENT BY 30;
 select AUTHOR_ID_SEQ.nextval from dual;
 
 ALTER SEQUENCE AUTHOR_ID_SEQ INCREMENT BY 1;
---SELECT pg_catalog.setval('author_id_seq', 30, true);
-
-
---
--- TOC entry 1948 (class 0 OID 42759046)
--- Dependencies: 169
--- Data for Name: book; Type: TABLE DATA; Schema: public; Owner: -
---
 
 INSERT INTO book(id, isbn, publisher, title, year_published) VALUES (1, '9781603090155', 'Diamond Comic Distributors', 'Johnny Boo 2', to_date('2015', 'YYYY'));
 INSERT INTO book(id, isbn, publisher, title, year_published) VALUES (2, '9781891830433', 'Top Shelf', 'Blankets', to_date('2003', 'YYYY'));
@@ -147,13 +139,3 @@ INSERT INTO book_author(book_id, author_id) VALUES (46, 8);
 INSERT INTO book_author(book_id, author_id) VALUES (47, 30);
 INSERT INTO book_author(book_id, author_id) VALUES (48, 9);
 INSERT INTO book_author(book_id, author_id) VALUES (49, 27);
-
---SELECT pg_catalog.setval('book_id_seq', 49, true);
-
-
---TOOD: alter sequence of reviews
---SELECT pg_catalog.setval('review_id_seq', 1, false);
-
-
--- Completed on 2016-01-13 15:43:25
-
