@@ -3,14 +3,10 @@ package ua.softserve.bandr.persistence.facade;
 import ua.softserve.bandr.entity.Review;
 
 import javax.ejb.Local;
-import java.util.List;
 
 /**
  * Created by bandr on 22.01.2016.
  */
 @Local
-public interface ReviewFacade extends AbstractFacadeInt {
-    List<Review> getAll();
-
-    List<Review> getPaged(Integer startWith, Integer pageSize);
+public interface ReviewFacade extends AbstractFacadeInt<Review> {
 }

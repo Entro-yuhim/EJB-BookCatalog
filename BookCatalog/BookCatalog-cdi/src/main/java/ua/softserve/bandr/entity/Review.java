@@ -1,9 +1,7 @@
 package ua.softserve.bandr.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.Check;
-import ua.softserve.bandr.entity.json.Views;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -13,10 +11,10 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Check(constraints = "rating BETWEEN 1 AND 5")
 @NamedQueries({
-        @NamedQuery(name= Review.GET_ALL, query="SELECT r FROM Review r"),
-        @NamedQuery(name= Review.GET_BY_BOOK, query="SELECT r FROM Review r WHERE r.book.id = :id")
+        @NamedQuery(name = Review.GET_ALL, query = "SELECT r FROM Review r"),
+        @NamedQuery(name = Review.GET_BY_BOOK, query = "SELECT r FROM Review r WHERE r.book.id = :id")
 })
-public class Review {
+public class Review implements Persistable {
     public static final String GET_ALL = "Reviews.getAll";
     public static final String GET_BY_BOOK = "Reviews.getByBook";
     @Id
@@ -28,13 +26,13 @@ public class Review {
     @Column(length = 255)
     private String username;
 
-    @Column(length=1, nullable = false)
+    @Column(length = 1, nullable = false)
     @Min(value = 1, message = "Rating should be between 1 and 5.")
     @Max(value = 5, message = "Rating should be between 1 and 5.")
     private Integer rating;
 
     @Lob
-    @Column(name="review_text", nullable = false)
+    @Column(name = "review_text", nullable = false)
     @NotNull(message = "Text of review cannot be null.")
     private String reviewText;
 
@@ -65,7 +63,7 @@ public class Review {
         this.reviewText = message;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -79,5 +77,10 @@ public class Review {
 
     public void setBook(Book book) {
         this.book = book;
+    }
+
+    @Override
+    public String getEntityName() {
+        return "Review";
     }
 }

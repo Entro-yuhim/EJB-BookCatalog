@@ -1,5 +1,7 @@
 package ua.softserve.bandr.persistence.manager;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.dto.BookRatingDTO;
 import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.persistence.facade.AbstractFacadeInt;
@@ -23,6 +25,8 @@ public class BookManager extends AbstractManager<Book> {
     @Inject
     private BookFacade bookFacade;
 
+    private static final Logger LOG = LoggerFactory.getLogger(BookManager.class);
+
     @Override
     protected AbstractHome<Book> getHome() {
         return bookHome;
@@ -33,16 +37,8 @@ public class BookManager extends AbstractManager<Book> {
         return bookFacade;
     }
 
-    public void update(Book book) {
-        bookHome.update(book);
-    }
-
-    public void delete(Book book) {
-        bookHome.delete(book);
-    }
-
     public List<BookRatingDTO> getBookRatingData() {
-        List<BookRatingDTO> list = bookFacade.getBookCountByRating();
-        return list;
+        LOG.debug("Retrieved data of book distribution by rating.");
+        return bookFacade.getBookCountByRating();
     }
 }

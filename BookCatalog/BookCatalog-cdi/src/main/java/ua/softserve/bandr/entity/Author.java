@@ -19,7 +19,7 @@ import java.util.StringJoiner;
 @Table(name = "author",
         uniqueConstraints = @UniqueConstraint(name = "unique_author",
                 columnNames = {"first_name", "last_name"}))
-public class Author {
+public class Author implements Persistable {
 
     public static final String GET_ALL = "Author.getAll";
     public static final String GET_BY_NAME = "Author.getByLastName";
@@ -76,5 +76,10 @@ public class Author {
 
     public int getRating() {
         return rating;
+    }
+
+    @Override
+    public String getEntityName() {
+        return "Author";
     }
 }

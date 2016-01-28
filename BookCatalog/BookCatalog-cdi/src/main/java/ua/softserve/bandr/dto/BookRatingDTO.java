@@ -1,9 +1,11 @@
 package ua.softserve.bandr.dto;
 
+import java.io.Serializable;
+
 /**
  * Created by bandr on 19.01.2016.
  */
-public class BookRatingDTO {
+public class BookRatingDTO implements Serializable {
     private Integer rating;
     private Long count;
 

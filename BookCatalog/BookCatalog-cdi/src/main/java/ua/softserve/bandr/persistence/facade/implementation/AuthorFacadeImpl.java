@@ -14,9 +14,13 @@ import java.util.List;
 
 @Stateless
 @LocalBean
-public class AuthorFacadeImpl extends AbstractFacade<Author> implements AuthorFacade{
+public class AuthorFacadeImpl extends AbstractFacade<Author> implements AuthorFacade {
 
-    public List<Author> getAll(){
+    public AuthorFacadeImpl() {
+        super(Author.class);
+    }
+
+    public List<Author> getAll() {
         return executeNamedQuery(Author.GET_ALL);
     }
 
@@ -32,13 +36,13 @@ public class AuthorFacadeImpl extends AbstractFacade<Author> implements AuthorFa
     }
 
     public List<Author> getPagedFilteredSorted(Optional<Integer> startWith, Optional<Integer> pageSize,
-                                               Optional<String> filterText){
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+                                               Optional<String> filterText) {
+        CriteriaBuilder cb = getCriteriaBuilder();
         CriteriaQuery<Author> criteriaQuery = cb.createQuery(Author.class);
         Root<Author> author = criteriaQuery.from(Author.class);
         criteriaQuery = criteriaQuery.select(author)
-                                .where(cb.or(getLike(cb, "name", author),
-                                        getLike(cb, "name", author))).orderBy();
-        return executeQuery(entityManager.createQuery(criteriaQuery), Pair.of("name", filterText.get()));
+                .where(cb.or(getLike(cb, "name", author),
+                             getLike(cb, "name", author))).orderBy();
+        return executeQuery(criteriaQuery, startWith, pageSize, Pair.of("name", filterText.get()));
     }
 }

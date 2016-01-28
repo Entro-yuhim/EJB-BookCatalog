@@ -21,6 +21,10 @@ import java.util.List;
 @LocalBean
 public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 
+    public BookFacadeImpl() {
+        super(Book.class);
+    }
+
     public List<Book> getAll() {
         return executeNamedQuery(Book.GET_ALL);
     }
@@ -42,7 +46,7 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
     //I need to see what type of data will I receive from JSF/RF for pagination to properly implement this
     public List<Book> getPagedFilteredSorted(Optional<Integer> startWith, Optional<Integer> pageSize,
                                              Optional<String> filterText) {//, Optional<Book.BookSorting> sorting) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = getCriteriaBuilder();
         CriteriaQuery<Book> criteria = criteriaBuilder.createQuery(Book.class);
         Root<Book> book = criteria.from(Book.class);
         Join<Book, Author> bookAuthor = book.join("authors");
@@ -52,7 +56,7 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
                                 .or(getLike(criteriaBuilder, "alias", book.get("title")),
                                         getLike(criteriaBuilder, "alias", bookAuthor.get("firstName")),
                                         getLike(criteriaBuilder, "alias", bookAuthor.get("lastName"))));
-        return executeQuery(entityManager.createQuery(finalQuery), startWith, pageSize, Pair.of("alias", "%" + filterText.get().toUpperCase() + "%"));
+        return executeQuery(finalQuery, startWith, pageSize, Pair.of("alias", "%" + filterText.get().toUpperCase() + "%"));
     }
 
     public List<BookRatingDTO> getBookCountByRating() {

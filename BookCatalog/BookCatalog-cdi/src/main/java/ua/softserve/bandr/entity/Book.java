@@ -1,11 +1,7 @@
 package ua.softserve.bandr.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreType;
-import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.Formula;
-import ua.softserve.bandr.dto.BookRatingDTO;
-import ua.softserve.bandr.entity.json.Views;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -34,7 +30,7 @@ import java.util.Set;
                         "GROUP by subq.rating " +
                         "ORDER by subq.rating")
 })
-public class Book {
+public class Book implements Persistable {
     public static final String GET_ALL = "Book.getAll";
     public static final String GET_BY_AUTHOR_NAME = "Book.getByAuthorName";
     public static final String GET_BY_RATING = "Book.getByRating";
@@ -77,10 +73,6 @@ public class Book {
     @JsonIgnore
     private Set<Review> reviews = new HashSet<>();
 
-    public enum BookSorting{
-        ID, TITLE, PUBLISHED_DATE, PUBLISHER, RATING, AUTHOR
-    }
-
     public String getTitle() {
         return title;
     }
@@ -121,11 +113,16 @@ public class Book {
         this.createDate = createDate;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    @Override
+    public String getEntityName() {
+        return "Book";
+    }
+
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -147,9 +144,5 @@ public class Book {
 
     public Integer getRating() {
         return rating;
-    }
-
-    public void setRating(Integer rating) {
-        this.rating = rating;
     }
 }
