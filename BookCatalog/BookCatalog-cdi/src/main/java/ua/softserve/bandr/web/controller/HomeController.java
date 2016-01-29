@@ -14,13 +14,11 @@ import java.util.List;
 @ManagedBean
 @RequestScoped
 public class HomeController {
-    @Inject
-    private BookManager bookManager;
+	@Inject
+	private BookManager bookManager;
 
-    public List<BookRatingDTO> getBookData() {
-        int a = bookManager.getRecordCount();
-        System.out.println(a);
-        return bookManager.getBookRatingData();
-    }
+	public List<BookRatingDTO> getBookData() {
+		return bookManager.getBookRatingData();
+	}
 
 }

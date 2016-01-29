@@ -16,38 +16,40 @@ import java.util.List;
 @LocalBean
 public class AuthorFacadeImpl extends AbstractFacade<Author> implements AuthorFacade {
 
-    public AuthorFacadeImpl() {
-        super(Author.class);
-    }
+	public AuthorFacadeImpl() {
+		super(Author.class);
+	}
 
-    public List<Author> getAll() {
-        return executeNamedQuery(Author.GET_ALL);
-    }
+	@Override
+	public List<Author> getAll() {
+		return executeNamedQuery(Author.GET_ALL);
+	}
 
-    @Override
-    public List<Author> getPaged(Integer startWith, Integer pageSize) {
-        return executeNamedQuery(Author.GET_ALL, Optional.of(startWith), Optional.of(pageSize));
-    }
+	@Override
+	public List<Author> getPaged(Integer startWith, Integer pageSize) {
+		return executeNamedQuery(Author.GET_ALL, Optional.of(startWith), Optional.of(pageSize));
+	}
 
-    @Override
-    public Integer getRecordCount() {
-        return executeNamedQueryToCount(Author.GET_RECORD_COUNT);
-    }
+	@Override
+	public Integer getRecordCount() {
+		return executeNamedQueryToCount(Author.GET_RECORD_COUNT);
+	}
 
-    @Override
-    public List<Author> getByName(String lastName) {
-        return executeNamedQuery(Author.GET_BY_NAME,
-                Pair.of("lastName", (Object) lastName), Pair.of("firstName", lastName));
-    }
+	@Override
+	public List<Author> getByName(String lastName) {
+		return executeNamedQuery(Author.GET_BY_NAME,
+				Pair.of("lastName", (Object) lastName), Pair.of("firstName", lastName));
+	}
 
-    public List<Author> getPagedFilteredSorted(Optional<Integer> startWith, Optional<Integer> pageSize,
-                                               Optional<String> filterText) {
-        CriteriaBuilder cb = getCriteriaBuilder();
-        CriteriaQuery<Author> criteriaQuery = cb.createQuery(Author.class);
-        Root<Author> author = criteriaQuery.from(Author.class);
-        criteriaQuery = criteriaQuery.select(author)
-                .where(cb.or(getLike(cb, "name", author),
-                             getLike(cb, "name", author))).orderBy();
-        return executeQuery(criteriaQuery, startWith, pageSize, Pair.of("name", filterText.get()));
-    }
+	@Override
+	public List<Author> getPagedFilteredSorted(Optional<Integer> startWith, Optional<Integer> pageSize,
+											   Optional<String> filterText) {
+		CriteriaBuilder cb = getCriteriaBuilder();
+		CriteriaQuery<Author> criteriaQuery = cb.createQuery(Author.class);
+		Root<Author> author = criteriaQuery.from(Author.class);
+		criteriaQuery = criteriaQuery.select(author)
+				.where(cb.or(getLike(cb, "name", author),   // todo: what is a field "name" ?
+						getLike(cb, "name", author))).orderBy();   // todo: 2 expression for one field
+		return executeQuery(criteriaQuery, startWith, pageSize, Pair.of("name", filterText.get())); // todo: what is a field "name" ?
+	}
 }

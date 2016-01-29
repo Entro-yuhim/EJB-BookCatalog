@@ -11,78 +11,80 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Check(constraints = "rating BETWEEN 1 AND 5")
 @NamedQueries({
-        @NamedQuery(name = Review.GET_ALL, query = "SELECT r FROM Review r"),
-        @NamedQuery(name = Review.GET_BY_BOOK, query = "SELECT r FROM Review r WHERE r.book.id = :id"),
-        @NamedQuery(name = Review.GET_RECORD_COUNT, query = "SELECT count(r.id) FROM Review r")
+		@NamedQuery(name = Review.GET_ALL, query = "SELECT r FROM Review r"),
+		@NamedQuery(name = Review.GET_BY_BOOK, query = "SELECT r FROM Review r WHERE r.book.id = :id"),
+		@NamedQuery(name = Review.GET_RECORD_COUNT, query = "SELECT count(r.id) FROM Review r")
 })
 public class Review implements Persistable {
-    public static final String GET_ALL = "Reviews.getAll";
-    public static final String GET_BY_BOOK = "Reviews.getByBook";
-    public static final String GET_RECORD_COUNT = "Reviews.getRecordCount";
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "review_id_generator")
-    @SequenceGenerator(name = "review_id_generator", sequenceName = "review_id_seq", allocationSize = 1)
-    @JsonIgnore //Shouldn't accept or give id in JSON data
-    private Long id;
+	public static final String GET_ALL = "Reviews.getAll";
+	public static final String GET_BY_BOOK = "Reviews.getByBook";
+	public static final String GET_RECORD_COUNT = "Reviews.getRecordCount";
+	private static final long serialVersionUID = 4070328724532468249L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "review_id_generator")
+	@SequenceGenerator(name = "review_id_generator", sequenceName = "review_id_seq", allocationSize = 1)
+	@JsonIgnore //Shouldn't accept or give id in JSON data
+	private Long id;
 
-    @Column(length = 255)
-    private String username;
+	@Column(length = 255)
+	private String username;
 
-    @Column(length = 1, nullable = false)
-    @Min(value = 1, message = "Rating should be between 1 and 5.")
-    @Max(value = 5, message = "Rating should be between 1 and 5.")
-    private Integer rating;
+	@Column(length = 1, nullable = false)
+	@Min(value = 1, message = "Rating should be between 1 and 5.")
+	@Max(value = 5, message = "Rating should be between 1 and 5.")
+	private Integer rating;
 
-    @Lob
-    @Column(name = "review_text", nullable = false)
-    @NotNull(message = "Text of review cannot be null.")
-    private String reviewText;
+	@Lob
+	@Column(name = "review_text", nullable = false)
+	@NotNull(message = "Text of review cannot be null.")
+	private String reviewText;
 
-    @ManyToOne
-    private Book book;
+	@ManyToOne
+	private Book book;
 
-    public String getUsername() {
-        return username;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public Integer getRating() {
-        return rating;
-    }
+	public Integer getRating() {
+		return rating;
+	}
 
-    public void setRating(Integer rating) {
-        this.rating = rating;
-    }
+	public void setRating(Integer rating) {
+		this.rating = rating;
+	}
 
-    public String getReviewText() {
-        return reviewText;
-    }
+	public String getReviewText() {
+		return reviewText;
+	}
 
-    public void setReviewText(String message) {
-        this.reviewText = message;
-    }
+	public void setReviewText(String message) {
+		this.reviewText = message;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	@Override
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public Book getBook() {
-        return book;
-    }
+	public Book getBook() {
+		return book;
+	}
 
-    public void setBook(Book book) {
-        this.book = book;
-    }
+	public void setBook(Book book) {
+		this.book = book;
+	}
 
-    @Override
-    public String getEntityName() {
-        return "Review";
-    }
+	@Override
+	public String getEntityName() {
+		return "Review";
+	}
 }

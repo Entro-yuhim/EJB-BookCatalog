@@ -9,11 +9,12 @@ import ua.softserve.bandr.persistence.facade.BookFacade;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,55 +22,67 @@ import java.util.List;
 @LocalBean
 public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 
-    public BookFacadeImpl() {
-        super(Book.class);
-    }
+	public BookFacadeImpl() {
+		super(Book.class);
+	}
 
-    public List<Book> getAll() {
-        return executeNamedQuery(Book.GET_ALL);
-    }
+	@Override
+	public List<Book> getAll() {
+		return executeNamedQuery(Book.GET_ALL);
+	}
 
-    @Override
-    public List<Book> getPaged(Integer startWith, Integer pageSize) {
-        return executeNamedQuery(Book.GET_ALL, Optional.of(startWith), Optional.of(pageSize));
-    }
+	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public List<Book> getPaged(Integer startWith, Integer pageSize) {
+		return executeNamedQuery(Book.GET_ALL, Optional.of(startWith), Optional.of(pageSize));
+	}
 
-    @Override
-    public Integer getRecordCount() {
-        return executeNamedQueryToCount(Book.GET_RECORD_COUNT);
-    }
+	@Override
+	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+	public Integer getRecordCount() {
+		return executeNamedQueryToCount(Book.GET_RECORD_COUNT);
+	}
 
-    public List<Book> getAllByAuthor(String authorFilter) {
-        return executeNamedQuery(Book.GET_BY_AUTHOR_NAME,
-                Pair.of("name", authorFilter));
-    }
+	@Override
+	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	public List<Book> getAllByAuthor(String authorFilter) {
+		return executeNamedQuery(Book.GET_BY_AUTHOR_NAME,
+				Pair.of("authorNamePlaceholder", authorFilter));
+	}
 
-    public List<Book> getBooksByRating(int rating) {
-        return executeNamedQuery(Book.GET_BY_RATING, Pair.of("rating", rating));
-    }
+	@Override
+	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	public List<Book> getBooksByRating(int rating) {
+		return executeNamedQuery(Book.GET_BY_RATING, Pair.of("rating", rating));
+	}
 
-    //I need to see what type of data will I receive from JSF/RF for pagination to properly implement this
-    public List<Book> getPagedFilteredSorted(Optional<Integer> startWith, Optional<Integer> pageSize,
-                                             Optional<String> filterText) {//, Optional<Book.BookSorting> sorting) {
-        CriteriaBuilder criteriaBuilder = getCriteriaBuilder();
-        CriteriaQuery<Book> criteria = criteriaBuilder.createQuery(Book.class);
-        Root<Book> book = criteria.from(Book.class);
-        Join<Book, Author> bookAuthor = book.join("authors");
-        CriteriaQuery<Book> finalQuery =
-                criteria.select(book)
-                        .where(criteriaBuilder
-                                .or(getLike(criteriaBuilder, "alias", book.get("title")),
-                                        getLike(criteriaBuilder, "alias", bookAuthor.get("firstName")),
-                                        getLike(criteriaBuilder, "alias", bookAuthor.get("lastName"))));
-        return executeQuery(finalQuery, startWith, pageSize, Pair.of("alias", "%" + filterText.get().toUpperCase() + "%"));
-    }
+	//I need to see what type of data will I receive from JSF/RF for pagination to properly implement this
+	@Override
+	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	public List<Book> getPagedFilteredSorted(Optional<Integer> startWith, Optional<Integer> pageSize,
+											 Optional<String> filterText) {//, Optional<Book.BookSorting> sorting) {
+		CriteriaBuilder criteriaBuilder = getCriteriaBuilder();
+		CriteriaQuery<Book> criteria = criteriaBuilder.createQuery(Book.class);
+		Root<Book> book = criteria.from(Book.class);
+		Join<Book, Author> bookAuthor = book.join("authors");
+		CriteriaQuery<Book> finalQuery =
+				criteria.select(book)
+						.where(criteriaBuilder
+								.or(getLike(criteriaBuilder, "alias", book.get("title")),
+										getLike(criteriaBuilder, "alias", bookAuthor.get("firstName")),
+										getLike(criteriaBuilder, "alias", bookAuthor.get("lastName"))));
+		return executeQuery(finalQuery, startWith, pageSize, Pair.of("alias", "%" + filterText.get().toUpperCase() + "%")); // todo: case unsensitive ?
+	}
 
-    public List<BookRatingDTO> getBookCountByRating() {
-        List<Object[]> data = entityManager.createNamedQuery(Book.GET_COUNT_BY_RATING).getResultList();
-        List<BookRatingDTO> dtoList = new ArrayList<>();
-        for (Object[] a : data){
-            dtoList.add(new BookRatingDTO(((BigDecimal) a[0]).intValue(), ((BigDecimal) a[1]).longValue()));
-        }
-        return dtoList;
-    }
+	@Override
+	@SuppressWarnings("unchecked")
+	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+	public List<BookRatingDTO> getBookCountByRating() {
+		List<Object[]> data = entityManager.createNamedQuery(Book.GET_COUNT_BY_RATING).getResultList();
+		List<BookRatingDTO> dtoList = new ArrayList<>();
+		for (Object[] a : data) {
+			dtoList.add(new BookRatingDTO(((Number) a[0]).intValue(), ((Number) a[1]).longValue()));
+		}
+		return dtoList;
+	}
 }

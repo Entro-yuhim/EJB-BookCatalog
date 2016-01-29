@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by bandr on 28.01.2016.
  */
 public interface Persistable extends Serializable {
-    Long getId();
+	Long getId();
 
-    String getEntityName();
+	String getEntityName();
 }

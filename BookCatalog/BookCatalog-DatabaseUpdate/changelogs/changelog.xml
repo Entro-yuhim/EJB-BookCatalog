@@ -7,18 +7,18 @@
     <changeSet id="1_CREATE_SCHEMA" author="bandr">
         <createTable tableName="author">
             <column name="id" type="INTEGER">
-                <constraints primaryKey="true" nullable="false" />
+                <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="first_name" type="VARCHAR(255)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
-            <column name="last_name" type="VARCHAR2(255)" />
+            <column name="last_name" type="VARCHAR2(255)"/>
         </createTable>
         <addUniqueConstraint tableName="author" columnNames="first_name, last_name"/>
 
         <createTable tableName="book">
             <column name="id" type="INTEGER">
-                <constraints primaryKey="true" nullable="false" />
+                <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="create_date" type="DATE" defaultValueComputed="CURRENT_DATE"/>
             <column name="isbn" type="VARCHAR(14)">
@@ -33,31 +33,31 @@
 
         <createTable tableName="book_author">
             <column name="author_id" type="INTEGER">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="book_id" type="INTEGER">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
         </createTable>
         <addForeignKeyConstraint baseTableName="book_author" baseColumnNames="author_id"
                                  constraintName="author_to_book_fk" referencedTableName="author"
-                                 referencedColumnNames="id" />
+                                 referencedColumnNames="id"/>
         <addForeignKeyConstraint baseTableName="book_author" baseColumnNames="book_id"
                                  constraintName="book_to_author_fk" referencedTableName="book"
-                                 referencedColumnNames="id" />
+                                 referencedColumnNames="id"/>
 
         <createTable tableName="review">
             <column name="id" type="INTEGER">
-                <constraints primaryKey="true" nullable="false" />
+                <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="username" type="VARCHAR2(255)" defaultValue="anonymous"/>
-            <column name="review_text" type="CLOB" >
+            <column name="review_text" type="CLOB">
                 <constraints nullable="false"/>
             </column>
             <column name="rating" type="NUMBER(1)">
                 <constraints nullable="false"/>
             </column>
-            <column name="book_id" type="INTEGER" >
+            <column name="book_id" type="INTEGER">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -66,16 +66,16 @@
                                  referencedTableName="book"
                                  referencedColumnNames="id" onDelete="CASCADE"/>
     </changeSet>
-    
+
     <changeSet id="1.1_SEQUENCES" author="bandr">
         <createSequence sequenceName="author_id_seq"/>
         <createSequence sequenceName="book_id_seq"/>
         <createSequence sequenceName="review_id_seq"/>
     </changeSet>
     <changeSet id="2.1_DATA" author="bandr">
-        <sqlFile path="database/data/books_authors_sql.sql" />
+        <sqlFile path="database/data/books_authors_sql.sql"/>
     </changeSet>
     <changeSet id="2.2_DATA" author="bandr">
-        <sqlFile path="database/data/comments.sql" />
+        <sqlFile path="database/data/comments.sql"/>
     </changeSet>
 </databaseChangeLog>

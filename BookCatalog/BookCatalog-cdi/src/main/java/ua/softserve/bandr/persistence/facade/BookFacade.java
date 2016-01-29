@@ -13,11 +13,11 @@ import java.util.List;
 @Local
 public interface BookFacade extends AbstractFacadeInt<Book> {
 
-    List<Book> getAllByAuthor(String authorFilter);
+	List<Book> getAllByAuthor(String authorFilter);
 
-    List<Book> getBooksByRating(int rating);
+	List<Book> getBooksByRating(int rating);
 
-    List<Book> getPagedFilteredSorted(Optional<Integer> startWith, Optional<Integer> pageSize, Optional<String> filterText);
+	List<Book> getPagedFilteredSorted(Optional<Integer> startWith, Optional<Integer> pageSize, Optional<String> filterText);
 
-    List<BookRatingDTO> getBookCountByRating();
+	List<BookRatingDTO> getBookCountByRating();
 }

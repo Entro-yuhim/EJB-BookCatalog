@@ -1,5 +1,5 @@
 .basicTable {
-    width: 60%;
+    width: 90%;
     margin: auto;
     border: none !important;
     font-size: 14px !important;
@@ -11,7 +11,7 @@ body {
 }
 
 .container {
-    width: 1170px;
+    width: 900px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -26,9 +26,10 @@ body {
 
 a.navbutton {
     text-decoration: none;
-    padding:15px 15px;
+    padding: 15px 15px;
     color: #000;
 }
+
 a.navbutton:hover {
     background-color: #ebe6de;
 }

@@ -14,27 +14,27 @@ import java.util.List;
 @Stateless
 public class ReviewFacadeImpl extends AbstractFacade<Review> implements ReviewFacade {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ReviewFacadeImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ReviewFacadeImpl.class);
 
-    protected ReviewFacadeImpl() {
-        super(Review.class);
-    }
+	protected ReviewFacadeImpl() {
+		super(Review.class);
+	}
 
-    @Override
-    public List<Review> getAll() {
-        List<Review> reviews = executeNamedQuery(Review.GET_ALL);
-        LOG.debug("Got all reviews, {} total", reviews.size());
-        return reviews;
-    }
+	@Override
+	public List<Review> getAll() {
+		List<Review> reviews = executeNamedQuery(Review.GET_ALL);
+		LOG.debug("Got all reviews, {} total", reviews.size());
+		return reviews;
+	}
 
-    @Override
-    public List<Review> getPaged(Integer startWith, Integer pageSize){
-        LOG.debug("Got paged reviews, first restult at {} max results {}", startWith, pageSize);
-        return executeNamedQuery(Review.GET_ALL, Optional.of(startWith), Optional.of(pageSize));
-    }
+	@Override
+	public List<Review> getPaged(Integer startWith, Integer pageSize) {
+		LOG.debug("Got paged reviews, first restult at {} max results {}", startWith, pageSize);
+		return executeNamedQuery(Review.GET_ALL, Optional.of(startWith), Optional.of(pageSize));
+	}
 
-    @Override
-    public Integer getRecordCount() {
-        return executeNamedQueryToCount(Review.GET_RECORD_COUNT);
-    }
+	@Override
+	public Integer getRecordCount() {
+		return executeNamedQueryToCount(Review.GET_RECORD_COUNT);
+	}
 }

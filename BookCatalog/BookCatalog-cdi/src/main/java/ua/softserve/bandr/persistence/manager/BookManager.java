@@ -10,35 +10,36 @@ import ua.softserve.bandr.persistence.home.AbstractHome;
 import ua.softserve.bandr.persistence.home.BookHome;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
  * Created by bandr on 20.01.2016.
  */
 @Stateless
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class BookManager extends AbstractManager<Book> {
-    @Inject
-    private BookHome bookHome;
-    @Inject
-    private BookFacade bookFacade;
+	@Inject
+	private BookHome bookHome;
+	@Inject
+	private BookFacade bookFacade;
 
-    private static final Logger LOG = LoggerFactory.getLogger(BookManager.class);
+	private static final Logger LOG = LoggerFactory.getLogger(BookManager.class);
 
-    @Override
-    protected AbstractHome<Book> getHome() {
-        return bookHome;
-    }
+	@Override
+	protected AbstractHome<Book> getHome() {
+		return bookHome;
+	}
 
-    @Override
-    protected AbstractFacadeInt<Book> getFacade() {
-        return bookFacade;
-    }
+	@Override
+	protected AbstractFacadeInt<Book> getFacade() {
+		return bookFacade;
+	}
 
-    public List<BookRatingDTO> getBookRatingData() {
-        LOG.debug("Retrieved data of book distribution by rating.");
-        return bookFacade.getBookCountByRating();
-    }
+	public List<BookRatingDTO> getBookRatingData() {
+		LOG.debug("Retrieved data of book distribution by rating.");
+		return bookFacade.getBookCountByRating();
+	}
 }

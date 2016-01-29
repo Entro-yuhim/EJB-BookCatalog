@@ -14,18 +14,18 @@ import javax.inject.Inject;
  */
 @Stateless
 public class ReviewManager extends AbstractManager<Review> {
-    @Inject
-    private ReviewHome reviewHome;
-    @Inject
-    private ReviewFacade reviewFacade;
+	@Inject
+	private ReviewHome reviewHome;
+	@Inject
+	private ReviewFacade reviewFacade;
 
-    @Override
-    protected AbstractHome<Review> getHome() {
-        return reviewHome;
-    }
+	@Override
+	protected AbstractHome<Review> getHome() {
+		return reviewHome;
+	}
 
-    @Override
-    protected AbstractFacadeInt<Review> getFacade() {
-        return reviewFacade;
-    }
+	@Override
+	protected AbstractFacadeInt<Review> getFacade() {
+		return reviewFacade;
+	}
 }
