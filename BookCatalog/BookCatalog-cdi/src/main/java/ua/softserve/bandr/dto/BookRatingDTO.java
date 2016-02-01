@@ -6,6 +6,7 @@ import java.io.Serializable;
  * Created by bandr on 19.01.2016.
  */
 public class BookRatingDTO implements Serializable {
+	private static final long serialVersionUID = -2742636080563238689L;
 	private Integer rating;
 	private Long count;
 

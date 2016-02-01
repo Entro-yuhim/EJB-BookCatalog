@@ -44,7 +44,7 @@
                                  referencedColumnNames="id"/>
         <addForeignKeyConstraint baseTableName="book_author" baseColumnNames="book_id"
                                  constraintName="book_to_author_fk" referencedTableName="book"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id" onDelete="CASCADE"/>
 
         <createTable tableName="review">
             <column name="id" type="INTEGER">
@@ -77,5 +77,14 @@
     </changeSet>
     <changeSet id="2.2_DATA" author="bandr">
         <sqlFile path="database/data/comments.sql"/>
+    </changeSet>
+
+    <changeSet id="3_ADDITIONAL_BOOK_FIELD" author="bandr">
+        <addColumn tableName="book">
+            <column name="description" type="CLOB" defaultValue="[[PLACEHOLDER DESCRIPTION VALUE]]">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+            
     </changeSet>
 </databaseChangeLog>

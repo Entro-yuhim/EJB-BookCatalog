@@ -7,48 +7,58 @@
         <h1>
             This page is currently being developed.
         </h1>
-            <a4j:queue requestDelay="500" ignoreDupResponses="true"/>
-            <h:form>
-                <div style="margin-bottom: 10px;">
-                    <h:commandButton title="Delete" action="#{bookListController.doStuff}" value="Create" style="float:left; margin-left: 7%;"/>
-                    <h:commandButton title="Delete" action="#{bookListController.doStuff}" value="Delete" style="float:right; margin-right: 7%;"/>
-                </div>
-                <rich:dataTable id="goodsTable" value="#{bookListController.books}" var="record" rows="15"
-                                styleClass="basicTable">
-                    <rich:column>
-                        <f:facet name="header">
-                            <h:outputText value="ID"/>
-                        </f:facet>
-                        <h:outputText value="#{record.id}"/>
-                    </rich:column>
-                    <rich:column>
-                        <f:facet name="header">
-                            <h:outputText value="Title"/>
-                        </f:facet>
-                        <h:outputText value="#{record.title}"/>
-                    </rich:column>
-                    <rich:column>
-                        <f:facet name="header">
-                            <h:outputText value="Authors"/>
-                        </f:facet>
-                        <h:outputText value="#{record.authorNames}"/>
-                    </rich:column>
-                    <rich:column>
-                        <f:facet name="header">
-                            <h:outputText value="Rating"/>
-                        </f:facet>
-                        <h:outputText value="#{record.rating}"/>
-                    </rich:column>
-                    <rich:column>
-                        <f:facet name="header">
-                            <h:outputText value="Delete"/>
-                        </f:facet>
-                        <h:selectBooleanCheckbox value="#{bookListController.checked[record.id]}"/>
-                    </rich:column>
-                    <f:facet name="footer">
-                        <rich:dataScroller/>
+        <a4j:queue requestDelay="500" ignoreDupResponses="true"/>
+        <h:form>
+            <div style="margin-bottom: 10px;">
+                <h:commandButton title="Delete" action="#{bookListController.doStuff}" value="Create"
+                                 style="float:left; margin-left: 7%;"/>
+                <h:commandButton title="Delete" action="#{bookListController.doStuff}" value="Delete"
+                                 style="float:right; margin-right: 7%;"/>
+            </div>
+            <rich:dataTable id="richTable" value="#{bookListController.books}" var="record" rows="2"
+                            styleClass="basicTable">
+                <rich:column>
+                    <f:facet name="header">
+                        <h:outputText value="ID"/>
                     </f:facet>
-                </rich:dataTable>
-            </h:form>
+                    <h:outputText value="#{record.id}"/>
+                </rich:column>
+                <ui:include src="tableColumn.xhtml">
+                    <ui:param name="title" value="Title"/>
+                    <ui:param name="bean" value="#{bookListController}"/>
+                    <ui:param name="property" value="title"/>
+                </ui:include>
+                <rich:column>
+                    <f:facet name="header">
+                        <h:outputText value="Authors"/>
+                    </f:facet>
+                    <h:outputText value="#{record.authorNames}"/>
+                </rich:column>
+                <ui:include src="tableColumn.xhtml">
+                    <ui:param name="title" value="Rating"/>
+                    <ui:param name="bean" value="#{bookListController}"/>
+                    <ui:param name="property" value="rating"/>
+                </ui:include>
+                <rich:column>
+                    <f:facet name="header">
+                        <h:outputText value="Edit"/>
+                    </f:facet>
+                    <h:link>
+                        <h:commandButton title="Edit" action="bookEdit" value="Edit">
+                            <f:param name="bookId" value="#{record.id}"/>
+                        </h:commandButton>
+                    </h:link>
+                </rich:column>
+                <rich:column>
+                    <f:facet name="header">
+                        <h:outputText value="Delete"/>
+                    </f:facet>
+                    <h:selectBooleanCheckbox value="#{bookListController.checkedForAction[record.id]}"/>
+                </rich:column>
+                <f:facet name="footer">
+                    <rich:dataScroller/>
+                </f:facet>
+            </rich:dataTable>
+        </h:form>
     </ui:define>
 </ui:composition>

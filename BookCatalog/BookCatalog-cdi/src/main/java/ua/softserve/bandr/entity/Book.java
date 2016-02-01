@@ -3,7 +3,26 @@ package ua.softserve.bandr.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Formula;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -60,6 +79,11 @@ public class Book implements Persistable {
 
 	@Formula("(SELECT round(avg(r.rating)) FROM review r WHERE r.book_id = id)")
 	private Integer rating;
+
+	@Lob
+	@Column(nullable = false)
+	@JsonIgnore
+	private String description;
 
 	@ManyToMany
 	@JoinTable(name = "book_author",
@@ -149,5 +173,13 @@ public class Book implements Persistable {
 
 	public Integer getRating() {
 		return rating;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

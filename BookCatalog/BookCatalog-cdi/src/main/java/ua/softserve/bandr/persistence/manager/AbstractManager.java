@@ -47,7 +47,6 @@ public abstract class AbstractManager<T extends Persistable> {
 		return getFacade().getById(id);
 	}
 
-	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public List<T> getPaged(Integer startWith, Integer pageSize) {
 		LOG.info("Fetched entities for StartWith [{}] and PageSize [{}]", startWith, pageSize);
 		return getFacade().getPaged(startWith, pageSize);

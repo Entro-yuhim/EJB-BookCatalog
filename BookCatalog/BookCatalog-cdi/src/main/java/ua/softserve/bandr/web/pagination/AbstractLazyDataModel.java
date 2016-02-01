@@ -4,6 +4,7 @@ import org.ajax4jsf.model.DataVisitor;
 import org.ajax4jsf.model.ExtendedDataModel;
 import org.ajax4jsf.model.Range;
 import org.ajax4jsf.model.SequenceRange;
+import org.richfaces.model.Arrangeable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +21,7 @@ import java.util.Map;
  * <p/>
  * credit to: http://pastebin.com/raw/evUwT8VY
  */
-public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> {
+public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> implements Arrangeable {
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractLazyDataModel.class);
 	private Integer cachedRowCount;
 	private SequenceRange cachedRange;

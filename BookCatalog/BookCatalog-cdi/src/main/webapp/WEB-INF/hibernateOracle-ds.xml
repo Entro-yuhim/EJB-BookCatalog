@@ -5,7 +5,7 @@
     <datasource jndi-name="java:jboss/datasources/Hibernate4DS-OCL"
                 pool-name="hibernate4-oracle" enabled="true"
                 use-java-context="true">
-        <connection-url>jdbc:oracle:thin:@192.168.99.100:49161:xe</connection-url>
+        <connection-url>jdbc:oracle:thin:@localhost:49161:xe</connection-url>
         <driver>oracle</driver>
         <security>
             <user-name>oracle</user-name>

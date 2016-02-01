@@ -6,13 +6,11 @@ import org.apache.commons.lang3.StringUtils;
 import ua.softserve.bandr.entity.Author;
 import ua.softserve.bandr.entity.Book;
 
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-
 /**
  * Created by bandr on 29.01.2016.
  */
 public class BookDTO implements EntityDTO {
+	private static final long serialVersionUID = -4613984916560535321L;
 	private Long id;
 	private String title;
 	private String authorNames;
