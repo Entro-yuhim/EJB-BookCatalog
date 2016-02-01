@@ -1,5 +1,6 @@
 package ua.softserve.bandr.web.controller;
 
+import com.google.common.collect.Lists;
 import ua.softserve.bandr.dto.BookRatingDTO;
 import ua.softserve.bandr.persistence.manager.BookManager;
 
@@ -18,6 +19,7 @@ public class HomeController {
 	private BookManager bookManager;
 
 	public List<BookRatingDTO> getBookData() {
+		bookManager.getPagedFiltered(1, 1, Lists.newArrayList(), Lists.newArrayList());
 		return bookManager.getBookRatingData();
 	}
 

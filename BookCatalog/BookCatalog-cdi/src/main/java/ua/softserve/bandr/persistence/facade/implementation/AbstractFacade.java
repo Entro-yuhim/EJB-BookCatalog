@@ -4,7 +4,6 @@ import com.google.common.base.Optional;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.entity.Persistable;
 import ua.softserve.bandr.persistence.facade.AbstractFacadeInt;
 
@@ -110,12 +109,18 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 
 	@SuppressWarnings("unchecked")
 	protected static Predicate getLike(CriteriaBuilder cb, String alias, Path pathRoot) {
-		return cb.like(pathRoot.get("firstName"), cb.upper(cb.parameter(String.class, "name")));
+		return cb.like(pathRoot, cb.upper(cb.parameter(String.class, alias)));
+	}
+
+	//TODO: Rename after finished with functionality
+	@SuppressWarnings("unchecked")
+	protected static Predicate getLike2(CriteriaBuilder cb, String alias, Path pathRoot) {
+		return cb.like(pathRoot.get(alias), cb.upper(cb.parameter(String.class, alias)));
 	}
 
 	//For f*cks sake, Oracle, please get your *** api together.
 	protected Integer executeNamedQueryToCount(String queryName) {
-		return ((Long) entityManager.createNamedQuery(queryName).getSingleResult()).intValue();
+		return ((Number) entityManager.createNamedQuery(queryName).getSingleResult()).intValue();
 	}
 
 	private TypedQuery<T> getTypedNamedQuery(String queryName) {

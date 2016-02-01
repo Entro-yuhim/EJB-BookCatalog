@@ -1,6 +1,7 @@
 package ua.softserve.bandr.web.pagination;
 
 import org.richfaces.model.Arrangeable;
+import org.richfaces.model.ArrangeableState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.dto.EntityDTO;
@@ -20,12 +21,12 @@ public abstract class AbstractDTODataModel<U extends Persistable, T extends Enti
 
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<T> getDataList(int firstRow, int numRows) {
+	public List<T> getDataList(int firstRow, int numRows, ArrangeableState arrangeableState) {
 		//LOG.info("Getting data list with first row [{}] and size [{}]", firstRow, numRows);
-		return getDTOTransformer().getDTOList(getPersistablesList(firstRow, numRows));
+		return getDTOTransformer().getDTOList(getPersistablesList(firstRow, numRows, arrangeableState));
 	}
 
-	protected abstract List<U> getPersistablesList(Integer firstRow, Integer numRows);
+	protected abstract List<U> getPersistablesList(Integer firstRow, Integer numRows, ArrangeableState arrangeableState);
 
 	@Override
 	public Object getKey(T t) {

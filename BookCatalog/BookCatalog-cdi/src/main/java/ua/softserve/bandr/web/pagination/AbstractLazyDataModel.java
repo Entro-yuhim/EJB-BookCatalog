@@ -5,6 +5,7 @@ import org.ajax4jsf.model.ExtendedDataModel;
 import org.ajax4jsf.model.Range;
 import org.ajax4jsf.model.SequenceRange;
 import org.richfaces.model.Arrangeable;
+import org.richfaces.model.ArrangeableState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,8 +29,9 @@ public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> impl
 	private List<T> cachedList = new ArrayList<>();
 	private final Map<Object, T> cachedMap = new HashMap<>();
 	private Object rowKey;
+	protected ArrangeableState arrangeableState;
 
-	public abstract List<T> getDataList(int firstRow, int numRows);
+	public abstract List<T> getDataList(int firstRow, int numRows, ArrangeableState arrangeableState);
 
 	public abstract Object getKey(T t);
 
@@ -57,7 +59,7 @@ public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> impl
 			list = cachedList;
 		} else {
 			cachedRange = sr;
-			list = getDataList(sr.getFirstRow(), sr.getRows());
+			list = getDataList(sr.getFirstRow(), sr.getRows(), arrangeableState);
 			cachedList = list;
 		}
 		return list;
@@ -92,6 +94,10 @@ public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> impl
 		return this.rowKey;
 	}
 
+	@Override
+	public void arrange(FacesContext context, ArrangeableState state) {
+		this.arrangeableState = state;
+	}
 
 	@Override
 	public int getRowIndex() {
@@ -112,4 +118,5 @@ public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> impl
 	public void setWrappedData(Object data) {
 		throw new UnsupportedOperationException("Something is really wrong");
 	}
+
 }

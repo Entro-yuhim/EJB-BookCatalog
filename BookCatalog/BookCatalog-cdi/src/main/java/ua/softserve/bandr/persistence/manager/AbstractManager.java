@@ -1,8 +1,10 @@
 package ua.softserve.bandr.persistence.manager;
 
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.entity.Persistable;
 import ua.softserve.bandr.persistence.facade.AbstractFacadeInt;
 import ua.softserve.bandr.persistence.home.AbstractHome;
@@ -12,6 +14,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.Order;
 import java.util.List;
 
 /**
@@ -47,6 +50,7 @@ public abstract class AbstractManager<T extends Persistable> {
 		return getFacade().getById(id);
 	}
 
+	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public List<T> getPaged(Integer startWith, Integer pageSize) {
 		LOG.info("Fetched entities for StartWith [{}] and PageSize [{}]", startWith, pageSize);
 		return getFacade().getPaged(startWith, pageSize);
@@ -73,4 +77,6 @@ public abstract class AbstractManager<T extends Persistable> {
 	public int getRecordCount() {
 		return getFacade().getRecordCount();
 	}
+
+	public abstract List<Book> getPagedFiltered(Integer firstRow, Integer numRows, List<Pair<String, Object>> filterList, List<Order> orderList);
 }

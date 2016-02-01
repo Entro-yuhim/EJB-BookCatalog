@@ -14,6 +14,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,19 +60,26 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 	//I need to see what type of data will I receive from JSF/RF for pagination to properly implement this
 	@Override
 	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
-	public List<Book> getPagedFilteredSorted(Optional<Integer> startWith, Optional<Integer> pageSize,
-											 Optional<String> filterText) {//, Optional<Book.BookSorting> sorting) {
+	public List<Book> getPagedFilteredSorted(Integer startWith, Integer pageSize,
+											 List<Pair<String, Object>> filterData) {//, Optional<Book.BookSorting> sorting) {
 		CriteriaBuilder criteriaBuilder = getCriteriaBuilder();
 		CriteriaQuery<Book> criteria = criteriaBuilder.createQuery(Book.class);
 		Root<Book> book = criteria.from(Book.class);
 		Join<Book, Author> bookAuthor = book.join("authors");
+		//bookAuthor.get("title");
+		List<Predicate> predicates = new ArrayList<>();
+		//This api sucks // FIXME: 01.02.2016
+		for (Pair<String, Object> filter : filterData) {
+			//TODO check actual name of filter
+			predicates.add(getLike2(criteriaBuilder, filter.getKey(), "authorNames".equals(filter.getKey()) ? bookAuthor : book));
+		}
 		CriteriaQuery<Book> finalQuery =
 				criteria.select(book)
 						.where(criteriaBuilder
 								.or(getLike(criteriaBuilder, "alias", book.get("title")),
 										getLike(criteriaBuilder, "alias", bookAuthor.get("firstName")),
 										getLike(criteriaBuilder, "alias", bookAuthor.get("lastName"))));
-		return executeQuery(finalQuery, startWith, pageSize, Pair.of("alias", "%" + filterText.get().toUpperCase() + "%")); // todo: case unsensitive ?
+		return executeQuery(finalQuery, Optional.of(startWith), Optional.of(pageSize), Pair.of("alias", "%" + "abc".toUpperCase() + "%")); // todo: case unsensitive ?
 	}
 
 	@Override
