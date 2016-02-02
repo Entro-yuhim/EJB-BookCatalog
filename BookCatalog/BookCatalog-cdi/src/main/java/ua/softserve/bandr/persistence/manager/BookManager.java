@@ -1,6 +1,5 @@
 package ua.softserve.bandr.persistence.manager;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.dto.BookRatingDTO;
@@ -16,6 +15,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.persistence.criteria.Order;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by bandr on 20.01.2016.
@@ -41,9 +41,8 @@ public class BookManager extends AbstractManager<Book> {
 	}
 
 	@Override
-	public List<Book> getPagedFiltered(Integer firstRow, Integer numRows, List<Pair<String, Object>> filterList, List<Order> orderList) {
-		bookFacade.getPagedFilteredSorted(firstRow, numRows, filterList);
-		return null;
+	public List<Book> getPagedFiltered(Integer firstRow, Integer numRows, Map<String, String> filter, List<Order> orderList) {
+		return bookFacade.getPagedFilteredSorted(firstRow, numRows, filter);
 	}
 
 	public List<BookRatingDTO> getBookRatingData() {

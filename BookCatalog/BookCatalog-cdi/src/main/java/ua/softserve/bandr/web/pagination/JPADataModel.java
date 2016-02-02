@@ -1,6 +1,19 @@
 package ua.softserve.bandr.web.pagination;
 
-import java.util.List;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import org.ajax4jsf.model.DataVisitor;
+import org.ajax4jsf.model.ExtendedDataModel;
+import org.ajax4jsf.model.Range;
+import org.ajax4jsf.model.SequenceRange;
+import org.apache.commons.lang3.StringUtils;
+import org.richfaces.component.SortOrder;
+import org.richfaces.model.Arrangeable;
+import org.richfaces.model.ArrangeableState;
+import org.richfaces.model.FilterField;
+import org.richfaces.model.SortField;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
@@ -11,27 +24,17 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
-
-import org.richfaces.model.Arrangeable;
-import org.richfaces.model.ArrangeableState;
-import org.ajax4jsf.model.DataVisitor;
-import org.ajax4jsf.model.ExtendedDataModel;
-import org.richfaces.model.FilterField;
-import org.ajax4jsf.model.Range;
-import org.ajax4jsf.model.SequenceRange;
-import org.richfaces.model.SortField;
-import org.richfaces.component.SortOrder;
-
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class JPADataModel<T> extends ExtendedDataModel<T> implements Arrangeable {
+	private static final Logger LOG = LoggerFactory.getLogger(JPADataModel.class);
 	private EntityManager entityManager;
 	private Object rowKey;
 	private ArrangeableState arrangeableState;
 	private Class<T> entityClass;
+	private Map<String, String> cachedFilter;
 
 	public JPADataModel(EntityManager entityManager, Class<T> entityClass) {
 		super();
@@ -40,6 +43,14 @@ public abstract class JPADataModel<T> extends ExtendedDataModel<T> implements Ar
 	}
 
 	public void arrange(FacesContext context, ArrangeableState state) {
+//
+//		LOG.info("oldFilter [{}]", cachedFilter);
+//		Map<String, String> newFilter = buildFilterFromState(arrangeableState);
+//		LOG.info("newFilter [{}]", newFilter);
+//		if (!newFilter.equals(cachedFilter)) {
+//			cachedFilter = newFilter;
+//		}
+		LOG.info("Arrange");
 		arrangeableState = state;
 	}
 
@@ -50,6 +61,7 @@ public abstract class JPADataModel<T> extends ExtendedDataModel<T> implements Ar
 
 	@Override
 	public Object getRowKey() {
+		LOG.info("getRowKey");
 		return rowKey;
 	}
 
@@ -169,6 +181,7 @@ public abstract class JPADataModel<T> extends ExtendedDataModel<T> implements Ar
 
 	@Override
 	public void walk(FacesContext context, DataVisitor visitor, Range range, Object argument) {
+		LOG.info("walk");
 		CriteriaQuery<T> criteriaQuery = createSelectCriteriaQuery();
 		TypedQuery<T> query = entityManager.createQuery(criteriaQuery);
 
@@ -197,6 +210,7 @@ public abstract class JPADataModel<T> extends ExtendedDataModel<T> implements Ar
 
 	@Override
 	public T getRowData() {
+		LOG.info("getRowData [{}]", rowKey);
 		return entityManager.find(entityClass, rowKey);
 	}
 

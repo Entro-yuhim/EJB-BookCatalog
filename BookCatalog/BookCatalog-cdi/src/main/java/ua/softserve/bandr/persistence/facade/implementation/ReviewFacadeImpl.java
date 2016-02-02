@@ -9,6 +9,7 @@ import ua.softserve.bandr.persistence.facade.ReviewFacade;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import java.util.List;
+import java.util.Map;
 
 @LocalBean
 @Stateless
@@ -34,7 +35,7 @@ public class ReviewFacadeImpl extends AbstractFacade<Review> implements ReviewFa
 	}
 
 	@Override
-	public Integer getRecordCount() {
+	public Integer getRecordCount(Map<String, String> filter) {
 		return executeNamedQueryToCount(Review.GET_RECORD_COUNT);
 	}
 }

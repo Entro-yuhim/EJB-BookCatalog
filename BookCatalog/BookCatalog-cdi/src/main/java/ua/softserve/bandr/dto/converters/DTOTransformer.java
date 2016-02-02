@@ -19,7 +19,7 @@ public abstract class DTOTransformer<U extends Persistable, T extends EntityDTO>
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public List<T> getDTOList(List<U> inputList) {
-		LOG.info("Transforming data list with given converter");
+		//LOG.info("Transforming data list with given converter");
 		return Lists.transform(inputList, getConverterFunction());
 	}
 

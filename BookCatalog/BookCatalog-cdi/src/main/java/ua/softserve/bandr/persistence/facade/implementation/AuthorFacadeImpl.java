@@ -11,6 +11,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Map;
 
 @Stateless
 @LocalBean
@@ -31,7 +32,7 @@ public class AuthorFacadeImpl extends AbstractFacade<Author> implements AuthorFa
 	}
 
 	@Override
-	public Integer getRecordCount() {
+	public Integer getRecordCount(Map<String, String> filter) {
 		return executeNamedQueryToCount(Author.GET_RECORD_COUNT);
 	}
 

@@ -1,6 +1,7 @@
 package ua.softserve.bandr.persistence.facade.implementation;
 
 import com.google.common.base.Optional;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import ua.softserve.bandr.dto.BookRatingDTO;
 import ua.softserve.bandr.entity.Author;
@@ -14,10 +15,12 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Stateless
 @LocalBean
@@ -40,8 +43,33 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 
 	@Override
 	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	public Integer getRecordCount() {
-		return executeNamedQueryToCount(Book.GET_RECORD_COUNT);
+	public Integer getRecordCount(Map<String, String> filter) {
+		if (filter == null || filter.isEmpty()) {
+			return executeNamedQueryToCount(Book.GET_RECORD_COUNT);
+		}
+		CriteriaBuilder criteriaBuilder = getCriteriaBuilder();
+		CriteriaQuery baseQuery = criteriaBuilder.createQuery(Long.class);
+		Root<Book> book = baseQuery.from(Book.class);
+		Join<Book, Author> bookAuthor = book.join("authors");
+		List<Predicate> predicates = buildPredicates(filter, criteriaBuilder, book);
+		CriteriaQuery<Long> bookCriteriaQuery = baseQuery.select(criteriaBuilder.count(book))
+				.where(predicates.toArray(new Predicate[predicates.size()]));
+		return executeCriteriaQueryToCount(bookCriteriaQuery, filter);
+	}
+
+	private static List<Predicate> buildPredicates(Map<String, String> filter, CriteriaBuilder criteriaBuilder, Path<Book> book) {
+		List<Predicate> predicates = new ArrayList<>();
+		//This sucks // FIXME: 01.02.2016 -bandr
+		for (Map.Entry<String, String> filter1 : filter.entrySet()) {
+			if (!StringUtils.isEmpty(filter1.getValue())) {
+				String filterValue = StringUtils.appendIfMissing(StringUtils.prependIfMissing(filter1.getValue(), "%"), "%");
+				filter.put(filter1.getKey(), filterValue);
+				predicates.add(getLike2(criteriaBuilder, filter1.getKey(), book));
+			} else {
+				filter.remove(filter1.getKey());
+			}
+		}
+		return predicates;
 	}
 
 	@Override
@@ -61,25 +89,16 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 	@Override
 	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public List<Book> getPagedFilteredSorted(Integer startWith, Integer pageSize,
-											 List<Pair<String, Object>> filterData) {//, Optional<Book.BookSorting> sorting) {
+											 Map<String, String> filterData) {//, Optional<Book.BookSorting> sorting) {
 		CriteriaBuilder criteriaBuilder = getCriteriaBuilder();
 		CriteriaQuery<Book> criteria = criteriaBuilder.createQuery(Book.class);
 		Root<Book> book = criteria.from(Book.class);
 		Join<Book, Author> bookAuthor = book.join("authors");
-		//bookAuthor.get("title");
-		List<Predicate> predicates = new ArrayList<>();
-		//This api sucks // FIXME: 01.02.2016
-		for (Pair<String, Object> filter : filterData) {
-			//TODO check actual name of filter
-			predicates.add(getLike2(criteriaBuilder, filter.getKey(), "authorNames".equals(filter.getKey()) ? bookAuthor : book));
-		}
-		CriteriaQuery<Book> finalQuery =
-				criteria.select(book)
-						.where(criteriaBuilder
-								.or(getLike(criteriaBuilder, "alias", book.get("title")),
-										getLike(criteriaBuilder, "alias", bookAuthor.get("firstName")),
-										getLike(criteriaBuilder, "alias", bookAuthor.get("lastName"))));
-		return executeQuery(finalQuery, Optional.of(startWith), Optional.of(pageSize), Pair.of("alias", "%" + "abc".toUpperCase() + "%")); // todo: case unsensitive ?
+		List<Predicate> predicates = buildPredicates(filterData, criteriaBuilder, book);
+		CriteriaQuery<Book> finalQuery = criteria.select(book)
+				.where(predicates.toArray(new Predicate[predicates.size()]));
+		//This api sucks // FIXME: 02.02.2016 -bandr
+		return executeQuery(finalQuery, Optional.of(startWith), Optional.of(pageSize), filterData);
 	}
 
 	@Override

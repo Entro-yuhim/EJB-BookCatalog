@@ -48,16 +48,18 @@ public class BookListController extends ContainsSotrableTable {
 
 	public String doStuff() {
 		LOG.info("Doing stuffz");
-		checkedForAction.forEach((k, v) -> {
-			if (v) {
-				LOG.info("Checked id = [{}]", k);
-			}
-		});
+
+		//TODO remove. this is just a debug output of values in map. Using java8 for convenience.
+//		checkedForAction.forEach((k, v) -> {
+//			if (v) {
+//				LOG.info("Checked id = [{}]", k);
+//			}
+//		});
 		return "bookPage";
 	}
 
 	public Map<String, String> getFilterValues() {
-		LOG.info("Current filter: [{}]", filterValues);
+		//LOG.info("Current filter: [{}]", filterValues);
 		return filterValues;
 	}
 

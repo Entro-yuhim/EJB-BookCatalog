@@ -1,10 +1,8 @@
 package ua.softserve.bandr.persistence.manager;
 
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.entity.Persistable;
 import ua.softserve.bandr.persistence.facade.AbstractFacadeInt;
 import ua.softserve.bandr.persistence.home.AbstractHome;
@@ -16,6 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.Order;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by bandr on 22.01.2016.
@@ -74,9 +73,9 @@ public abstract class AbstractManager<T extends Persistable> {
 		getHome().delete(entity);
 	}
 
-	public int getRecordCount() {
-		return getFacade().getRecordCount();
+	public Integer getRecordCount(Map<String, String> filter) {
+		return getFacade().getRecordCount(filter);
 	}
 
-	public abstract List<Book> getPagedFiltered(Integer firstRow, Integer numRows, List<Pair<String, Object>> filterList, List<Order> orderList);
+	public abstract List<T> getPagedFiltered(Integer firstRow, Integer numRows, Map<String, String> filter, List<Order> orderList);
 }

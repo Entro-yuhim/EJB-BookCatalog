@@ -11,12 +11,14 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is responsible for removing some of the
@@ -41,7 +43,7 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 
 	@Override
 	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	//In actual environment, should never be used.
+	//Should never be used in actual environment.
 	public abstract List<T> getAll();
 
 	@Override
@@ -99,11 +101,28 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 		return resultList;
 	}
 
+	protected final List<T> executeQuery(TypedQuery<T> query,
+										 Optional<Integer> firstResult, Optional<Integer> maxResults,
+										 Map<String, ?> args) {
+		TypedQuery<T> query1 = query;
+		setQueryParams(query1, args);
+		query1.setFirstResult(firstResult.or(0));
+		query1.setMaxResults(maxResults.or(10));
+		List<T> resultList = query1.getResultList();
+		return resultList;
+	}
+
 
 	@SafeVarargs
 	protected final List<T> executeQuery(CriteriaQuery<T> criteriaQuery,
 										 Optional<Integer> firstResult, Optional<Integer> maxResults,
 										 Pair<String, ?>... args) {
+		return executeQuery(entityManager.createQuery(criteriaQuery), firstResult, maxResults, args);
+	}
+
+	protected final List<T> executeQuery(CriteriaQuery<T> criteriaQuery,
+										 Optional<Integer> firstResult, Optional<Integer> maxResults,
+										 Map<String, ?> args) {
 		return executeQuery(entityManager.createQuery(criteriaQuery), firstResult, maxResults, args);
 	}
 
@@ -115,12 +134,25 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 	//TODO: Rename after finished with functionality
 	@SuppressWarnings("unchecked")
 	protected static Predicate getLike2(CriteriaBuilder cb, String alias, Path pathRoot) {
-		return cb.like(pathRoot.get(alias), cb.upper(cb.parameter(String.class, alias)));
+		return cb.like(cb.upper(pathRoot.get(alias)), cb.upper(cb.parameter(String.class, alias)));
 	}
 
 	//For f*cks sake, Oracle, please get your *** api together.
 	protected Integer executeNamedQueryToCount(String queryName) {
 		return ((Number) entityManager.createNamedQuery(queryName).getSingleResult()).intValue();
+	}
+
+	protected Integer executeCriteriaQueryToCount(CriteriaQuery queryName, Map<String, String> filter) {
+		TypedQuery query = entityManager.createQuery(queryName);
+		query = setQueryParams(query, filter);
+		return ((Number) query.getSingleResult()).intValue();
+	}
+
+	private static TypedQuery setQueryParams(TypedQuery query, Map<String, ?> filter) {
+		for (Map.Entry<String, ?> arg : filter.entrySet()) {
+			query = query.setParameter(arg.getKey(), arg.getValue());
+		}
+		return query;
 	}
 
 	private TypedQuery<T> getTypedNamedQuery(String queryName) {

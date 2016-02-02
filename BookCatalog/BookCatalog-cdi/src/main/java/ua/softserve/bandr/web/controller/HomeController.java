@@ -19,7 +19,6 @@ public class HomeController {
 	private BookManager bookManager;
 
 	public List<BookRatingDTO> getBookData() {
-		bookManager.getPagedFiltered(1, 1, Lists.newArrayList(), Lists.newArrayList());
 		return bookManager.getBookRatingData();
 	}
 

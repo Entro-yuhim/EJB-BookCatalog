@@ -1,12 +1,11 @@
 package ua.softserve.bandr.persistence.facade;
 
-import com.google.common.base.Optional;
-import org.apache.commons.lang3.tuple.Pair;
 import ua.softserve.bandr.dto.BookRatingDTO;
 import ua.softserve.bandr.entity.Book;
 
 import javax.ejb.Local;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by bandr on 22.01.2016.
@@ -18,7 +17,7 @@ public interface BookFacade extends AbstractFacadeInt<Book> {
 
 	List<Book> getBooksByRating(int rating);
 
-	List<Book> getPagedFilteredSorted(Integer startWith, Integer pageSize, List<Pair<String, Object>> filterText);
+	List<Book> getPagedFilteredSorted(Integer startWith, Integer pageSize, Map<String, String> filterText);
 
 	List<BookRatingDTO> getBookCountByRating();
 }

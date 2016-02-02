@@ -1,9 +1,7 @@
 package ua.softserve.bandr.web.pagination;
 
 import com.google.common.collect.Lists;
-import org.apache.commons.lang3.tuple.Pair;
 import org.richfaces.model.ArrangeableState;
-import org.richfaces.model.FilterField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.dto.BookDTO;
@@ -15,7 +13,6 @@ import ua.softserve.bandr.persistence.manager.BookManager;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.criteria.Order;
 import java.util.HashMap;
@@ -38,27 +35,12 @@ public class BookDataModel extends AbstractDTODataModel<Book, BookDTO> {
 
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Book> getPersistablesList(Integer firstRow, Integer numRows, ArrangeableState arrangeableState) {
+	public List<Book> getPersistablesList(Integer firstRow, Integer numRows, Map<String, String> filter) {
 		//Hack to remove checked between pages. Should I change this to be a feature instead?
 		invalidateCheckedMap();
-		List<FilterField> filterFields = arrangeableState.getFilterFields();
-		if (filterFields.isEmpty()) {
-			return bookManager.getPaged(firstRow, numRows);
-		}
-		List<Pair<String, Object>> filterList = buildFilterList(filterFields);
-		//Fixme change API of ordering.
+		//TODO change API of ordering.
 		List<Order> orderList = Lists.newArrayList();
-		return bookManager.getPagedFiltered(firstRow, numRows, filterList, orderList);
-	}
-
-	private List<Pair<String, Object>> buildFilterList(List<FilterField> filterFields) {
-		List<Pair<String, Object>> filterList = Lists.newArrayList();
-		for (FilterField filter : filterFields) {
-			String key = (String) filter.getFilterExpression().getValue(FacesContext.getCurrentInstance().getELContext());
-			Object value = filter.getFilterValue();
-			filterList.add(Pair.of(key, value));
-		}
-		return filterList;
+		return bookManager.getPagedFiltered(firstRow, numRows, filter, orderList);
 	}
 
 	private void invalidateCheckedMap() {
@@ -71,8 +53,8 @@ public class BookDataModel extends AbstractDTODataModel<Book, BookDTO> {
 	}
 
 	@Override
-	public int getTotalCount() {
-		return bookManager.getRecordCount();
+	public int getTotalCount(Map<String, String> filter) {
+		return bookManager.getRecordCount(filter);
 	}
 
 	public Map<Long, Boolean> getCheckedData() {
@@ -81,12 +63,5 @@ public class BookDataModel extends AbstractDTODataModel<Book, BookDTO> {
 
 	public void setCheckedData(Map<Long, Boolean> checkedData) {
 		this.checkedData = checkedData;
-	}
-
-	@Override
-	public void arrange(FacesContext context, ArrangeableState state) {
-		LOG.info("Arranging");
-		List stat = state.getFilterFields();
-		this.state = state;
 	}
 }

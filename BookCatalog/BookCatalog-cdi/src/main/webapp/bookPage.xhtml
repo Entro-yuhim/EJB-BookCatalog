@@ -7,7 +7,7 @@
         <h1>
             This page is currently being developed.
         </h1>
-        <a4j:queue requestDelay="500" ignoreDupResponses="true"/>
+        <a4j:queue requestDelay="500" ignoreDupResponses="true" name="bookPageQueue"/>
         <h:form>
             <div style="margin-bottom: 10px;">
                 <h:commandButton title="Delete" action="#{bookListController.doStuff}" value="Create"
@@ -15,8 +15,8 @@
                 <h:commandButton title="Delete" action="#{bookListController.doStuff}" value="Delete"
                                  style="float:right; margin-right: 7%;"/>
             </div>
-            <rich:dataTable id="richTable" value="#{bookListController.books}" var="record" rows="2"
-                            styleClass="basicTable">
+            <rich:dataTable id="richTable" value="#{bookListController.books}" var="record" rows="20"
+                            styleClass="basicTable" keepSaved="true">
                 <rich:column>
                     <f:facet name="header">
                         <h:outputText value="ID"/>
@@ -56,7 +56,7 @@
                     <h:selectBooleanCheckbox value="#{bookListController.checkedForAction[record.id]}"/>
                 </rich:column>
                 <f:facet name="footer">
-                    <rich:dataScroller/>
+                    <rich:dataScroller id="scroller"/>
                 </f:facet>
             </rich:dataTable>
         </h:form>
