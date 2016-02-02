@@ -1,6 +1,8 @@
 package ua.softserve.bandr.web.pagination;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import org.richfaces.component.SortOrder;
 import org.richfaces.model.ArrangeableState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,12 +37,10 @@ public class BookDataModel extends AbstractDTODataModel<Book, BookDTO> {
 
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<Book> getPersistablesList(Integer firstRow, Integer numRows, Map<String, String> filter) {
+	public List<Book> getPersistablesList(Integer firstRow, Integer numRows, Map<String, String> filter, Map<String, SortOrder> sortingMap) {
 		//Hack to remove checked between pages. Should I change this to be a feature instead?
 		invalidateCheckedMap();
-		//TODO change API of ordering.
-		List<Order> orderList = Lists.newArrayList();
-		return bookManager.getPagedFiltered(firstRow, numRows, filter, orderList);
+		return bookManager.getPagedFiltered(firstRow, numRows, filter, convertSortingToOrder(sortingMap));
 	}
 
 	private void invalidateCheckedMap() {

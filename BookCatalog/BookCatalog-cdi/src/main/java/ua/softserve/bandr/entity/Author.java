@@ -35,12 +35,12 @@ public class Author implements Persistable {
 	@Column(name = "last_name")
 	private String lastName;
 
-	// todo:  replace IN with JOIN
 	@Formula("(SELECT round(avg(r.rating)) FROM review r " +
-			"WHERE r.book_id IN (SELECT b.id FROM book b " +
-			"JOIN book_author ba ON  " +
+			"JOIN book b ON " +
+			"b.id = r.book_id " +
+			"JOIN book_author ba ON " +
 			"b.id = ba.book_id " +
-			"WHERE ba.author_id = id))")
+			"WHERE ba.author_id = id)")
 	private Integer rating; // maybe Double ? - something to consider
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "authors")
 	private Set<Book> books = new HashSet<>();
@@ -78,7 +78,7 @@ public class Author implements Persistable {
 		this.books = books;
 	}
 
-	public int getRating() {
+	public Integer getRating() {
 		return rating;
 	}
 

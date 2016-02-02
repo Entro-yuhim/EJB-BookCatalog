@@ -1,5 +1,7 @@
 package ua.softserve.bandr.web.pagination;
 
+import com.google.common.collect.Maps;
+import org.richfaces.component.SortOrder;
 import org.richfaces.model.Arrangeable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,13 +23,13 @@ public abstract class AbstractDTODataModel<U extends Persistable, T extends Enti
 
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<T> getDataList(int firstRow, int numRows, Map<String, String> filter) {
+	public List<T> getDataList(int firstRow, int numRows, Map<String, String> filter, Map<String, SortOrder> sorting) {
 		//LOG.info("Getting data list with first row [{}] and size [{}]", firstRow, numRows);
-		return getDTOTransformer().getDTOList(getPersistablesList(firstRow, numRows, filter));
+		return getDTOTransformer().getDTOList(getPersistablesList(firstRow, numRows, filter, sorting));
 	}
 
 
-	protected abstract List<U> getPersistablesList(Integer firstRow, Integer numRows, Map<String, String> filter);
+	protected abstract List<U> getPersistablesList(Integer firstRow, Integer numRows, Map<String, String> filter, Map<String, SortOrder> sortingMap);
 
 	@Override
 	public Object getKey(T t) {
@@ -35,4 +37,13 @@ public abstract class AbstractDTODataModel<U extends Persistable, T extends Enti
 	}
 
 	protected abstract DTOTransformer<U, T> getDTOTransformer();
+
+	protected static Map<String, Boolean> convertSortingToOrder(Map<String, SortOrder> sortingMap) {
+		Map<String, Boolean> result = Maps.newHashMap();
+		for (Map.Entry<String, SortOrder> sorting : sortingMap.entrySet()) {
+			result.put(sorting.getKey(), sorting.getValue() == SortOrder.ascending);
+		}
+		return result;
+	}
+
 }

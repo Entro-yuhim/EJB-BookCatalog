@@ -12,7 +12,6 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.Order;
 import java.util.List;
 import java.util.Map;
 
@@ -77,5 +76,5 @@ public abstract class AbstractManager<T extends Persistable> {
 		return getFacade().getRecordCount(filter);
 	}
 
-	public abstract List<T> getPagedFiltered(Integer firstRow, Integer numRows, Map<String, String> filter, List<Order> orderList);
+	public abstract List<T> getPagedFiltered(Integer firstRow, Integer numRows, Map<String, String> filter, Map<String, Boolean> sortingOrder);
 }

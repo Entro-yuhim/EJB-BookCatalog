@@ -1,9 +1,12 @@
 package ua.softserve.bandr.persistence.facade.implementation;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.entity.Persistable;
 import ua.softserve.bandr.persistence.facade.AbstractFacadeInt;
 
@@ -11,12 +14,14 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -127,8 +132,8 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 	}
 
 	@SuppressWarnings("unchecked")
-	protected static Predicate getLike(CriteriaBuilder cb, String alias, Path pathRoot) {
-		return cb.like(pathRoot, cb.upper(cb.parameter(String.class, alias)));
+	protected static Predicate getLikeWithExactPathToParam(CriteriaBuilder cb, String alias, Path pathRoot) {
+		return cb.like(cb.upper(pathRoot), cb.upper(cb.parameter(String.class, alias)));
 	}
 
 	//TODO: Rename after finished with functionality
@@ -157,5 +162,29 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 
 	private TypedQuery<T> getTypedNamedQuery(String queryName) {
 		return entityManager.createNamedQuery(queryName, entityClass);
+	}
+
+	protected List<Predicate> buildPredicates(Map<String, String> filter, CriteriaBuilder criteriaBuilder, Path<T> book) {
+		List<Predicate> predicates = new ArrayList<>();
+		//This sucks // FIXME: 01.02.2016 -bandr
+		//Doesn't suck anymore, but need to figure a hack how to use it for Joins(like in Book -> Author filtering)
+		for (Map.Entry<String, String> filter1 : filter.entrySet()) {
+			if (StringUtils.isEmpty(filter1.getValue())) {
+				filter.remove(filter1.getKey());
+			}
+			String filterValue = StringUtils.appendIfMissing(StringUtils.prependIfMissing(filter1.getValue(), "%"), "%");
+			filter.put(filter1.getKey(), filterValue);
+			predicates.add(getLike2(criteriaBuilder, filter1.getKey(), book));
+		}
+		return predicates;
+	}
+
+	protected List<Order> getOrders(Map<String, Boolean> sortingOrder, CriteriaBuilder criteriaBuilder, Root<T> root) {
+		List<Order> sortingList = Lists.newArrayList();
+		for (Map.Entry<String, Boolean> sortingEntry : sortingOrder.entrySet()) {
+			Path<T> sortingPath = root.get(sortingEntry.getKey());
+			sortingList.add(sortingEntry.getValue() ? criteriaBuilder.asc(sortingPath) : criteriaBuilder.desc((sortingPath)));
+		}
+		return sortingList;
 	}
 }

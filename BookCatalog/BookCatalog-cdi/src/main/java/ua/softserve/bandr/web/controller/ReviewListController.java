@@ -19,6 +19,7 @@ import java.util.Map;
  */
 @ManagedBean
 @ViewScoped
+//TODO: maybe re-do this??
 public class ReviewListController extends ContainsSotrableTable {
 	private static final Logger LOG = LoggerFactory.getLogger(ReviewListController.class);
 

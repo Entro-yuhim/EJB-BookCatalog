@@ -13,7 +13,6 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import javax.persistence.criteria.Order;
 import java.util.List;
 import java.util.Map;
 
@@ -41,8 +40,8 @@ public class BookManager extends AbstractManager<Book> {
 	}
 
 	@Override
-	public List<Book> getPagedFiltered(Integer firstRow, Integer numRows, Map<String, String> filter, List<Order> orderList) {
-		return bookFacade.getPagedFilteredSorted(firstRow, numRows, filter);
+	public List<Book> getPagedFiltered(Integer firstRow, Integer numRows, Map<String, String> filter, Map<String, Boolean> sortingOrder) {
+		return bookFacade.getPagedFilteredSorted(firstRow, numRows, filter, sortingOrder);
 	}
 
 	public List<BookRatingDTO> getBookRatingData() {

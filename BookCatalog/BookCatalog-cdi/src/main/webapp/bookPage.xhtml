@@ -28,6 +28,11 @@
                     <ui:param name="bean" value="#{bookListController}"/>
                     <ui:param name="property" value="title"/>
                 </ui:include>
+                <ui:include src="tableColumn.xhtml">
+                    <ui:param name="title" value="Authors"/>
+                    <ui:param name="bean" value="#{bookListController}"/>
+                    <ui:param name="property" value="authorNames"/>
+                </ui:include>
                 <rich:column>
                     <f:facet name="header">
                         <h:outputText value="Authors"/>
@@ -43,11 +48,9 @@
                     <f:facet name="header">
                         <h:outputText value="Edit"/>
                     </f:facet>
-                    <h:link>
                         <h:commandButton title="Edit" action="bookEdit" value="Edit">
                             <f:param name="bookId" value="#{record.id}"/>
                         </h:commandButton>
-                    </h:link>
                 </rich:column>
                 <rich:column>
                     <f:facet name="header">

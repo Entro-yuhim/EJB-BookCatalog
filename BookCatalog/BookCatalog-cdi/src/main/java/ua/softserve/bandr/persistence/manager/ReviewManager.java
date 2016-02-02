@@ -8,7 +8,6 @@ import ua.softserve.bandr.persistence.home.ReviewHome;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.persistence.criteria.Order;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +32,7 @@ public class ReviewManager extends AbstractManager<Review> {
 	}
 
 	@Override
-	public List<Review> getPagedFiltered(Integer firstRow, Integer numRows, Map<String, String> filter, List<Order> orderList) {
+	public List<Review> getPagedFiltered(Integer firstRow, Integer numRows, Map<String, String> filter, Map<String, Boolean> sortingOrder) {
 		return null;
 	}
 }

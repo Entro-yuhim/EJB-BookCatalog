@@ -1,5 +1,6 @@
 package ua.softserve.bandr.persistence.facade;
 
+import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.entity.Persistable;
 
 import java.util.List;
@@ -15,6 +16,8 @@ public interface AbstractFacadeInt<T extends Persistable> {
 	T getById(Long id);
 
 	List<T> getPaged(Integer startWith, Integer pageSize);
+
+	List<T> getPagedFilteredSorted(Integer startWith, Integer pageSize, Map<String, String> filterText, Map<String, Boolean> sortingOrder);
 
 	Integer getRecordCount(Map<String, String> filter);
 }

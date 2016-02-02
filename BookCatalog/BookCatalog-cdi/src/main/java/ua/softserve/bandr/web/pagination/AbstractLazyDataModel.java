@@ -18,8 +18,6 @@ import org.slf4j.LoggerFactory;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.faces.context.FacesContext;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,17 +26,18 @@ import java.util.Map;
  * <p/>
  * credit to: http://pastebin.com/raw/evUwT8VY
  */
+// FIXME: 02.02.2016 refactor -> new classes for cache, etc
 public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> implements Arrangeable {
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractLazyDataModel.class);
 	private Integer cachedRowCount;
 	private SequenceRange cachedRange;
-	private List<T> cachedList = new ArrayList<>();
-	private final Map<Object, T> cachedMap = new HashMap<>();
+	private List<T> cachedList = Lists.newArrayList();
+	private final Map<Object, T> cachedMap = Maps.newHashMap();
 	private Object rowKey;
-	private ArrangeableState arrangeableState;
 	private Map<String, String> cachedFilter = Maps.newHashMap();
+	private Map<String, SortOrder> cachedSorting = Maps.newHashMap();
 
-	public abstract List<T> getDataList(int firstRow, int numRows, Map<String, String> filter);
+	public abstract List<T> getDataList(int firstRow, int numRows, Map<String, String> filter, Map<String, SortOrder> sorting);
 
 	public abstract Object getKey(T t);
 
@@ -66,13 +65,17 @@ public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> impl
 			list = cachedList;
 		} else {
 			cachedRange = sr;
-			list = getDataList(sr.getFirstRow(), sr.getRows(), cachedFilter);
+			list = getDataList(sr.getFirstRow(), sr.getRows(), cachedFilter, cachedSorting);
 			cachedList = list;
 		}
 		return list;
 	}
 
 	protected void invalidateCache() {
+		/* TODO check how to properly invalidate this cache.
+		* Is it even necessary?
+		* */
+
 		cachedRange = null;
 		cachedRowCount = null;
 		cachedList = Lists.newArrayList();
@@ -80,7 +83,7 @@ public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> impl
 	}
 
 	private static Map<String, String> buildFilterFromState(ArrangeableState arrangeableState) {
-		Map<String, String> result = new HashMap<>();
+		Map<String, String> result = Maps.newHashMap();
 		if (arrangeableState == null) {
 			return result;
 		}
@@ -104,7 +107,7 @@ public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> impl
 		if (cachedRowCount == null) {
 			cachedRowCount = getTotalCount(cachedFilter);
 		}
-		//LOG.info("Row Count with current filter [{}] is [{}]", cachedFilter, cachedRowCount);
+		LOG.debug("Row Count with current filter [{}] is [{}]", cachedFilter, cachedRowCount);
 		return cachedRowCount;
 	}
 
@@ -125,16 +128,14 @@ public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> impl
 
 	@Override
 	public void arrange(FacesContext context, ArrangeableState state) {
-		Map sortingMap = buildSortingFromState(state);
-		LOG.info("oldFilter [{}]", cachedFilter);
+		Map<String, SortOrder> sortingMap = buildSortingFromState(state);
 		Map<String, String> newFilter = buildFilterFromState(state);
-		LOG.info("newFilter [{}]", newFilter);
-		//Invalidate cache if state contains new filter
-		if (!newFilter.equals(cachedFilter)) {
+		if (!newFilter.equals(cachedFilter) || !sortingMap.equals(cachedSorting)) {
 			invalidateCache();
 			cachedFilter = newFilter;
+			cachedSorting = sortingMap;
 		}
-		this.arrangeableState = state;
+		LOG.info("Current filter [{}], current sorting [{}]", cachedFilter, cachedSorting);
 	}
 
 	private static Map<String, SortOrder> buildSortingFromState(ArrangeableState state) {
@@ -146,11 +147,10 @@ public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> impl
 		if (sortFields == null || sortFields.isEmpty()) {
 			return map;
 		}
-		for (SortField sortField : sortFields){
+		for (SortField sortField : sortFields) {
 			String o = (String) sortField.getSortBy().getValue(FacesContext.getCurrentInstance().getELContext());
-			sortField.getSortOrder();
+			map.put(o, sortField.getSortOrder());
 		}
-
 		return map;
 	}
 

@@ -24,13 +24,11 @@ public class BookListController extends ContainsSotrableTable {
 	private BookDataModel model;
 	private Map<Long, Boolean> checkedForAction = new HashMap<>();
 
-	private Map<String, SortOrder> sortOrders = Maps.newHashMapWithExpectedSize(2);
-	private String sortProperty;
-	private Map<String, String> filterValues = Maps.newHashMap();
+
 
 	public BookListController() {
-		sortOrders.put("title", SortOrder.unsorted);
-		sortOrders.put("rating", SortOrder.unsorted);
+		getSortOrders().put("title", SortOrder.unsorted);
+		getSortOrders().put("rating", SortOrder.unsorted);
 	}
 
 	public Map<Long, Boolean> getCheckedForAction() {
@@ -56,34 +54,5 @@ public class BookListController extends ContainsSotrableTable {
 //			}
 //		});
 		return "bookPage";
-	}
-
-	public Map<String, String> getFilterValues() {
-		//LOG.info("Current filter: [{}]", filterValues);
-		return filterValues;
-	}
-
-	public void setFilterValues(Map<String, String> filterValues) {
-		this.filterValues = filterValues;
-	}
-
-	@Override
-	public Map<String, SortOrder> getSortOrders() {
-		return sortOrders;
-	}
-
-	@Override
-	public void setSortOrders(Map<String, SortOrder> sortOrders) {
-		this.sortOrders = sortOrders;
-	}
-
-	@Override
-	public String getSortProperty() {
-		return sortProperty;
-	}
-
-	@Override
-	public void setSortProperty(String sortProperty) {
-		this.sortProperty = sortProperty;
 	}
 }

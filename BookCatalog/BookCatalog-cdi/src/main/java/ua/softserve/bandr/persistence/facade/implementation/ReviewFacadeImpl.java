@@ -35,6 +35,11 @@ public class ReviewFacadeImpl extends AbstractFacade<Review> implements ReviewFa
 	}
 
 	@Override
+	public List<Review> getPagedFilteredSorted(Integer startWith, Integer pageSize, Map<String, String> filterText, Map<String, Boolean> sortingOrder) {
+		return null;
+	}
+
+	@Override
 	public Integer getRecordCount(Map<String, String> filter) {
 		return executeNamedQueryToCount(Review.GET_RECORD_COUNT);
 	}

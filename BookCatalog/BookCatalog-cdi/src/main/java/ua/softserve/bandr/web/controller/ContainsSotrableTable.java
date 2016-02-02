@@ -1,5 +1,6 @@
 package ua.softserve.bandr.web.controller;
 
+import com.google.common.collect.Maps;
 import org.richfaces.component.SortOrder;
 
 import java.util.Map;
@@ -9,13 +10,34 @@ import java.util.Map;
  */
 public abstract class ContainsSotrableTable {
 
-	abstract Map<String, SortOrder> getSortOrders();
+	private Map<String, SortOrder> sortOrders = Maps.newHashMap();
+	private String sortProperty = "";
+	private Map<String, String> filterValues = Maps.newHashMap();
 
-	abstract void setSortOrders(Map<String, SortOrder> sortOrders);
+	public Map<String, String> getFilterValues() {
+		//LOG.info("Current filter: [{}]", filterValues);
+		return filterValues;
+	}
 
-	abstract String getSortProperty();
+	public void setFilterValues(Map<String, String> filterValues) {
+		this.filterValues = filterValues;
+	}
 
-	abstract void setSortProperty(String sortProperty);
+	public Map<String, SortOrder> getSortOrders() {
+		return sortOrders;
+	}
+
+	public void setSortOrders(Map<String, SortOrder> sortOrders) {
+		this.sortOrders = sortOrders;
+	}
+
+	public String getSortProperty() {
+		return sortProperty;
+	}
+
+	public void setSortProperty(String sortProperty) {
+		this.sortProperty = sortProperty;
+	}
 
 	public void toggleSort() {
 		for (Map.Entry<String, SortOrder> entry : getSortOrders().entrySet()) {

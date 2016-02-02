@@ -3,12 +3,17 @@ package ua.softserve.bandr.persistence.facade.implementation;
 import com.google.common.base.Optional;
 import org.apache.commons.lang3.tuple.Pair;
 import ua.softserve.bandr.entity.Author;
+import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.persistence.facade.AuthorFacade;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Map;
@@ -32,8 +37,18 @@ public class AuthorFacadeImpl extends AbstractFacade<Author> implements AuthorFa
 	}
 
 	@Override
+	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public Integer getRecordCount(Map<String, String> filter) {
-		return executeNamedQueryToCount(Author.GET_RECORD_COUNT);
+		if (filter == null || filter.isEmpty()) {
+			return executeNamedQueryToCount(Author.GET_RECORD_COUNT);
+		}
+		CriteriaBuilder criteriaBuilder = getCriteriaBuilder();
+		CriteriaQuery<Long> baseQuery = criteriaBuilder.createQuery(Long.class);
+		Root<Author> author = baseQuery.from(Author.class);
+		List<Predicate> predicates = buildPredicates(filter, criteriaBuilder, author);
+		baseQuery = baseQuery.select(criteriaBuilder.count(author))
+				.where(predicates.toArray(new Predicate[predicates.size()]));
+		return executeCriteriaQueryToCount(baseQuery, filter);
 	}
 
 	@Override
@@ -43,14 +58,15 @@ public class AuthorFacadeImpl extends AbstractFacade<Author> implements AuthorFa
 	}
 
 	@Override
-	public List<Author> getPagedFilteredSorted(Optional<Integer> startWith, Optional<Integer> pageSize,
-											   Optional<String> filterText) {
+	public List<Author> getPagedFilteredSorted(Integer startWith, Integer pageSize, Map<String, String> filterText, Map<String, Boolean> sortingOrder) {
 		CriteriaBuilder cb = getCriteriaBuilder();
 		CriteriaQuery<Author> criteriaQuery = cb.createQuery(Author.class);
 		Root<Author> author = criteriaQuery.from(Author.class);
+		List<Predicate> predicates = buildPredicates(filterText, cb, author);
+		List<Order> orderList = getOrders(sortingOrder, cb, author);
 		criteriaQuery = criteriaQuery.select(author)
-				.where(cb.or(getLike(cb, "name", author),   // todo: what is a field "name" ?
-						getLike(cb, "name", author))).orderBy();   // todo: 2 expression for one field
-		return executeQuery(criteriaQuery, startWith, pageSize, Pair.of("name", filterText.get())); // todo: what is a field "name" ?
+				.where(predicates.toArray(new Predicate[predicates.size()]))
+				.orderBy(orderList);
+		return executeQuery(criteriaQuery, Optional.of(startWith), Optional.of(pageSize), filterText);
 	}
 }
