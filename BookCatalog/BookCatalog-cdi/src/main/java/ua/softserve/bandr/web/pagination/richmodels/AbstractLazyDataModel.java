@@ -43,7 +43,7 @@ public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> impl
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void walk(FacesContext context, DataVisitor visitor, Range range, Object argument) {
-		LOG.info("Walk");
+		LOG.debug("Walk");
 		SequenceRange sr = (SequenceRange) range;
 		List<T> list = getList(sr);
 		for (T t : list) {
@@ -132,7 +132,7 @@ public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> impl
 			cachedFilter = newFilter;
 			cachedSorting = sortingMap;
 		}
-		LOG.info("Current filter [{}], current sorting [{}]", cachedFilter, cachedSorting);
+		LOG.debug("Current filter [{}], current sorting [{}]", cachedFilter, cachedSorting);
 	}
 
 	private static Map<String, SortOrder> buildSortingFromState(ArrangeableState state) {

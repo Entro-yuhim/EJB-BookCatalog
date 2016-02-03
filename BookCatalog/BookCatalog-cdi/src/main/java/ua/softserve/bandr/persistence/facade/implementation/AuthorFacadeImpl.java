@@ -55,7 +55,7 @@ public class AuthorFacadeImpl extends AbstractFacade<Author> implements AuthorFa
 	@Override
 	public List<Author> getByName(String lastName) {
 		return executeNamedQuery(Author.GET_BY_NAME,
-				Pair.of("lastName", (Object) lastName), Pair.of("firstName", lastName));
+				Pair.of("namePlaceholder", "%" + lastName + "%"));
 	}
 
 	@Override

@@ -2,7 +2,18 @@ package ua.softserve.bandr.entity;
 
 import org.hibernate.annotations.Formula;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,7 +22,10 @@ import java.util.Set;
 		@NamedQuery(name = Author.GET_ALL,
 				query = "SELECT a FROM Author a"),
 		@NamedQuery(name = Author.GET_BY_NAME,
-				query = "SELECT a FROM Author a WHERE a.lastName = :lastName"),
+				query = "SELECT a FROM Author a WHERE lower(a.lastName) like lower(:namePlaceholder) " +
+						"OR lower(a.firstName) like lower(:namePlaceholder) " +
+						"OR lower(CONCAT(a.firstName,' ', a.lastName)) like  lower(:namePlaceholder) " +
+						"OR lower(CONCAT(a.lastName,' ', a.firstName)) like lower(:namePlaceholder)"),
 		@NamedQuery(name = Author.GET_RECORD_COUNT,
 				query = "SELECT count(a.id) FROM Author a")
 

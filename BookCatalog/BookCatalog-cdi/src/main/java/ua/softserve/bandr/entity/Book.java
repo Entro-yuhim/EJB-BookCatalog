@@ -39,7 +39,11 @@ import java.util.Set;
 				query = "SELECT b FROM Book b " +
 						"WHERE b.rating = :rating"),
 		@NamedQuery(name = Book.GET_RECORD_COUNT,
-				query = "SELECT count(b.id) FROM Book b")
+				query = "SELECT count(b.id) FROM Book b"),
+		@NamedQuery(name = Book.GET_BY_AUTHOR_ID,
+				query = "SELECT b FROM Book b " +
+						"JOIN b.authors a " +
+						"WHERE a.id = :id")
 })
 @NamedNativeQueries({
 		@NamedNativeQuery(name = Book.GET_COUNT_BY_RATING,
@@ -54,6 +58,7 @@ import java.util.Set;
 public class Book implements Persistable {
 	public static final String GET_ALL = "Book.getAll";
 	public static final String GET_BY_AUTHOR_NAME = "Book.getByAuthorName";
+	public static final String GET_BY_AUTHOR_ID = "Book.getByAuthorId";
 	public static final String GET_BY_RATING = "Book.getByRating";
 	public static final String GET_COUNT_BY_RATING = "Book.ratingDistribution";
 	public static final String GET_RECORD_COUNT = "Book.getRecordCount";
@@ -69,7 +74,7 @@ public class Book implements Persistable {
 	@Temporal(TemporalType.DATE)
 	private Date yearPublished;
 
-	@Column(unique = true, name = "isbn")
+	@Column(unique = true, name = "isbn", length = 14)
 	private String iSBN;
 	private String publisher;
 

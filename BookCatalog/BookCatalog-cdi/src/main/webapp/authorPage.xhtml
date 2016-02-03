@@ -40,7 +40,12 @@
                     <ui:param name="property" value="rating"/>
                 </ui:include>
                 <rich:column>
-
+                    <f:facet name="header">
+                        <h:outputText value="Edit"/>
+                    </f:facet>
+                    <h:commandButton title="Edit" action="authorEdit" value="Edit">
+                        <f:param name="authorId" value="#{record.id}"/>
+                    </h:commandButton>
                 </rich:column>
                 <f:facet name="footer">
                     <rich:dataScroller id="scroller"/>

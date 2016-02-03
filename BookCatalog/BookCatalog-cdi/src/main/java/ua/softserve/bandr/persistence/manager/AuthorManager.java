@@ -11,6 +11,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +46,10 @@ public class AuthorManager extends AbstractManager<Author> {
 			authorHome.delete(authorDB);
 		}
 		/* fixme Should do something if validation fails; */
+	}
+
+	public List<Author> getByName(String name) {
+		return authorFacade.getByName(name);
 	}
 }
 

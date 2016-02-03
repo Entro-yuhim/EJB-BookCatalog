@@ -1,11 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-<f:view>
-    <h:outputLabel value="Hello, world"/>
-</f:view>
-</html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:rich="http://richfaces.org/rich" xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="WEB-INF/templates/default.xhtml">
+    <ui:define name="page-body">
+        <h:outputText value="#{authorEditController.author.firstName}"/>
+        <h:outputText value="#{authorEditController.author.lastName}"/>
+        <h:outputLabel value="#{authorEditController.author.rating}" style="float:right"/>
+        <rich:dataTable id="richTable" value="#{authorEditController.books}" var="book">
+            <rich:column>
+                <f:facet name="header">
+                    <h:outputLabel value="Title"/>
+                </f:facet>
+                <h:outputText value="#{book.title}"/>
+            </rich:column>
+            <rich:column>
+                <f:facet name="header">
+                    <h:outputLabel value="Publisher"/>
+                </f:facet>
+                <h:outputText value="#{book.publisher}"/>
+            </rich:column>
+            <rich:column>
+                <f:facet name="header">
+                    <h:outputLabel value="Year published"/>
+                </f:facet>
+                <h:outputText value="#{book.yearPublished}"/>
+            </rich:column>
+            <rich:column>
+                <f:facet name="header">
+                    <h:outputLabel value="ISBN"/>
+                </f:facet>
+                <h:outputText value="#{book.iSBN}"/>
+            </rich:column>
+
+
+        </rich:dataTable>
+        <ui:remove>
+            <h:outputText value="#{authorEditController.author.books}"/>
+        </ui:remove>
+    </ui:define>
+</ui:composition>

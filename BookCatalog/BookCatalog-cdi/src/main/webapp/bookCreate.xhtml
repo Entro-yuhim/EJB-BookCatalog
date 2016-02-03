@@ -1,11 +1,66 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-<f:view>
-    <h:outputLabel value="Hello, world"/>
-</f:view>
-</html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:rich="http://richfaces.org/rich"
+                xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:a4j="http://richfaces.org/a4j"
+                template="WEB-INF/templates/default.xhtml">
+    <ui:define name="page-body">
+        <h:form>
+            <h:panelGrid columns="3" columnClasses="titleCell">
+                <h:outputLabel for="title" value="Enter title:"/>
+                <h:inputText id="title" value="#{bookCreateController.book.title}"/>
+                <h:message for="title" errorClass="invalid"/>
+
+                <h:outputLabel for="published" value="Published"/>
+                <rich:calendar id="published" value="#{bookCreateController.book.yearPublished}"/>
+                <h:message for="published" errorClass="invalid"/>
+
+                <h:outputLabel for="publisher" value="Publisher"/>
+                <h:inputText id="publisher" value="#{bookCreateController.book.publisher}"/>
+                <h:message for="publisher" errorClass="invalid"/>
+
+                <h:outputLabel for="isbn" value="ISBN"/>
+                <h:inputText id="isbn" value="#{bookCreateController.book.iSBN}">
+                    <f:validateLength maximum="14"/>
+                    <f:validateRequired/>
+                </h:inputText>
+                <h:message for="isbn" errorClass="invalid"/>
+                <ui:remove>
+                    <h:outputLabel for="description" value="Description"/>
+                    <h:inputText id="description" value="#{bookCreateController.book.description}"/>
+                    <h:message for="description" errorClass="invalid"/>
+                </ui:remove>
+            </h:panelGrid>
+            <rich:editor value="#{bookCreateController.book.description}">
+                <f:facet name="config">
+                    toolbar_custom:
+                    [
+                    { name: 'document', items : [ 'NewPage','Preview' ] },
+                    { name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
+                    { name: 'editing', items : [ 'Find','Replace','-','SelectAll','-','Scayt' ] },
+                    { name: 'insert', items : [ 'Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak'
+                    ,'Iframe' ] },
+                    '/',
+                    { name: 'styles', items : [ 'Styles','Format' ] },
+                    { name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat' ] },
+                    { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote' ] },
+                    { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
+                    { name: 'tools', items : [ 'Maximize','-','About' ] }
+                    ]
+                </f:facet>
+            </rich:editor>
+            <a4j:outputPanel id="authors">
+                #{bookCreateController.authors}
+            </a4j:outputPanel>
+            <h:commandButton action="#{bookCreateController.save}" value="Save"/>
+        </h:form>
+        <h:form>
+            <rich:select mode="cachedAjax" minChars="1"
+                         autocompleteMethod="#{bookCreateController.autocomplete}"
+                         var='author' itemValue="${author.id}"
+                         itemLabel="#{author.firstName} #{author.lastName}"
+                         value="#{bookCreateController.selectedAuthor}"/>
+            <a4j:commandButton value="Add" render="authors" execute="@this"
+                               action="#{bookCreateController.addSelectedAuthor(author)}"/>
+        </h:form>
+    </ui:define>
+</ui:composition>

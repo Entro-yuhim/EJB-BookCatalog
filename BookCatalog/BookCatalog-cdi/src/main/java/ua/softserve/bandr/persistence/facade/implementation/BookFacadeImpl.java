@@ -102,6 +102,11 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 		return dtoList;
 	}
 
+	@Override
+	public List<Book> getAllByAuthor(Long id) {
+		return executeNamedQuery(Book.GET_BY_AUTHOR_ID, Pair.of("id", id));
+	}
+
 
 	@SuppressWarnings("unchecked")
 	protected static Predicate getLikeWithExactPathToParam(CriteriaBuilder cb, String alias, Path pathRoot) {

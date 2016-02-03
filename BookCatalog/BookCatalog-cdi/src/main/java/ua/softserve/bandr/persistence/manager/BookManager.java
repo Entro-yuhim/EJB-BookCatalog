@@ -42,4 +42,8 @@ public class BookManager extends AbstractManager<Book> {
 		LOG.debug("Retrieved data of book distribution by rating.");
 		return bookFacade.getBookCountByRating();
 	}
+
+	public List<Book> getByAuthorId(Long id) {
+		return bookFacade.getAllByAuthor(id);
+	}
 }

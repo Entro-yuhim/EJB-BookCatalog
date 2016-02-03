@@ -18,4 +18,6 @@ public interface BookFacade extends AbstractFacadeInt<Book> {
 	List<Book> getBooksByRating(int rating);
 
 	List<BookRatingDTO> getBookCountByRating();
+
+	List<Book> getAllByAuthor(Long id);
 }
