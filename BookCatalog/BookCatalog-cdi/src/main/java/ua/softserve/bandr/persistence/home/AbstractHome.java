@@ -13,7 +13,7 @@ import javax.persistence.PersistenceContext;
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
 public abstract class AbstractHome<T extends Persistable> {
 
-	private static final Logger LOG = LoggerFactory.getLogger(AbstractHome.class);    // todo: private
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractHome.class);
 
 	@PersistenceContext(name = "pg_BC")
 	protected EntityManager entityManager;
@@ -28,7 +28,10 @@ public abstract class AbstractHome<T extends Persistable> {
 	public T update(T entity) {
 		Validate.notNull(entity);
 		LOG.debug("Updating entity of class = [{}] with id = [{}]", entity.getEntityName(), entity.getId());
-		// todo: entity.getId() == null ?
+		if (entity.getId() == null){
+			entityManager.persist(entity);
+			return entity;
+		}
 		return entityManager.merge(entity);
 	}
 

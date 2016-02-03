@@ -14,7 +14,6 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by bandr on 20.01.2016.
@@ -37,11 +36,6 @@ public class BookManager extends AbstractManager<Book> {
 	@Override
 	protected AbstractFacadeInt<Book> getFacade() {
 		return bookFacade;
-	}
-
-	@Override
-	public List<Book> getPagedFiltered(Integer firstRow, Integer numRows, Map<String, String> filter, Map<String, Boolean> sortingOrder) {
-		return bookFacade.getPagedFilteredSorted(firstRow, numRows, filter, sortingOrder);
 	}
 
 	public List<BookRatingDTO> getBookRatingData() {

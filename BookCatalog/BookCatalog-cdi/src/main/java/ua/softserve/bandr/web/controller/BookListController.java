@@ -1,6 +1,5 @@
 package ua.softserve.bandr.web.controller;
 
-import com.google.common.collect.Maps;
 import org.richfaces.component.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +46,7 @@ public class BookListController extends ContainsSotrableTable {
 	public String doStuff() {
 		LOG.info("Doing stuffz");
 
-		//TODO remove. this is just a debug output of values in map. Using java8 for convenience.
+		//TODO using java8 for convenience.
 //		checkedForAction.forEach((k, v) -> {
 //			if (v) {
 //				LOG.info("Checked id = [{}]", k);

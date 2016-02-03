@@ -33,7 +33,7 @@ public class ReviewFacadeImpl extends AbstractFacade<Review> implements ReviewFa
 		LOG.debug("Got paged reviews, first restult at {} max results {}", startWith, pageSize);
 		return executeNamedQuery(Review.GET_ALL, Optional.of(startWith), Optional.of(pageSize));
 	}
-
+	//Not used
 	@Override
 	public List<Review> getPagedFilteredSorted(Integer startWith, Integer pageSize, Map<String, String> filterText, Map<String, Boolean> sortingOrder) {
 		return null;

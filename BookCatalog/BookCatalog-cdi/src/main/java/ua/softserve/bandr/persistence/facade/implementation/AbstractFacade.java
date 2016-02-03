@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.entity.Persistable;
 import ua.softserve.bandr.persistence.facade.AbstractFacadeInt;
 
@@ -58,7 +57,6 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 		return entityManager.find(entityClass, id);
 	}
 
-	// todo: is this method need transaction ?
 	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	protected CriteriaBuilder getCriteriaBuilder() {
 		return entityManager.getCriteriaBuilder();
@@ -73,14 +71,12 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 
 
 	@SafeVarargs
-	@TransactionAttribute(TransactionAttributeType.MANDATORY)
 	protected final List<T> executeNamedQuery(String queryName,
 											  Optional<Integer> firstResult, Optional<Integer> maxResults,
 											  Pair<String, ?>... args) {
 		LOG.debug("Executing query {}", queryName);
 		TypedQuery<T> query = (TypedQuery<T>) getTypedNamedQuery(queryName);
-		List<T> ts = executeQuery(query, firstResult, maxResults, args);
-		return ts;
+		return executeQuery(query, firstResult, maxResults, args);
 	}
 
 	@SafeVarargs
@@ -132,13 +128,7 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 	}
 
 	@SuppressWarnings("unchecked")
-	protected static Predicate getLikeWithExactPathToParam(CriteriaBuilder cb, String alias, Path pathRoot) {
-		return cb.like(cb.upper(pathRoot), cb.upper(cb.parameter(String.class, alias)));
-	}
-
-	//TODO: Rename after finished with functionality
-	@SuppressWarnings("unchecked")
-	protected static Predicate getLike2(CriteriaBuilder cb, String alias, Path pathRoot) {
+	protected static Predicate getLike(CriteriaBuilder cb, String alias, Path pathRoot) {
 		return cb.like(cb.upper(pathRoot.get(alias)), cb.upper(cb.parameter(String.class, alias)));
 	}
 
@@ -166,15 +156,13 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 
 	protected List<Predicate> buildPredicates(Map<String, String> filter, CriteriaBuilder criteriaBuilder, Path<T> book) {
 		List<Predicate> predicates = new ArrayList<>();
-		//This sucks // FIXME: 01.02.2016 -bandr
-		//Doesn't suck anymore, but need to figure a hack how to use it for Joins(like in Book -> Author filtering)
 		for (Map.Entry<String, String> filter1 : filter.entrySet()) {
 			if (StringUtils.isEmpty(filter1.getValue())) {
 				filter.remove(filter1.getKey());
 			}
 			String filterValue = StringUtils.appendIfMissing(StringUtils.prependIfMissing(filter1.getValue(), "%"), "%");
 			filter.put(filter1.getKey(), filterValue);
-			predicates.add(getLike2(criteriaBuilder, filter1.getKey(), book));
+			predicates.add(getLike(criteriaBuilder, filter1.getKey(), book));
 		}
 		return predicates;
 	}

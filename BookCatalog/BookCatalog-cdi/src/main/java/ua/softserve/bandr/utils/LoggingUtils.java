@@ -11,12 +11,9 @@ import java.util.Collection;
  * Created by bandr on 28.01.2016.
  */
 
-//TODO: rename class or add DTO converters here.
-public final class EntityCollectionTransformer {
+public enum LoggingUtils {
+	;
 	private static final Transformer idTransformer = new BeanToPropertyValueTransformer("id");
-
-	private EntityCollectionTransformer() {
-	}
 
 	public static Collection getIdCollection(Collection<? extends Persistable> entityCollection) {
 		return CollectionUtils.collect(entityCollection, idTransformer);

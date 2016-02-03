@@ -1,5 +1,6 @@
 package ua.softserve.bandr.persistence.manager;
 
+import org.apache.commons.lang3.Validate;
 import ua.softserve.bandr.entity.Review;
 import ua.softserve.bandr.persistence.facade.AbstractFacadeInt;
 import ua.softserve.bandr.persistence.facade.ReviewFacade;
@@ -33,6 +34,10 @@ public class ReviewManager extends AbstractManager<Review> {
 
 	@Override
 	public List<Review> getPagedFiltered(Integer firstRow, Integer numRows, Map<String, String> filter, Map<String, Boolean> sortingOrder) {
+		Validate.notNull(firstRow);
+		Validate.notNull(numRows);
+		Validate.notNull(filter);
+		Validate.notNull(sortingOrder);
 		return null;
 	}
 }

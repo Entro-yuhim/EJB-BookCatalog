@@ -74,12 +74,10 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 		return executeNamedQuery(Book.GET_BY_RATING, Pair.of("rating", rating));
 	}
 
-	//I need to see what type of data will I receive from JSF/RF for pagination to properly implement this
 	@Override
 	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public List<Book> getPagedFilteredSorted(Integer startWith, Integer pageSize,
 											 Map<String, String> filterData, Map<String, Boolean> sortingOrder) {
-
 		//Do something about order in which sorting is applied. not necessary right now, but might be in future;
 		CriteriaBuilder criteriaBuilder = getCriteriaBuilder();
 		CriteriaQuery<Book> criteria = criteriaBuilder.createQuery(Book.class);
@@ -92,6 +90,25 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 		return executeQuery(finalQuery.orderBy(sortingList), Optional.of(startWith), Optional.of(pageSize), filterData);
 	}
 
+	@Override
+	@SuppressWarnings("unchecked")
+	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+	public List<BookRatingDTO> getBookCountByRating() {
+		List<Object[]> data = entityManager.createNamedQuery(Book.GET_COUNT_BY_RATING).getResultList();
+		List<BookRatingDTO> dtoList = new ArrayList<>();
+		for (Object[] a : data) {
+			dtoList.add(new BookRatingDTO(((Number) a[0]).intValue(), ((Number) a[1]).longValue()));
+		}
+		return dtoList;
+	}
+
+
+	@SuppressWarnings("unchecked")
+	protected static Predicate getLikeWithExactPathToParam(CriteriaBuilder cb, String alias, Path pathRoot) {
+		return cb.like(cb.upper(pathRoot), cb.upper(cb.parameter(String.class, alias)));
+	}
+
+
 	//TODO halp.
 	private static Predicate getAuthorPredicate(Map<String, String> authorParamFilter, CriteriaBuilder cb, Path<Author> authors) {
 		String key = authorParamFilter.entrySet().iterator().next().getKey();
@@ -100,6 +117,7 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 				cb.like(cb.upper(cb.concat(authors.get("firstName"), authors.get("lastName"))), cb.upper(cb.parameter(String.class, key))));
 	}
 
+	//TODO halp.
 	private static void separateFiltersForBook(Map<String, String> baseSorting, Map<String, String> bookParams, Map<String, String> authorParams) {
 		for (Map.Entry<String, String> filter : baseSorting.entrySet()) {
 			if (filter.getValue().isEmpty()) {
@@ -116,6 +134,7 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 		}
 	}
 
+	//TODO halp.
 	private List<Predicate> buildFullBookPredicates(Map<String, String> filter, CriteriaBuilder criteriaBuilder, Path book, Join<Book, Author> bookAuthor) {
 		Map<String, String> bookParamFilter = Maps.newHashMap();
 		Map<String, String> authorParamFilter = Maps.newHashMap();
@@ -125,18 +144,5 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 			predicates.add(getAuthorPredicate(authorParamFilter, criteriaBuilder, bookAuthor));
 		}
 		return predicates;
-	}
-
-
-	@Override
-	@SuppressWarnings("unchecked")
-	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	public List<BookRatingDTO> getBookCountByRating() {
-		List<Object[]> data = entityManager.createNamedQuery(Book.GET_COUNT_BY_RATING).getResultList();
-		List<BookRatingDTO> dtoList = new ArrayList<>();
-		for (Object[] a : data) {
-			dtoList.add(new BookRatingDTO(((Number) a[0]).intValue(), ((Number) a[1]).longValue()));
-		}
-		return dtoList;
 	}
 }

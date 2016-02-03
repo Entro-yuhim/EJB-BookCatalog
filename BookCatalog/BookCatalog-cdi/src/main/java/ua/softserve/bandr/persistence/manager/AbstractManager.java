@@ -6,12 +6,13 @@ import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.entity.Persistable;
 import ua.softserve.bandr.persistence.facade.AbstractFacadeInt;
 import ua.softserve.bandr.persistence.home.AbstractHome;
-import ua.softserve.bandr.utils.EntityCollectionTransformer;
+import ua.softserve.bandr.utils.LoggingUtils;
 
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
@@ -29,9 +30,10 @@ public abstract class AbstractManager<T extends Persistable> {
 
 	protected abstract AbstractFacadeInt<T> getFacade();
 
-	protected void deleteBulk(List<T> entities) {
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public void deleteBulk(List<T> entities) {
 		Validate.notNull(entities);
-		LOG.info("Trying to delete entities with id = [{}]", EntityCollectionTransformer.getIdCollection(entities));
+		LOG.info("Trying to delete entities with id = [{}]", LoggingUtils.getIdCollection(entities));
 		for (T entity : entities) {
 			delete(entity);
 		}
@@ -54,18 +56,21 @@ public abstract class AbstractManager<T extends Persistable> {
 		return getFacade().getPaged(startWith, pageSize);
 	}
 
-	public void persist(T entity) {
+	public Long persist(T entity) {
+		Validate.notNull(entity);
 		LOG.debug("Trying to persist entity of class [{}]", entity.getEntityName());
 		getHome().persist(entity);
 		LOG.info("Persisted entity of class [{}] with id [{}]", entity.getEntityName(), entity.getId());
+		return entity.getId();
 	}
 
-	public void update(T entity) {
+	public T update(T entity) {
 		Validate.notNull(entity);
 		LOG.info("Updating entity of class [{}] and id [{}]", entity.getEntityName(), entity.getId());
 		getHome().update(entity);
+		return entity;
 	}
-
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void delete(T entity) {
 		Validate.notNull(entity);
 		LOG.info("Deleting entity of class [{}] with id [{}]", entity.getEntityName(), entity.getId());
@@ -73,8 +78,15 @@ public abstract class AbstractManager<T extends Persistable> {
 	}
 
 	public Integer getRecordCount(Map<String, String> filter) {
+		Validate.notNull(filter);
 		return getFacade().getRecordCount(filter);
 	}
 
-	public abstract List<T> getPagedFiltered(Integer firstRow, Integer numRows, Map<String, String> filter, Map<String, Boolean> sortingOrder);
+	public List<T> getPagedFiltered(Integer firstRow, Integer numRows, Map<String, String> filter, Map<String, Boolean> sortingOrder){
+		Validate.notNull(firstRow);
+		Validate.notNull(numRows);
+		Validate.notNull(filter);
+		Validate.notNull(sortingOrder);
+		return getFacade().getPagedFilteredSorted(firstRow, numRows, filter, sortingOrder);
+	};
 }

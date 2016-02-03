@@ -1,4 +1,4 @@
-package ua.softserve.bandr.web.pagination;
+package ua.softserve.bandr.web.pagination.richmodels;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -23,10 +23,7 @@ import java.util.Map;
 
 /**
  * Created by bandr on 28.01.2016.
- * <p/>
- * credit to: http://pastebin.com/raw/evUwT8VY
  */
-// FIXME: 02.02.2016 refactor -> new classes for cache, etc
 public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> implements Arrangeable {
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractLazyDataModel.class);
 	private Integer cachedRowCount;

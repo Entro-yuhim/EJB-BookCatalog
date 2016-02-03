@@ -1,4 +1,4 @@
-package ua.softserve.bandr.web.pagination;
+package ua.softserve.bandr.web.pagination.richmodels;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -6,7 +6,6 @@ import org.ajax4jsf.model.DataVisitor;
 import org.ajax4jsf.model.ExtendedDataModel;
 import org.ajax4jsf.model.Range;
 import org.ajax4jsf.model.SequenceRange;
-import org.apache.commons.lang3.StringUtils;
 import org.richfaces.component.SortOrder;
 import org.richfaces.model.Arrangeable;
 import org.richfaces.model.ArrangeableState;
@@ -24,7 +23,6 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -234,6 +232,5 @@ public abstract class JPADataModel<T> extends ExtendedDataModel<T> implements Ar
 		throw new UnsupportedOperationException();
 	}
 
-	// TODO - implement using metadata
 	protected abstract Object getId(T t);
 }

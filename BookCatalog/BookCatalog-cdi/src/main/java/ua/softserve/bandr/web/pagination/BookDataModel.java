@@ -1,7 +1,5 @@
 package ua.softserve.bandr.web.pagination;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.richfaces.component.SortOrder;
 import org.richfaces.model.ArrangeableState;
 import org.slf4j.Logger;
@@ -11,12 +9,12 @@ import ua.softserve.bandr.dto.converters.BookDTOTransformer;
 import ua.softserve.bandr.dto.converters.DTOTransformer;
 import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.persistence.manager.BookManager;
+import ua.softserve.bandr.web.pagination.richmodels.AbstractDTODataModel;
 
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import javax.persistence.criteria.Order;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

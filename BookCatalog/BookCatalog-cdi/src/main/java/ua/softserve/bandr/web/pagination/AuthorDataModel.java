@@ -6,6 +6,7 @@ import ua.softserve.bandr.dto.AuthorDTO;
 import ua.softserve.bandr.dto.converters.DTOTransformer;
 import ua.softserve.bandr.entity.Author;
 import ua.softserve.bandr.persistence.manager.AuthorManager;
+import ua.softserve.bandr.web.pagination.richmodels.AbstractDTODataModel;
 
 import javax.ejb.Stateful;
 import javax.inject.Inject;

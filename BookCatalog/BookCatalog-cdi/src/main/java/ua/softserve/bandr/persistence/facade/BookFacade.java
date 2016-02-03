@@ -17,7 +17,5 @@ public interface BookFacade extends AbstractFacadeInt<Book> {
 
 	List<Book> getBooksByRating(int rating);
 
-	List<Book> getPagedFilteredSorted(Integer startWith, Integer pageSize, Map<String, String> filterText, Map<String, Boolean> sortingOrder);
-
 	List<BookRatingDTO> getBookCountByRating();
 }

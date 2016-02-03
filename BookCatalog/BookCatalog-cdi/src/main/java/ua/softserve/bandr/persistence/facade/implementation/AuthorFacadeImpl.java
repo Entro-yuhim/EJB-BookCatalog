@@ -20,6 +20,7 @@ import java.util.Map;
 
 @Stateless
 @LocalBean
+@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 public class AuthorFacadeImpl extends AbstractFacade<Author> implements AuthorFacade {
 
 	public AuthorFacadeImpl() {

@@ -39,16 +39,12 @@ public class AuthorManager extends AbstractManager<Author> {
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void delete(Author author) {
 		Validate.notNull(author);
+		Validate.notNull(author);
 		Author authorDB = authorHome.update(author);
 		if (authorDB.getBooks().isEmpty()) {
 			authorHome.delete(authorDB);
 		}
 		/* fixme Should do something if validation fails; */
-	}
-
-	@Override
-	public List<Author> getPagedFiltered(Integer firstRow, Integer numRows, Map<String, String> filter, Map<String, Boolean> sortingOrder) {
-		return authorFacade.getPagedFilteredSorted(firstRow, numRows, filter, sortingOrder);
 	}
 }
 
