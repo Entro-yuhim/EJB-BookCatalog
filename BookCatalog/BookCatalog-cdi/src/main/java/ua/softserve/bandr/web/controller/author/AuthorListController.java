@@ -1,6 +1,7 @@
-package ua.softserve.bandr.web.controller;
+package ua.softserve.bandr.web.controller.author;
 
 import org.richfaces.component.SortOrder;
+import ua.softserve.bandr.web.controller.ContainsSotrableTable;
 import ua.softserve.bandr.web.pagination.AuthorDataModel;
 
 import javax.faces.bean.ManagedBean;

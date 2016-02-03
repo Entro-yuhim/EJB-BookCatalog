@@ -1,4 +1,4 @@
-package ua.softserve.bandr.web.controller;
+package ua.softserve.bandr.web.controller.book;
 
 import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.persistence.manager.BookManager;
