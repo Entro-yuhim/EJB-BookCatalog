@@ -13,7 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
@@ -23,6 +22,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -43,17 +44,20 @@ import java.util.Set;
 		@NamedQuery(name = Book.GET_BY_AUTHOR_ID,
 				query = "SELECT b FROM Book b " +
 						"JOIN b.authors a " +
-						"WHERE a.id = :id")
+						"WHERE a.id = :id"),
+		@NamedQuery(name = Book.DELETE_BY_ID,
+				query = "DELETE FROM Book b " +
+						"WHERE b.id = :id")
 })
 @NamedNativeQueries({
 		@NamedNativeQuery(name = Book.GET_COUNT_BY_RATING,
-				query = "SELECT subq.rating as rating, count(subq.id) as data_count " +
+				query = "SELECT subq.rating AS rating, count(subq.id) AS data_count " +
 						"FROM (SELECT b.id, round(avg(r.rating)) rating FROM book b " +
 						"JOIN review r ON " +
 						"b.id = r.book_id " +
-						"group by b.id) subq " +
-						"GROUP by subq.rating " +
-						"ORDER by subq.rating")
+						"GROUP BY b.id) subq " +
+						"GROUP BY subq.rating " +
+						"ORDER BY subq.rating")
 })
 public class Book implements Persistable {
 	public static final String GET_ALL = "Book.getAll";
@@ -63,18 +67,22 @@ public class Book implements Persistable {
 	public static final String GET_COUNT_BY_RATING = "Book.ratingDistribution";
 	public static final String GET_RECORD_COUNT = "Book.getRecordCount";
 	private static final long serialVersionUID = -7196067339640930752L;
+	public static final String DELETE_BY_ID = "Book.deleteById";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_id_generator")
 	@SequenceGenerator(name = "book_id_generator", sequenceName = "book_id_seq", allocationSize = 1)
 	@JsonIgnore
 	private Long id;
+	@NotNull
+	@Size(min = 1)
 	private String title;
 	@Column(name = "year_published")
 	@Temporal(TemporalType.DATE)
 	private Date yearPublished;
 
 	@Column(unique = true, name = "isbn", length = 14)
+	@Size(min = 1, max = 14)
 	private String iSBN;
 	private String publisher;
 
@@ -84,13 +92,13 @@ public class Book implements Persistable {
 
 	@Formula("(SELECT round(avg(r.rating)) FROM review r WHERE r.book_id = id)")
 	private Integer rating;
+//
+//	@Lob
+//	@Column(nullable = false)
+//	@JsonIgnore
+//	private String description;
 
-	@Lob
-	@Column(nullable = false)
-	@JsonIgnore
-	private String description;
-
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.MERGE)
 	@JoinTable(name = "book_author",
 			joinColumns = @JoinColumn(name = "book_id",
 					foreignKey = @ForeignKey(name = "book_author_fk")),
@@ -178,13 +186,5 @@ public class Book implements Persistable {
 
 	public Integer getRating() {
 		return rating;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 }

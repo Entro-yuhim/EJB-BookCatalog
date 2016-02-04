@@ -1,6 +1,7 @@
 package ua.softserve.bandr.web.controller;
 
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.Validate;
 import ua.softserve.bandr.dto.BookRatingDTO;
 import ua.softserve.bandr.persistence.manager.BookManager;
 

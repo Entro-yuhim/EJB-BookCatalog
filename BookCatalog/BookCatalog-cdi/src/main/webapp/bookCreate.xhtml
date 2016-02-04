@@ -24,43 +24,40 @@
                     <f:validateRequired/>
                 </h:inputText>
                 <h:message for="isbn" errorClass="invalid"/>
-                <ui:remove>
-                    <h:outputLabel for="description" value="Description"/>
-                    <h:inputText id="description" value="#{bookCreateController.book.description}"/>
-                    <h:message for="description" errorClass="invalid"/>
-                </ui:remove>
             </h:panelGrid>
-            <rich:editor value="#{bookCreateController.book.description}">
-                <f:facet name="config">
-                    toolbar_custom:
-                    [
-                    { name: 'document', items : [ 'NewPage','Preview' ] },
-                    { name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
-                    { name: 'editing', items : [ 'Find','Replace','-','SelectAll','-','Scayt' ] },
-                    { name: 'insert', items : [ 'Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak'
-                    ,'Iframe' ] },
-                    '/',
-                    { name: 'styles', items : [ 'Styles','Format' ] },
-                    { name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat' ] },
-                    { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote' ] },
-                    { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
-                    { name: 'tools', items : [ 'Maximize','-','About' ] }
-                    ]
-                </f:facet>
-            </rich:editor>
             <a4j:outputPanel id="authors">
-                #{bookCreateController.authors}
+                <h:dataTable value="#{bookCreateController.authors}" var="author">
+                    <h:column>
+                        #{author.firstName}
+                    </h:column>
+                    <h:column>
+                        #{author.lastName}
+                    </h:column>
+                    <h:column>
+                        #{author.rating}
+                    </h:column>
+                </h:dataTable>
             </a4j:outputPanel>
             <h:commandButton action="#{bookCreateController.save}" value="Save"/>
         </h:form>
         <h:form>
-            <rich:select mode="cachedAjax" minChars="1"
+            <rich:select id="authorName"
+                         mode="cachedAjax" minChars="1"
+                         autocomplete="true"
                          autocompleteMethod="#{bookCreateController.autocomplete}"
                          var='author' itemValue="${author.id}"
                          itemLabel="#{author.firstName} #{author.lastName}"
                          value="#{bookCreateController.selectedAuthor}"/>
-            <a4j:commandButton value="Add" render="authors" execute="@this"
-                               action="#{bookCreateController.addSelectedAuthor(author)}"/>
         </h:form>
+        <h:form>
+            <h:inputHidden id="selectedAuthor" value="#{bookCreateController.selectedAuthor}"/>
+            <a4j:commandButton value="Add" render="authors" execute="@form" onclick="passSelectToAjax()"
+                               action="#{bookCreateController.addSelectedAuthor}"/>
+        </h:form>
+        <h:outputScript>
+            function passSelectToAjax() {
+                $('[id*=selectedAuthor]').val($("[id*=authorNameInput]").val());
+            }
+        </h:outputScript>
     </ui:define>
 </ui:composition>

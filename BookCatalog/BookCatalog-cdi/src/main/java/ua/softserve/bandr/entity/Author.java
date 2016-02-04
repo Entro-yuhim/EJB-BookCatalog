@@ -26,8 +26,19 @@ import java.util.Set;
 						"OR lower(a.firstName) like lower(:namePlaceholder) " +
 						"OR lower(CONCAT(a.firstName,' ', a.lastName)) like  lower(:namePlaceholder) " +
 						"OR lower(CONCAT(a.lastName,' ', a.firstName)) like lower(:namePlaceholder)"),
+		@NamedQuery(name = Author.GET_BY_FULL_NAME,//Should i check if reverse data is corret?
+				query = "SELECT A FROM Author a WHERE " +
+						"LOWER(a.firstName) = LOWER(:firstName) AND " +
+						"LOWER(a.lastName) = LOWER(:lastName)"),
 		@NamedQuery(name = Author.GET_RECORD_COUNT,
-				query = "SELECT count(a.id) FROM Author a")
+				query = "SELECT count(a.id) FROM Author a"),
+		@NamedQuery(name = Author.GET_BY_BOOK,
+				query = "SELECT a FROM Author a " +
+						"JOIN a.books b " +
+						"WHERE b.id = :bookId"),
+		@NamedQuery(name = Author.DELETE_BY_ID,
+				query = "DELETE FROM Author a WHERE a.id = :id")
+
 
 })
 @Table(name = "author",
@@ -36,9 +47,12 @@ import java.util.Set;
 public class Author implements Persistable {
 
 	public static final String GET_ALL = "Author.getAll";
-	public static final String GET_BY_NAME = "Author.getByLastName";
+	public static final String GET_BY_NAME = "Author.getByName";
+	public static final String GET_BY_FULL_NAME = "Author.getByFullName";
 	public static final String GET_RECORD_COUNT = "Author.getCount";
 	private static final long serialVersionUID = -3297680484923478344L;
+	public static final String GET_BY_BOOK = "Author.getByBook";
+	public static final String DELETE_BY_ID = "Author.deleteById";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_id_generator")

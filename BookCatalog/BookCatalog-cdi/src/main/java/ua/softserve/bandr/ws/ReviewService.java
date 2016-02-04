@@ -1,11 +1,18 @@
 package ua.softserve.bandr.ws;
 
 import ua.softserve.bandr.entity.Review;
+import ua.softserve.bandr.persistence.manager.ConstraintCheckException;
 import ua.softserve.bandr.persistence.manager.ReviewManager;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -29,7 +36,7 @@ public class ReviewService {
 
 	@POST
 	@Path("/")
-	public Response saveReview(@Valid Review review) {
+	public Response saveReview(@Valid Review review) throws ConstraintCheckException {
 		reviewManager.persist(review);
 		return Response.ok().build();
 	}

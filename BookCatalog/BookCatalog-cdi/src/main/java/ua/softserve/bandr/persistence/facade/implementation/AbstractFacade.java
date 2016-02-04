@@ -3,6 +3,7 @@ package ua.softserve.bandr.persistence.facade.implementation;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +54,8 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 	@Override
 	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public T getById(Long id) {
-		LOG.debug("Query database for entity {} with id {}", entityClass.getSimpleName(), id);
+		Validate.notNull(id, "Received null as arument to AbstractFacade#getById");
+		LOG.debug("Query database for entity [{}] with id [{}]", entityClass.getSimpleName(), id);
 		return entityManager.find(entityClass, id);
 	}
 
@@ -64,9 +66,17 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 
 	@SafeVarargs
 	protected final List<T> executeNamedQuery(String queryName, Pair<String, ?>... args) {
-		LOG.debug("Executing query {}", queryName);
+		LOG.debug("Executing query [{}]", queryName);
 		TypedQuery<T> query = (TypedQuery<T>) getTypedNamedQuery(queryName);
 		return executeQuery(query, args);
+	}
+
+	@SafeVarargs
+	protected final T executeNamedQueryToSingleResult(String queryName, Pair<String, ?>... args) {
+		LOG.debug("Executing query [{}]", queryName);
+		TypedQuery<T> query = (TypedQuery<T>) getTypedNamedQuery(queryName);
+		setQueryParams(query, args);
+		return query.getSingleResult();
 	}
 
 
@@ -74,7 +84,7 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 	protected final List<T> executeNamedQuery(String queryName,
 											  Optional<Integer> firstResult, Optional<Integer> maxResults,
 											  Pair<String, ?>... args) {
-		LOG.debug("Executing query {}", queryName);
+		LOG.debug("Executing query [{}]", queryName);
 		TypedQuery<T> query = (TypedQuery<T>) getTypedNamedQuery(queryName);
 		return executeQuery(query, firstResult, maxResults, args);
 	}
@@ -98,8 +108,7 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 		}
 		query1.setFirstResult(firstResult.or(0));
 		query1.setMaxResults(maxResults.or(10));
-		List<T> resultList = query1.getResultList();
-		return resultList;
+		return query1.getResultList();
 	}
 
 	protected final List<T> executeQuery(TypedQuery<T> query,
@@ -109,8 +118,7 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 		setQueryParams(query1, args);
 		query1.setFirstResult(firstResult.or(0));
 		query1.setMaxResults(maxResults.or(10));
-		List<T> resultList = query1.getResultList();
-		return resultList;
+		return query1.getResultList();
 	}
 
 
@@ -145,6 +153,13 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 
 	private static TypedQuery setQueryParams(TypedQuery query, Map<String, ?> filter) {
 		for (Map.Entry<String, ?> arg : filter.entrySet()) {
+			query = query.setParameter(arg.getKey(), arg.getValue());
+		}
+		return query;
+	}
+
+	private static TypedQuery setQueryParams(TypedQuery query, Pair<String, ?>... filter) {
+		for (Pair<String, ?> arg : filter) {
 			query = query.setParameter(arg.getKey(), arg.getValue());
 		}
 		return query;

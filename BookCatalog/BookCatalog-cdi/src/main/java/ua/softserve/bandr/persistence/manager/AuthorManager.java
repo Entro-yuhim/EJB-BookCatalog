@@ -11,9 +11,8 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import java.util.Collection;
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by bandr on 20.01.2016.
@@ -38,9 +37,18 @@ public class AuthorManager extends AbstractManager<Author> {
 
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public Long persist(@Valid Author entity) throws ConstraintCheckException {
+		Validate.notNull(entity, "Received null argument in AuthorManager#persist");
+		if (authorFacade.getByFullName(entity.getFirstName(), entity.getLastName()) != null) {
+			throw new ConstraintCheckException("Author already exists.");
+		}
+		return super.persist(entity);
+	}
+
+	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void delete(Author author) {
-		Validate.notNull(author);
-		Validate.notNull(author);
+		Validate.notNull(author, "Received impossible null argument in AuthorManager#delete");
 		Author authorDB = authorHome.update(author);
 		if (authorDB.getBooks().isEmpty()) {
 			authorHome.delete(authorDB);
@@ -49,7 +57,13 @@ public class AuthorManager extends AbstractManager<Author> {
 	}
 
 	public List<Author> getByName(String name) {
+		Validate.notNull(name, "Received null argument in AuthorManager#getByName");
 		return authorFacade.getByName(name);
+	}
+
+	public List<Author> getByBookId(Long id) {
+		Validate.notNull(id, "Received null argument in AuthorManager#getByBookId");
+		return authorFacade.getByBookId(id);
 	}
 }
 

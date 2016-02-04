@@ -1,9 +1,9 @@
 package ua.softserve.bandr.persistence.facade.implementation;
 
 import com.google.common.base.Optional;
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.tuple.Pair;
 import ua.softserve.bandr.entity.Author;
-import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.persistence.facade.AuthorFacade;
 
 import javax.ejb.LocalBean;
@@ -34,6 +34,8 @@ public class AuthorFacadeImpl extends AbstractFacade<Author> implements AuthorFa
 
 	@Override
 	public List<Author> getPaged(Integer startWith, Integer pageSize) {
+		Validate.notNull(startWith, "Received null startWith as arument to AuthorFacadeImpl#getPaged");
+		Validate.notNull(pageSize, "Received null pageSize as arument to AuthorFacadeImpl#getPaged");
 		return executeNamedQuery(Author.GET_ALL, Optional.of(startWith), Optional.of(pageSize));
 	}
 
@@ -56,6 +58,16 @@ public class AuthorFacadeImpl extends AbstractFacade<Author> implements AuthorFa
 	public List<Author> getByName(String lastName) {
 		return executeNamedQuery(Author.GET_BY_NAME,
 				Pair.of("namePlaceholder", "%" + lastName + "%"));
+	}
+
+	@Override
+	public List<Author> getByBookId(Long id) {
+		return executeNamedQuery(Author.GET_BY_BOOK, Pair.of("bookId", id));
+	}
+
+	@Override
+	public Author getByFullName(String firstName, String lastName) {
+		return executeNamedQueryToSingleResult(Author.GET_BY_FULL_NAME, Pair.of("firstName", firstName), Pair.of("lastName", lastName));
 	}
 
 	@Override

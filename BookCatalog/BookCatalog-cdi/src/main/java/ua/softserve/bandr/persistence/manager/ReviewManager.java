@@ -40,4 +40,8 @@ public class ReviewManager extends AbstractManager<Review> {
 		Validate.notNull(sortingOrder);
 		return null;
 	}
+
+	public List<Review> getByBookId(Long bookId) {
+		return reviewFacade.getByBookId(bookId);
+	}
 }

@@ -1,8 +1,10 @@
 package ua.softserve.bandr.web.controller.book;
 
+import com.google.common.collect.Lists;
 import org.richfaces.component.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ua.softserve.bandr.persistence.manager.BookManager;
 import ua.softserve.bandr.web.controller.ContainsSotrableTable;
 import ua.softserve.bandr.web.pagination.BookDataModel;
 
@@ -10,6 +12,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,9 +25,9 @@ public class BookListController extends ContainsSotrableTable {
 
 	@Inject
 	private BookDataModel model;
+	@Inject
+	private BookManager bookManager;
 	private Map<Long, Boolean> checkedForAction = new HashMap<>();
-
-
 
 	public BookListController() {
 		getSortOrders().put("title", SortOrder.unsorted);
@@ -45,14 +48,14 @@ public class BookListController extends ContainsSotrableTable {
 	}
 
 	public String doStuff() {
-		LOG.info("Doing stuffz");
+		List<Long> listForAction = Lists.newArrayList();
+		for (Map.Entry<Long, Boolean> entry : checkedForAction.entrySet()) {
+			if (entry.getValue() && entry.getValue() != null) {
+				listForAction.add(entry.getKey());
+			}
+			bookManager.deleteBulkById(listForAction);
+		}
 
-		//TODO using java8 for convenience.
-//		checkedForAction.forEach((k, v) -> {
-//			if (v) {
-//				LOG.info("Checked id = [{}]", k);
-//			}
-//		});
 		return "bookPage";
 	}
 }

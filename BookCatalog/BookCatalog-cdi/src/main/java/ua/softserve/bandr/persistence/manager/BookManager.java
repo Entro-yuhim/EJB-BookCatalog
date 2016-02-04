@@ -1,5 +1,6 @@
 package ua.softserve.bandr.persistence.manager;
 
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.dto.BookRatingDTO;
@@ -44,6 +45,7 @@ public class BookManager extends AbstractManager<Book> {
 	}
 
 	public List<Book> getByAuthorId(Long id) {
+		Validate.notNull(id, "Received null argument in BookManager#getByAuthorId");
 		return bookFacade.getAllByAuthor(id);
 	}
 }

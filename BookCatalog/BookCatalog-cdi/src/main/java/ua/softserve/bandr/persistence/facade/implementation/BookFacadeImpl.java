@@ -26,6 +26,8 @@ import java.util.Map;
 
 @Stateless
 @LocalBean
+
+//TODO: do something for distinct data.
 public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 
 	public BookFacadeImpl() {
@@ -54,9 +56,7 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 		Root<Book> book = baseQuery.from(Book.class);
 		Join<Book, Author> bookAuthor = book.join("authors");
 		List<Predicate> predicates = buildFullBookPredicates(filter, criteriaBuilder, book, bookAuthor);
-
-
-		CriteriaQuery<Long> bookCriteriaQuery = baseQuery.select(criteriaBuilder.count(book))
+		CriteriaQuery<Long> bookCriteriaQuery = baseQuery.select(criteriaBuilder.countDistinct(book))
 				.where(predicates.toArray(new Predicate[predicates.size()]));
 		return executeCriteriaQueryToCount(bookCriteriaQuery, filter);
 	}
@@ -85,6 +85,7 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 		Join<Book, Author> bookAuthor = book.join("authors");
 		List<Predicate> predicates = buildFullBookPredicates(filterData, criteriaBuilder, book, bookAuthor);
 		CriteriaQuery<Book> finalQuery = criteria.select(book)
+				.distinct(true)
 				.where(predicates.toArray(new Predicate[predicates.size()]));
 		List<Order> sortingList = getOrders(sortingOrder, criteriaBuilder, book);
 		return executeQuery(finalQuery.orderBy(sortingList), Optional.of(startWith), Optional.of(pageSize), filterData);

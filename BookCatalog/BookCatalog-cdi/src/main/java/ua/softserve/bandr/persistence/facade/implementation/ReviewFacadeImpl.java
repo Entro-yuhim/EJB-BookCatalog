@@ -1,6 +1,7 @@
 package ua.softserve.bandr.persistence.facade.implementation;
 
 import com.google.common.base.Optional;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.entity.Review;
@@ -17,7 +18,7 @@ public class ReviewFacadeImpl extends AbstractFacade<Review> implements ReviewFa
 
 	private static final Logger LOG = LoggerFactory.getLogger(ReviewFacadeImpl.class);
 
-	protected ReviewFacadeImpl() {
+	public ReviewFacadeImpl() {
 		super(Review.class);
 	}
 
@@ -42,5 +43,10 @@ public class ReviewFacadeImpl extends AbstractFacade<Review> implements ReviewFa
 	@Override
 	public Integer getRecordCount(Map<String, String> filter) {
 		return executeNamedQueryToCount(Review.GET_RECORD_COUNT);
+	}
+
+	@Override
+	public List<Review> getByBookId(Long bookId) {
+		return executeNamedQuery(Review.GET_BY_BOOK, Pair.of("id", bookId));
 	}
 }

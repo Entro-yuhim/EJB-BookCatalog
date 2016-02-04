@@ -1,0 +1,74 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:rich="http://richfaces.org/rich" xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                template="WEB-INF/templates/default.xhtml">
+    <ui:define name="page-body">
+        <f:metadata>
+            <f:viewParam name="bookId" value="#{bookViewController.bookId}"/>
+            <f:viewAction action="#{bookViewController.init}"/>
+        </f:metadata>
+        <h:panelGrid columns="2">
+            <h:outputLabel value="Title"/>
+            <h:outputLabel value="#{bookViewController.book.title}"/>
+            <h:outputLabel value="Authors"/>
+            <h:dataTable value="#{bookViewController.authors}" var="author">
+                <h:column>
+                    <h:outputLabel value="#{author.firstName}"/>
+                </h:column>
+                <h:column>
+                    <h:outputLabel value="#{author.lastName}"/>
+                </h:column>
+                <h:column>
+                    <h:outputLabel value="#{author.rating}"/>
+                </h:column>
+            </h:dataTable>
+            <h:outputLabel value="Publisher"/>
+            <h:outputLabel value="#{bookViewController.book.publisher}"/>
+            <h:outputLabel value="ISBN"/>
+            <h:outputLabel value="#{bookViewController.book.iSBN}"/>
+            <h:outputLabel value="Rating"/>
+            <h:outputLabel value="#{bookViewController.book.rating}"/>
+            <h:outputLabel value="YearPublished"/>
+            <h:outputLabel value="#{bookViewController.book.yearPublished}"/>
+        </h:panelGrid>
+        <rich:panel header="New review">
+            <h:form>
+                <h:panelGrid columns="3">
+                    <h:outputLabel for="username" value="Username"/>
+                    <h:inputText id="username" value="#{bookViewController.review.username}"/>
+                    <h:message for="username" errorClass="invalid"/>
+
+                    <h:outputLabel for="rating" value="Rate"/>
+                    <h:inputText id="rating" value="#{bookViewController.review.rating}">
+                        <f:validateRequired/>
+                        <f:validateDoubleRange minimum="1" maximum="5"/>
+                    </h:inputText>
+                    <h:message for="rating" errorClass="invalid"/>
+                </h:panelGrid>
+                <h:inputTextarea id="reviewText" value="#{bookViewController.review.reviewText}">
+                    <f:validateRequired/>
+                </h:inputTextarea>
+                <a4j:commandButton action="#{bookViewController.save}" value="Save" render="reviews" oncomplete="clearInputData();"/>
+            </h:form>
+        </rich:panel>
+        <a4j:outputPanel id="reviews">
+            <ui:repeat value="#{bookViewController.reviews}" var="review">
+                <rich:panel header="#{review.username}">
+                    <h:panelGrid columns="1">
+                        <h:outputLabel value="#{review.rating}"/>
+                    </h:panelGrid>
+                    #{review.reviewText}
+                </rich:panel>
+            </ui:repeat>
+        </a4j:outputPanel>
+        <h:outputScript>
+            function clearInputData(){
+                console.log("Hi");
+                $('[id*=username],[id*=rating],[id*=reviewText]').each(function(){
+                    $(this).val('');
+                });
+            }
+        </h:outputScript>
+    </ui:define>
+</ui:composition>

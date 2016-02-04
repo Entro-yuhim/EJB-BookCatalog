@@ -48,7 +48,7 @@ public abstract class JPADataModel<T> extends ExtendedDataModel<T> implements Ar
 //		if (!newFilter.equals(cachedFilter)) {
 //			cachedFilter = newFilter;
 //		}
-		LOG.info("Arrange");
+		LOG.debug("Arrange");
 		arrangeableState = state;
 	}
 
@@ -59,7 +59,7 @@ public abstract class JPADataModel<T> extends ExtendedDataModel<T> implements Ar
 
 	@Override
 	public Object getRowKey() {
-		LOG.info("getRowKey");
+		LOG.debug("getRowKey");
 		return rowKey;
 	}
 

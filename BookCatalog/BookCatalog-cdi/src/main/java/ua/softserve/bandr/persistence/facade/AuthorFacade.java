@@ -12,4 +12,8 @@ import java.util.List;
 @Local
 public interface AuthorFacade extends AbstractFacadeInt<Author> {
 	public List<Author> getByName(String name);
+
+	List<Author> getByBookId(Long id);
+
+	Author getByFullName(String firstName, String lastName);
 }

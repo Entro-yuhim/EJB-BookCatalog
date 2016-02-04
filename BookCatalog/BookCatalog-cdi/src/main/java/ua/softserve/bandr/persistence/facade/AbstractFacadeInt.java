@@ -1,6 +1,5 @@
 package ua.softserve.bandr.persistence.facade;
 
-import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.entity.Persistable;
 
 import java.util.List;
