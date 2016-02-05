@@ -4,39 +4,64 @@
                 xmlns:rich="http://richfaces.org/rich" xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="WEB-INF/templates/default.xhtml">
     <ui:define name="page-body">
-        <h:outputText value="#{authorEditController.author.firstName}"/>
-        <h:outputText value="#{authorEditController.author.lastName}"/>
+        <f:metadata>
+            <f:viewParam name="authorId" value="#{authorEditController.id}"/>
+            <f:viewAction action="#{authorEditController.init}"/>
+        </f:metadata>
+        <h:form>
+            <h:panelGrid columns="3">
+                <h:outputLabel for="firstName" value="First Name: "/>
+                <h:inputText id="firstName" value="#{authorEditController.author.firstName}"/>
+                <h:message for="firstName"/>
+
+                <h:outputLabel for="lastName" value="Last Name: "/>
+                <h:inputText id="lastName" value="#{authorEditController.author.lastName}"/>
+                <h:message for="lastName"/>
+            </h:panelGrid>
+        </h:form>
         <h:outputLabel value="#{authorEditController.author.rating}" style="float:right"/>
-        <rich:dataTable id="richTable" value="#{authorEditController.books}" var="book">
-            <rich:column>
-                <f:facet name="header">
-                    <h:outputLabel value="Title"/>
+        <h:form>
+            <rich:extendedDataTable id="richTable"
+                                    value="#{authorEditController.bookModel}"
+                                    selection="#{authorEditController.selected}"
+                                    selectionMode="multiple"
+                                    var="book" rows="1">
+                <rich:column>
+                    <f:facet name="header">
+                        <h:outputLabel value="Id"/>
+                    </f:facet>
+                    <h:outputText value="#{book.id}"/>
+                </rich:column>
+                <rich:column>
+                    <f:facet name="header">
+                        <h:outputLabel value="Title"/>
+                    </f:facet>
+                    <h:outputText value="#{book.title}"/>
+                </rich:column>
+                <rich:column>
+                    <f:facet name="header">
+                        <h:outputLabel value="Publisher"/>
+                    </f:facet>
+                    <h:outputText value="#{book.publisher}"/>
+                </rich:column>
+                <rich:column>
+                    <f:facet name="header">
+                        <h:outputLabel value="Year published"/>
+                    </f:facet>
+                    <h:outputText value="#{book.yearPublished}"/>
+                </rich:column>
+                <rich:column>
+                    <f:facet name="header">
+                        <h:outputLabel value="ISBN"/>
+                    </f:facet>
+                    <h:outputText value="#{book.iSBN}"/>
+                </rich:column>
+                <f:facet name="footer">
+                    <rich:dataScroller id="scroller"/>
                 </f:facet>
-                <h:outputText value="#{book.title}"/>
-            </rich:column>
-            <rich:column>
-                <f:facet name="header">
-                    <h:outputLabel value="Publisher"/>
-                </f:facet>
-                <h:outputText value="#{book.publisher}"/>
-            </rich:column>
-            <rich:column>
-                <f:facet name="header">
-                    <h:outputLabel value="Year published"/>
-                </f:facet>
-                <h:outputText value="#{book.yearPublished}"/>
-            </rich:column>
-            <rich:column>
-                <f:facet name="header">
-                    <h:outputLabel value="ISBN"/>
-                </f:facet>
-                <h:outputText value="#{book.iSBN}"/>
-            </rich:column>
+            </rich:extendedDataTable>
+            <h:commandButton value="Do stuff" action="#{authorEditController.doStuff}"/>
+        </h:form>
 
-
-        </rich:dataTable>
-        <ui:remove>
-            <h:outputText value="#{authorEditController.author.books}"/>
-        </ui:remove>
     </ui:define>
 </ui:composition>

@@ -45,6 +45,13 @@ public class AuthorManager extends AbstractManager<Author> {
 		return super.persist(entity);
 	}
 
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public Author getByIdWithInitializedCollections(Long id) {
+		Author author = super.getById(id);
+		author.getBooks().size();
+		return author;
+	}
+
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void delete(Author author) {
@@ -64,6 +71,10 @@ public class AuthorManager extends AbstractManager<Author> {
 	public List<Author> getByBookId(Long id) {
 		Validate.notNull(id, "Received null argument in AuthorManager#getByBookId");
 		return authorFacade.getByBookId(id);
+	}
+
+	public boolean isAuthorUnique(Author author) {
+		return authorFacade.authorExists(author.getFirstName(), author.getLastName());
 	}
 }
 

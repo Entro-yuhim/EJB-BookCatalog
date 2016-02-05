@@ -45,12 +45,6 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 	@PersistenceContext(name = "pg_BC")
 	protected EntityManager entityManager;
 
-
-	@Override
-	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	//Should never be used in actual environment.
-	public abstract List<T> getAll();
-
 	@Override
 	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public T getById(Long id) {
@@ -140,24 +134,24 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 		return cb.like(cb.upper(pathRoot.get(alias)), cb.upper(cb.parameter(String.class, alias)));
 	}
 
-	//For f*cks sake, Oracle, please get your *** api together.
-	protected Integer executeNamedQueryToCount(String queryName) {
-		return ((Number) entityManager.createNamedQuery(queryName).getSingleResult()).intValue();
+	protected Long executeNamedQueryToCount(String queryName) {
+		return ((Number) entityManager.createNamedQuery(queryName).getSingleResult()).longValue();
 	}
 
-	protected Integer executeCriteriaQueryToCount(CriteriaQuery queryName, Map<String, String> filter) {
-		TypedQuery query = entityManager.createQuery(queryName);
+	protected <X> X executeCriteriaQueryToCount(CriteriaQuery<X> queryName, Map<String, String> filter) {//// TODO: 05.02.2016
+		TypedQuery<X> query = entityManager.createQuery(queryName);
 		query = setQueryParams(query, filter);
-		return ((Number) query.getSingleResult()).intValue();
+		return query.getSingleResult();
 	}
 
-	private static TypedQuery setQueryParams(TypedQuery query, Map<String, ?> filter) {
+	private static <T> TypedQuery<T> setQueryParams(TypedQuery<T> query, Map<String, ?> filter) {
 		for (Map.Entry<String, ?> arg : filter.entrySet()) {
 			query = query.setParameter(arg.getKey(), arg.getValue());
 		}
 		return query;
 	}
 
+	@SafeVarargs
 	private static TypedQuery setQueryParams(TypedQuery query, Pair<String, ?>... filter) {
 		for (Pair<String, ?> arg : filter) {
 			query = query.setParameter(arg.getKey(), arg.getValue());

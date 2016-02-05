@@ -18,5 +18,5 @@ public interface AbstractFacadeInt<T extends Persistable> {
 
 	List<T> getPagedFilteredSorted(Integer startWith, Integer pageSize, Map<String, String> filterText, Map<String, Boolean> sortingOrder);
 
-	Integer getRecordCount(Map<String, String> filter);
+	Long getRecordCount(Map<String, String> filter);
 }

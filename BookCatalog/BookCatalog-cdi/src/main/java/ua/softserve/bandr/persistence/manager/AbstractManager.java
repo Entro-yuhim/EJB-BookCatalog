@@ -83,7 +83,7 @@ public abstract class AbstractManager<T extends Persistable> {
 		getHome().delete(entity);
 	}
 
-	public Integer getRecordCount(Map<String, String> filter) {
+	public Long getRecordCount(Map<String, String> filter) {
 		Validate.notNull(filter, "Received null argument in AbstractManager#getRecordCount");
 		return getFacade().getRecordCount(filter);
 	}

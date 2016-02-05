@@ -47,7 +47,7 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 
 	@Override
 	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	public Integer getRecordCount(Map<String, String> filter) {
+	public Long getRecordCount(Map<String, String> filter) {
 		if (filter == null || filter.isEmpty()) {
 			return executeNamedQueryToCount(Book.GET_RECORD_COUNT);
 		}
@@ -115,7 +115,6 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 	}
 
 
-	//TODO halp.
 	private static Predicate getAuthorPredicate(Map<String, String> authorParamFilter, CriteriaBuilder cb, Path<Author> authors) {
 		String key = authorParamFilter.entrySet().iterator().next().getKey();
 		return cb.or(getLikeWithExactPathToParam(cb, key, authors.get("firstName")),
@@ -123,7 +122,6 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 				cb.like(cb.upper(cb.concat(authors.get("firstName"), authors.get("lastName"))), cb.upper(cb.parameter(String.class, key))));
 	}
 
-	//TODO halp.
 	private static void separateFiltersForBook(Map<String, String> baseSorting, Map<String, String> bookParams, Map<String, String> authorParams) {
 		for (Map.Entry<String, String> filter : baseSorting.entrySet()) {
 			if (filter.getValue().isEmpty()) {
@@ -140,7 +138,6 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 		}
 	}
 
-	//TODO halp.
 	private List<Predicate> buildFullBookPredicates(Map<String, String> filter, CriteriaBuilder criteriaBuilder, Path book, Join<Book, Author> bookAuthor) {
 		Map<String, String> bookParamFilter = Maps.newHashMap();
 		Map<String, String> authorParamFilter = Maps.newHashMap();

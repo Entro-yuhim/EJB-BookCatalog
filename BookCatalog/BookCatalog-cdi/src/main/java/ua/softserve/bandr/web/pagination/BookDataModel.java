@@ -51,7 +51,7 @@ public class BookDataModel extends AbstractDTODataModel<Book, BookDTO> {
 	}
 
 	@Override
-	public int getTotalCount(Map<String, String> filter) {
+	public Long getTotalCount(Map<String, String> filter) {
 		return bookManager.getRecordCount(filter);
 	}
 

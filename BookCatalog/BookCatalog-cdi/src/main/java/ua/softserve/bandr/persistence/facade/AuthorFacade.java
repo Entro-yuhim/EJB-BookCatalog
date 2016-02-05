@@ -16,4 +16,6 @@ public interface AuthorFacade extends AbstractFacadeInt<Author> {
 	List<Author> getByBookId(Long id);
 
 	Author getByFullName(String firstName, String lastName);
+
+	public Boolean authorExists(String firstName, String lastName);
 }

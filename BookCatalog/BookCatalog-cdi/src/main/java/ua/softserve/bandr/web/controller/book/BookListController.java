@@ -27,6 +27,7 @@ public class BookListController extends ContainsSotrableTable {
 	private BookDataModel model;
 	@Inject
 	private BookManager bookManager;
+	//TODO: change to extendedDataTable
 	private Map<Long, Boolean> checkedForAction = new HashMap<>();
 
 	public BookListController() {

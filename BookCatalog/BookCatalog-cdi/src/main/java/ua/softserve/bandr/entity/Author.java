@@ -37,7 +37,11 @@ import java.util.Set;
 						"JOIN a.books b " +
 						"WHERE b.id = :bookId"),
 		@NamedQuery(name = Author.DELETE_BY_ID,
-				query = "DELETE FROM Author a WHERE a.id = :id")
+				query = "DELETE FROM Author a WHERE a.id = :id"),
+		@NamedQuery(name = Author.GET_COUNT_BY_NAME,
+				query = "SELECT COUNT(a.id) FROM Author a " +
+						"WHERE a.firstName = :firstName AND " +
+						"a.lastName = :lastName")
 
 
 })
@@ -53,6 +57,7 @@ public class Author implements Persistable {
 	private static final long serialVersionUID = -3297680484923478344L;
 	public static final String GET_BY_BOOK = "Author.getByBook";
 	public static final String DELETE_BY_ID = "Author.deleteById";
+	public static final String GET_COUNT_BY_NAME = "Author.getCountByName";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_id_generator")

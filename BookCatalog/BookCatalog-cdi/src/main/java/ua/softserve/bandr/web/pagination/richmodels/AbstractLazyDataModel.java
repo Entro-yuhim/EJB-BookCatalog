@@ -38,7 +38,7 @@ public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> impl
 
 	public abstract Object getKey(T t);
 
-	public abstract int getTotalCount(Map<String, String> filter);
+	public abstract Long getTotalCount(Map<String, String> filter);
 
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -102,7 +102,7 @@ public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> impl
 	@Override
 	public int getRowCount() {
 		if (cachedRowCount == null) {
-			cachedRowCount = getTotalCount(cachedFilter);
+			cachedRowCount = getTotalCount(cachedFilter).intValue();
 		}
 		LOG.debug("Row Count with current filter [{}] is [{}]", cachedFilter, cachedRowCount);
 		return cachedRowCount;
@@ -115,6 +115,7 @@ public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> impl
 
 	@Override
 	public void setRowKey(Object key) {
+		LOG.info("Set rowKey [{}]", key);
 		this.rowKey = key;
 	}
 
@@ -153,21 +154,23 @@ public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> impl
 
 	@Override
 	public int getRowIndex() {
-		throw new UnsupportedOperationException("DataModel is using trying to use unimplemented method.");
+		LOG.info("Attempting to get Row Index");
+		return -1;
 	}
 
 	@Override
 	public void setRowIndex(int rowIndex) {
-		throw new UnsupportedOperationException("DataModel is using trying to use unimplemented method.");
+		LOG.info("Attempting to set Row Index");
 	}
 
 	@Override
 	public Object getWrappedData() {
-		throw new UnsupportedOperationException("DataModel is using trying to use unimplemented method.");
+		LOG.info("Attempting to get wrapped data");
+		return null;
 	}
 
 	@Override
 	public void setWrappedData(Object data) {
-		throw new UnsupportedOperationException("DataModel is using trying to use unimplemented method.");
+		LOG.info("Attempting to set wrapped data");
 	}
 }

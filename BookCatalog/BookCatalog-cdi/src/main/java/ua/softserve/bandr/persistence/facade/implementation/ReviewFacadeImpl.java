@@ -41,7 +41,7 @@ public class ReviewFacadeImpl extends AbstractFacade<Review> implements ReviewFa
 	}
 
 	@Override
-	public Integer getRecordCount(Map<String, String> filter) {
+	public Long getRecordCount(Map<String, String> filter) {
 		return executeNamedQueryToCount(Review.GET_RECORD_COUNT);
 	}
 

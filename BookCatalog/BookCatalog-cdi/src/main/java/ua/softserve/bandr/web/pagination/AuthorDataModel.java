@@ -33,7 +33,7 @@ public class AuthorDataModel extends AbstractDTODataModel<Author, AuthorDTO> {
 	}
 
 	@Override
-	public int getTotalCount(Map<String, String> filter) {
+	public Long getTotalCount(Map<String, String> filter) {
 		return authorManager.getRecordCount(filter);
 	}
 

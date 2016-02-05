@@ -9,16 +9,17 @@
         </h1>
         <a4j:queue requestDelay="500" ignoreDupResponses="true"/>
         <h:form>
-            <ui:remove>
-                <div style="margin-bottom: 10px;">
-                    <h:commandButton title="Delete" action="#{authorListController.doStuff}" value="Create"
-                                     style="float:left; margin-left: 7%;"/>
-                    <h:commandButton title="Delete" action="#{authorListController.doStuff}" value="Delete"
-                                     style="float:right; margin-right: 7%;"/>
-                </div>
-            </ui:remove>
-            <rich:dataTable id="richTable" value="#{authorListController.authors}" var="record" rows="20"
-                            styleClass="basicTable" keepSaved="true">
+            <h:commandButton value="Create"
+                             style="float:left; margin-left: 7%;">
+                <rich:componentControl target="createModal" operation="show"/>
+            </h:commandButton>
+        </h:form>
+        <h:form>
+            <rich:extendedDataTable
+                    id="richTable" value="#{authorListController.authors}"
+                    var="record" rows="20"
+                    selection="#{authorListController.selection}"
+                    styleClass="basicTable" keepSaved="true">
                 <ui:include src="tableColumn.xhtml">
                     <ui:param name="title" value="ID"/>
                     <ui:param name="bean" value="#{authorListController}"/>
@@ -43,14 +44,53 @@
                     <f:facet name="header">
                         <h:outputText value="Edit"/>
                     </f:facet>
-                    <h:commandButton title="Edit" action="authorEdit" value="Edit">
+                    <h:button title="Edit" outcome="authorEdit" value="Edit">
                         <f:param name="authorId" value="#{record.id}"/>
-                    </h:commandButton>
+                    </h:button>
                 </rich:column>
                 <f:facet name="footer">
                     <rich:dataScroller id="scroller"/>
                 </f:facet>
-            </rich:dataTable>
+            </rich:extendedDataTable>
+            <h:commandButton action="#{authorListController.doStuff}"/>
         </h:form>
+
+        <rich:popupPanel id="createModal" modal="true" moveable="false" autosized="true">
+            <f:facet name="header">
+                <h:outputText value="Create new author"/>
+            </f:facet>
+            <f:facet name="controls">
+                <h:outputLink value="#" onclick="#{rich:component('createModal')}.hide(); return false;"
+                              style="color: inherit">X</h:outputLink>
+            </f:facet>
+
+            <p>
+                <h:form>
+                    <rich:graphValidator value="#{authorCreateController}" id="ajaxValidation">
+                        <rich:messages for="ajaxValidation"/>
+                        <h:panelGrid columns="3">
+                            <h:outputLabel for="firstName" value="First Name"/>
+                            <h:inputText id="firstName" value="#{authorCreateController.author.firstName}">
+                                <f:validateRequired/>
+                            </h:inputText>
+                            <h:message for="firstName" errorClass="invalid"/>
+
+                            <h:outputLabel for="lastName" value="Last Name"/>
+                            <h:inputText id="lastName" value="#{authorCreateController.author.lastName}"/>
+                            <h:message for="lastName" errorClass="invalid"/>
+                        </h:panelGrid>
+
+                        <ui:remove>
+                            <!--TODO: restrict close on validation fail-->
+                        </ui:remove>
+                        <a4j:commandButton value="Save"
+                                           oncomplete="#{rich:component('createModal')}.hide(); return false;"
+                                           action="#{authorCreateController.save}"/>
+                        <a4j:commandButton value="Cancel"
+                                           onclick="#{rich:component('createModal')}.hide(); return false;"/>
+                    </rich:graphValidator>
+                </h:form>
+            </p>
+        </rich:popupPanel>
     </ui:define>
 </ui:composition>

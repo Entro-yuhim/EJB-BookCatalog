@@ -34,14 +34,14 @@ public class AuthorFacadeImpl extends AbstractFacade<Author> implements AuthorFa
 
 	@Override
 	public List<Author> getPaged(Integer startWith, Integer pageSize) {
-		Validate.notNull(startWith, "Received null startWith as arument to AuthorFacadeImpl#getPaged");
-		Validate.notNull(pageSize, "Received null pageSize as arument to AuthorFacadeImpl#getPaged");
+		Validate.notNull(startWith, "Received null startWith as argument to AuthorFacadeImpl#getPaged");
+		Validate.notNull(pageSize, "Received null pageSize as argument to AuthorFacadeImpl#getPaged");
 		return executeNamedQuery(Author.GET_ALL, Optional.of(startWith), Optional.of(pageSize));
 	}
 
 	@Override
 	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	public Integer getRecordCount(Map<String, String> filter) {
+	public Long getRecordCount(Map<String, String> filter) {
 		if (filter == null || filter.isEmpty()) {
 			return executeNamedQueryToCount(Author.GET_RECORD_COUNT);
 		}
@@ -81,5 +81,14 @@ public class AuthorFacadeImpl extends AbstractFacade<Author> implements AuthorFa
 				.where(predicates.toArray(new Predicate[predicates.size()]))
 				.orderBy(orderList);
 		return executeQuery(criteriaQuery, Optional.of(startWith), Optional.of(pageSize), filterText);
+	}
+
+	@Override
+	public Boolean authorExists(String firstName, String lastName) {
+		long l = entityManager.createNamedQuery(Author.GET_COUNT_BY_NAME, Number.class)
+				.setParameter("firstName", firstName.trim())
+				.setParameter("lastName", lastName.trim())
+				.getSingleResult().longValue();
+		return l > 0;
 	}
 }
