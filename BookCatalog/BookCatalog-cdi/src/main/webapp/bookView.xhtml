@@ -3,11 +3,11 @@
                 xmlns:rich="http://richfaces.org/rich" xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:a4j="http://richfaces.org/a4j"
                 template="WEB-INF/templates/default.xhtml">
+    <f:metadata>
+        <f:viewParam name="bookId" value="#{bookViewController.bookId}"/>
+        <f:viewAction action="#{bookViewController.init}"/>
+    </f:metadata>
     <ui:define name="page-body">
-        <f:metadata>
-            <f:viewParam name="bookId" value="#{bookViewController.bookId}"/>
-            <f:viewAction action="#{bookViewController.init}"/>
-        </f:metadata>
         <h:panelGrid columns="2">
             <h:outputLabel value="Title"/>
             <h:outputLabel value="#{bookViewController.book.title}"/>
@@ -49,23 +49,31 @@
                 <h:inputTextarea id="reviewText" value="#{bookViewController.review.reviewText}">
                     <f:validateRequired/>
                 </h:inputTextarea>
-                <a4j:commandButton action="#{bookViewController.save}" value="Save" render="reviews" oncomplete="clearInputData();"/>
+                <a4j:commandButton action="#{bookViewController.save}" value="Save" render="reviews"
+                                   oncomplete="clearInputData();"/>
             </h:form>
         </rich:panel>
         <a4j:outputPanel id="reviews">
-            <ui:repeat value="#{bookViewController.reviews}" var="review">
-                <rich:panel header="#{review.username}">
-                    <h:panelGrid columns="1">
-                        <h:outputLabel value="#{review.rating}"/>
-                    </h:panelGrid>
+            <rich:dataGrid value="#{bookViewController.reviews}" var="review" columns="1" elements="5">
+                <rich:panel>
+                    <f:facet name="header">
+                        <h:outputText value="#{review.username}"/>
+                        <h:outputLabel style="float:right" value="#{review.rating}"/>
+                        <ui:remove>
+                            <!--TODO add rateYo-->
+                        </ui:remove>
+                    </f:facet>
+                    <br/>
                     #{review.reviewText}
                 </rich:panel>
-            </ui:repeat>
+                <f:facet name="footer">
+                    <rich:dataScroller fastStep="3"/>
+                </f:facet>
+            </rich:dataGrid>
         </a4j:outputPanel>
         <h:outputScript>
-            function clearInputData(){
-                console.log("Hi");
-                $('[id*=username],[id*=rating],[id*=reviewText]').each(function(){
+            function clearInputData() {
+                $('[id*=username],[id*=rating],[id*=reviewText]').each(function () {
                     $(this).val('');
                 });
             }
