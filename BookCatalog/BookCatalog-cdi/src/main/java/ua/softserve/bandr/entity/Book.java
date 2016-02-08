@@ -47,7 +47,13 @@ import java.util.Set;
 						"WHERE a.id = :id"),
 		@NamedQuery(name = Book.DELETE_BY_ID,
 				query = "DELETE FROM Book b " +
-						"WHERE b.id = :id")
+						"WHERE b.id = :id"),
+		@NamedQuery(name = Book.GET_BY_NAME_OR_ISBN,
+				query = "SELECT b FROM Book b " +
+						"WHERE b.iSBN LIKE :isbn OR b.title LIKE :title"),
+		@NamedQuery(name = Book.GET_COUNT_BY_ISBN,
+				query = "SELECT COUNT (b.id) FROM Book b " +
+						"WHERE b.iSBN = :isbn")
 })
 @NamedNativeQueries({
 		@NamedNativeQuery(name = Book.GET_COUNT_BY_RATING,
@@ -65,9 +71,11 @@ public class Book implements Persistable {
 	public static final String GET_BY_AUTHOR_ID = "Book.getByAuthorId";
 	public static final String GET_BY_RATING = "Book.getByRating";
 	public static final String GET_COUNT_BY_RATING = "Book.ratingDistribution";
+	public static final String GET_COUNT_BY_ISBN = "Book.getCountByISBN";
 	public static final String GET_RECORD_COUNT = "Book.getRecordCount";
 	private static final long serialVersionUID = -7196067339640930752L;
 	public static final String DELETE_BY_ID = "Book.deleteById";
+	public static final String GET_BY_NAME_OR_ISBN = "Book.getByNameOrISBN";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_id_generator")

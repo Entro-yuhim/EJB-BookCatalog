@@ -2,7 +2,16 @@
     width: 90%;
     margin: auto;
     border: none !important;
-    font-size: 14px !important;
+    font-size: 14px;
+}
+
+.extendedTable {
+    margin: auto;
+}
+
+.basicRow {
+    font-size: 76px !important;
+    text-align:center;
 }
 
 body {

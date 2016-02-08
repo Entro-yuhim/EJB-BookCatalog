@@ -4,7 +4,7 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:a4j="http://richfaces.org/a4j"
                 template="WEB-INF/templates/default.xhtml">
     <ui:define name="page-body">
-        <h:form>
+        <h:form id="bookData">
             <h:panelGrid columns="3" columnClasses="titleCell">
                 <h:outputLabel for="title" value="Enter title:"/>
                 <h:inputText id="title" value="#{bookCreateController.book.title}"/>
@@ -40,7 +40,7 @@
             </a4j:outputPanel>
             <h:commandButton action="#{bookCreateController.save}" value="Save"/>
         </h:form>
-        <h:form>
+        <h:form id="authorAutocomplete">
             <rich:select id="authorName"
                          mode="cachedAjax" minChars="1"
                          autocomplete="true"
@@ -48,6 +48,7 @@
                          var='author' itemValue="${author.id}"
                          itemLabel="#{author.firstName} #{author.lastName}"
                          value="#{bookCreateController.selectedAuthor}"/>
+            <h:message for="authorName" />
         </h:form>
         <h:form>
             <h:inputHidden id="selectedAuthor" value="#{bookCreateController.selectedAuthor}"/>

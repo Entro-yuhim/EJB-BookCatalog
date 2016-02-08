@@ -2,13 +2,15 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:rich="http://richfaces.org/rich" xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
                 template="WEB-INF/templates/default.xhtml">
+    <f:metadata>
+        <f:viewParam name="authorId" value="#{authorEditController.id}"/>
+        <f:viewAction action="#{authorEditController.init}"/>
+    </f:metadata>
     <ui:define name="page-body">
-        <f:metadata>
-            <f:viewParam name="authorId" value="#{authorEditController.id}"/>
-            <f:viewAction action="#{authorEditController.init}"/>
-        </f:metadata>
-        <h:form>
+        <h:outputLabel value="#{authorEditController.author.rating}" style="float:right"/>
+        <h:form id="authorData">
             <h:panelGrid columns="3">
                 <h:outputLabel for="firstName" value="First Name: "/>
                 <h:inputText id="firstName" value="#{authorEditController.author.firstName}"/>
@@ -18,50 +20,97 @@
                 <h:inputText id="lastName" value="#{authorEditController.author.lastName}"/>
                 <h:message for="lastName"/>
             </h:panelGrid>
+            <h:commandButton value="Save" action="#{authorEditController.save}"/>
         </h:form>
-        <h:outputLabel value="#{authorEditController.author.rating}" style="float:right"/>
         <h:form>
-            <rich:extendedDataTable id="richTable"
-                                    value="#{authorEditController.bookModel}"
-                                    selection="#{authorEditController.selected}"
-                                    selectionMode="multiple"
-                                    var="book" rows="1">
-                <rich:column>
-                    <f:facet name="header">
-                        <h:outputLabel value="Id"/>
+            <a4j:outputPanel id="outputTable">
+                <rich:extendedDataTable id="richTable"
+                                        style="width:700px"
+                                        frozenColumns="5"
+                                        styleClass="extendedTable"
+                                        value="#{authorEditController.bookModel}"
+                                        selection="#{authorEditController.selected}"
+                                        selectionMode="multipleKeyboardFree"
+                                        var="book" rows="3"
+                                        rowClass="basicRow">
+                    <rich:column width="40px">
+                        <f:facet name="header">
+                            <h:outputLabel value="Id"/>
+                        </f:facet>
+                        <h:outputText value="#{book.id}"/>
+                    </rich:column>
+                    <rich:column width="230px">
+                        <f:facet name="header">
+                            <h:outputLabel value="Title"/>
+                        </f:facet>
+                        <h:outputText value="#{book.title}"/>
+                    </rich:column>
+                    <rich:column width="200px">
+                        <f:facet name="header">
+                            <h:outputLabel value="Publisher"/>
+                        </f:facet>
+                        <h:outputText value="#{book.publisher}"/>
+                    </rich:column>
+                    <rich:column width="80px">
+                        <f:facet name="header">
+                            <h:outputLabel value="Year published"/>
+                        </f:facet>
+                        <h:outputText value="#{book.yearPublished}"/>
+                    </rich:column>
+                    <rich:column width="145px">
+                        <f:facet name="header">
+                            <h:outputLabel value="ISBN"/>
+                        </f:facet>
+                        <h:outputText value="#{book.iSBN}"/>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller id="scroller"/>
                     </f:facet>
-                    <h:outputText value="#{book.id}"/>
-                </rich:column>
-                <rich:column>
-                    <f:facet name="header">
-                        <h:outputLabel value="Title"/>
-                    </f:facet>
-                    <h:outputText value="#{book.title}"/>
-                </rich:column>
-                <rich:column>
-                    <f:facet name="header">
-                        <h:outputLabel value="Publisher"/>
-                    </f:facet>
-                    <h:outputText value="#{book.publisher}"/>
-                </rich:column>
-                <rich:column>
-                    <f:facet name="header">
-                        <h:outputLabel value="Year published"/>
-                    </f:facet>
-                    <h:outputText value="#{book.yearPublished}"/>
-                </rich:column>
-                <rich:column>
-                    <f:facet name="header">
-                        <h:outputLabel value="ISBN"/>
-                    </f:facet>
-                    <h:outputText value="#{book.iSBN}"/>
-                </rich:column>
-                <f:facet name="footer">
-                    <rich:dataScroller id="scroller"/>
-                </f:facet>
-            </rich:extendedDataTable>
-            <h:commandButton value="Do stuff" action="#{authorEditController.doStuff}"/>
+                </rich:extendedDataTable>
+            </a4j:outputPanel>
+            <a4j:commandButton value="Remove" render="outputTable" action="#{authorEditController.removeBooks}"/>
+            <div style="float:right">
+                <input type="button" value="Select All" onclick="selectAllRichTable()"/>
+                <input type="button" value="Unselect All" onclick="unselectAllRichTable()"/>
+            </div>
         </h:form>
+        <h:form>
+            <rich:autocomplete id="bookName"
+                               mode="cachedAjax"
+                               autocomplete="true"
+                               autocompleteMethod="#{authorEditController.autocomplete}"
+                               var="book" layout="table"
+                               fetchValue="#{book.iSBN}">
+                <rich:column>
+                    #{book.id}
+                </rich:column>
+                <rich:column>
+                    #{book.title}
+                </rich:column>
+                <rich:column>
+                    #{book.iSBN}
+                </rich:column>
+            </rich:autocomplete>
+        </h:form>
+        <h:form>
+            <h:inputHidden id="selectedBook" value="#{authorEditController.addBookData}"/>
+            <a4j:commandButton value="Add" render="outputTable" execute="@form" onclick="passSelectToAjax()"
+                               action="#{authorEditController.addBook}"/>
+        </h:form>
+        <h:outputScript>
+            function passSelectToAjax() {
+                $('[id*=selectedBook]').val($("[id*=bookNameInput]").val());
+            }
 
+            function selectAllRichTable() {
+                $('tbody[id*=richTable]').find('tr:not(.rf-edt-r-sel)').click();
+                return false;
+            }
+
+            function unselectAllRichTable() {
+                $('tbody[id*=richTable]').find('tr.rf-edt-r-sel').click();
+                return false;
+            }
+        </h:outputScript>
     </ui:define>
 </ui:composition>

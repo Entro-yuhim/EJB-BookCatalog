@@ -5,7 +5,6 @@ import ua.softserve.bandr.entity.Book;
 
 import javax.ejb.Local;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by bandr on 22.01.2016.
@@ -20,4 +19,10 @@ public interface BookFacade extends AbstractFacadeInt<Book> {
 	List<BookRatingDTO> getBookCountByRating();
 
 	List<Book> getAllByAuthor(Long id);
+
+	List<Book> getByNameOrISBN(String prefix);
+
+	Book getByISBN(String isbn);
+
+	Boolean isISBNPresent(String isbn);
 }

@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.dto.BookRatingDTO;
 import ua.softserve.bandr.entity.Book;
+import ua.softserve.bandr.persistence.exceptions.ConstraintCheckException;
+import ua.softserve.bandr.persistence.exceptions.InvalidEntityStateException;
 import ua.softserve.bandr.persistence.facade.AbstractFacadeInt;
 import ua.softserve.bandr.persistence.facade.BookFacade;
 import ua.softserve.bandr.persistence.home.AbstractHome;
@@ -14,6 +16,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -28,6 +31,26 @@ public class BookManager extends AbstractManager<Book> {
 	private BookFacade bookFacade;
 
 	private static final Logger LOG = LoggerFactory.getLogger(BookManager.class);
+
+	@Override
+	public Long persist(@Valid Book entity) throws ConstraintCheckException {
+		if (isISBNPresent(entity.getiSBN())) {
+			throw new ConstraintCheckException("Book with such ISBN is already persisted.");
+		}
+		return super.persist(entity);
+	}
+
+	@Override
+	public Book update(@Valid Book entity) throws ConstraintCheckException {
+		Validate.notNull(entity, "Received null argument in BookManager#update");
+		if (entity.getId() == null) {
+			throw new InvalidEntityStateException("Entity with null ID cannot be valid argument for update statement");
+		}
+		if (isISBNPresent(entity.getiSBN()) && entity.getId().equals(getBookByISBN(entity.getiSBN()).getId())) {
+			throw new ConstraintCheckException("Book with such ISBN is already persisted.");
+		}
+		return super.update(entity);
+	}
 
 	@Override
 	protected AbstractHome<Book> getHome() {
@@ -47,5 +70,24 @@ public class BookManager extends AbstractManager<Book> {
 	public List<Book> getByAuthorId(Long id) {
 		Validate.notNull(id, "Received null argument in BookManager#getByAuthorId");
 		return bookFacade.getAllByAuthor(id);
+	}
+
+	public List<Book> getBookByPrefix(String prefix) {
+		return bookFacade.getByNameOrISBN(prefix);
+	}
+
+	public Book getBookByISBN(String isbn) {
+		return bookFacade.getByISBN(isbn);
+	}
+
+	public Book getByIdWithInitializedCollections(Long id) {
+		Book byId = super.getById(id);
+		byId.getReviews().size();
+		byId.getAuthors().size();
+		return byId;
+	}
+
+	public Boolean isISBNPresent(String isbn) {
+		return bookFacade.isISBNPresent(isbn);
 	}
 }

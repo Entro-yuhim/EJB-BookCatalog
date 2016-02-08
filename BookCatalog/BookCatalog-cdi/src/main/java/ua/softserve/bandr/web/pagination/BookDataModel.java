@@ -26,7 +26,6 @@ import java.util.Map;
 public class BookDataModel extends AbstractDTODataModel<Book, BookDTO> {
 
 	private static final Logger LOG = LoggerFactory.getLogger(BookDataModel.class);
-	private ArrangeableState state;
 
 	@Inject
 	private BookManager bookManager;

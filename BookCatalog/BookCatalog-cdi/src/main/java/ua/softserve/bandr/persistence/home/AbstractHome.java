@@ -4,6 +4,7 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.entity.Persistable;
+import ua.softserve.bandr.persistence.exceptions.InvalidEntityStateException;
 
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;

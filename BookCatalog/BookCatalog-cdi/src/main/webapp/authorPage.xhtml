@@ -52,7 +52,7 @@
                     <rich:dataScroller id="scroller"/>
                 </f:facet>
             </rich:extendedDataTable>
-            <h:commandButton action="#{authorListController.doStuff}"/>
+            <h:commandButton action="#{authorListController.deleteSelected}"/>
         </h:form>
 
         <rich:popupPanel id="createModal" modal="true" moveable="false" autosized="true">
@@ -63,9 +63,8 @@
                 <h:outputLink value="#" onclick="#{rich:component('createModal')}.hide(); return false;"
                               style="color: inherit">X</h:outputLink>
             </f:facet>
-
             <p>
-                <h:form>
+                <h:form id="newAuthor">
                     <rich:graphValidator value="#{authorCreateController}" id="ajaxValidation">
                         <rich:messages for="ajaxValidation"/>
                         <h:panelGrid columns="3">
@@ -84,7 +83,7 @@
                             <!--TODO: restrict close on validation fail-->
                         </ui:remove>
                         <a4j:commandButton value="Save"
-                                           oncomplete="#{rich:component('createModal')}.hide(); return false;"
+                                           oncomplete="if (#{facesContext.maximumSeverity == null}) {#{rich:component('createModal')}.hide();}"
                                            action="#{authorCreateController.save}"/>
                         <a4j:commandButton value="Cancel"
                                            onclick="#{rich:component('createModal')}.hide(); return false;"/>

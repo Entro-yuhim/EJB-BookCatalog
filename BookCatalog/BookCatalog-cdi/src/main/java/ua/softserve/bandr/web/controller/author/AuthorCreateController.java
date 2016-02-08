@@ -3,10 +3,13 @@ package ua.softserve.bandr.web.controller.author;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.entity.Author;
+import ua.softserve.bandr.persistence.exceptions.ConstraintCheckException;
 import ua.softserve.bandr.persistence.manager.AuthorManager;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.validation.constraints.AssertTrue;
 
@@ -40,7 +43,11 @@ public class AuthorCreateController {
 	}
 
 	public void save() {
-		LOG.info("Saving");
+		try {
+			authorManager.persist(author);
+		} catch (ConstraintCheckException e) {
+			FacesContext.getCurrentInstance().addMessage("newAuthor:ajaxValidation", new FacesMessage("Author with this first name and last name are already in database"));
+		}
 		author = new Author();
 	}
 }

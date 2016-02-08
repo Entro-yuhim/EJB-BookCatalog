@@ -27,7 +27,7 @@ import java.util.Map;
 @Stateless
 @LocalBean
 
-//TODO: do something for distinct data.
+//TODO: make escaping data a separate method.
 public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 
 	public BookFacadeImpl() {
@@ -108,6 +108,23 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 		return executeNamedQuery(Book.GET_BY_AUTHOR_ID, Pair.of("id", id));
 	}
 
+	@Override
+	public List<Book> getByNameOrISBN(String prefix) {
+		String pref = "%" + prefix + "%";
+		return executeNamedQuery(Book.GET_BY_NAME_OR_ISBN, Pair.of("title", pref), Pair.of("isbn", pref));
+	}
+
+	public Book getByISBN(String isbn) {
+		return executeNamedQueryToSingleResult(Book.GET_BY_NAME_OR_ISBN, Pair.of("title", isbn), Pair.of("isbn", isbn));
+	}
+
+	@Override
+	public Boolean isISBNPresent(String isbn) {
+		return entityManager.createNamedQuery(Book.GET_COUNT_BY_ISBN, Number.class)
+				.setParameter("isbn", isbn)
+				.getSingleResult()
+				.longValue() > 0;
+	}
 
 	@SuppressWarnings("unchecked")
 	protected static Predicate getLikeWithExactPathToParam(CriteriaBuilder cb, String alias, Path pathRoot) {

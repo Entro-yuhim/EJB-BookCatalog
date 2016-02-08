@@ -85,10 +85,9 @@ public class AuthorFacadeImpl extends AbstractFacade<Author> implements AuthorFa
 
 	@Override
 	public Boolean authorExists(String firstName, String lastName) {
-		long l = entityManager.createNamedQuery(Author.GET_COUNT_BY_NAME, Number.class)
+		return entityManager.createNamedQuery(Author.GET_COUNT_BY_NAME, Number.class)
 				.setParameter("firstName", firstName.trim())
 				.setParameter("lastName", lastName.trim())
-				.getSingleResult().longValue();
-		return l > 0;
+				.getSingleResult().longValue() > 0;
 	}
 }

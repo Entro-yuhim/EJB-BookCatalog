@@ -1,4 +1,4 @@
-package ua.softserve.bandr.persistence.manager;
+package ua.softserve.bandr.persistence.exceptions;
 
 /**
  * Created by bandr on 04.02.2016.

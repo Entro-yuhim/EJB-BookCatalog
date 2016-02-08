@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.entity.Author;
 import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.entity.Review;
+import ua.softserve.bandr.persistence.exceptions.ConstraintCheckException;
 import ua.softserve.bandr.persistence.manager.AuthorManager;
 import ua.softserve.bandr.persistence.manager.BookManager;
-import ua.softserve.bandr.persistence.manager.ConstraintCheckException;
 import ua.softserve.bandr.persistence.manager.ReviewManager;
 
 import javax.faces.bean.ManagedBean;
@@ -45,7 +45,6 @@ public class BookViewController {
 		LOG.info("Saving new comment");
 		review.setBook(this.book);
 		try {
-			//TODO: think about it a bit more later.
 			reviewManager.persist(review);
 		} catch (ConstraintCheckException e) {
 			LOG.info("Error when persisting review", e);

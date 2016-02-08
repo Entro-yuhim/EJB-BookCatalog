@@ -1,7 +1,7 @@
 package ua.softserve.bandr.ws;
 
 import ua.softserve.bandr.entity.Review;
-import ua.softserve.bandr.persistence.manager.ConstraintCheckException;
+import ua.softserve.bandr.persistence.exceptions.ConstraintCheckException;
 import ua.softserve.bandr.persistence.manager.ReviewManager;
 
 import javax.inject.Inject;
@@ -43,7 +43,7 @@ public class ReviewService {
 
 	@POST
 	@Path("/{id:[0-9]+}")
-	public Response updateReview(@Valid Review review, @PathParam("id") Long id) {
+	public Response updateReview(@Valid Review review, @PathParam("id") Long id) throws ConstraintCheckException {
 		Review present = reviewManager.getById(id);
 		if (present == null) {
 			return Response.status(Response.Status.NOT_FOUND).build();
@@ -56,7 +56,7 @@ public class ReviewService {
 
 	@DELETE
 	@Path("/{id:[0-9]}")
-	public Response removeReview(@PathParam("id") Long id) {
+	public Response removeReview(@PathParam("id") Long id) throws ConstraintCheckException {
 		Review review = reviewManager.getById(id);
 		if (review == null) {
 			return Response.status(Response.Status.NOT_FOUND).build();

@@ -4,14 +4,14 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.entity.Persistable;
+import ua.softserve.bandr.persistence.exceptions.ConstraintCheckException;
 import ua.softserve.bandr.persistence.facade.AbstractFacadeInt;
 import ua.softserve.bandr.persistence.home.AbstractHome;
+import ua.softserve.bandr.persistence.exceptions.InvalidEntityStateException;
 import ua.softserve.bandr.utils.LoggingUtils;
 
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +21,6 @@ import java.util.Map;
  */
 @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 public abstract class AbstractManager<T extends Persistable> {
-	@PersistenceContext(name = "pg_BC")
-	protected EntityManager entityManager;
-
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractManager.class);
 
 	protected abstract AbstractHome<T> getHome();
@@ -31,7 +28,7 @@ public abstract class AbstractManager<T extends Persistable> {
 	protected abstract AbstractFacadeInt<T> getFacade();
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public void deleteBulk(List<T> entities) {
+	public void deleteBulk(List<T> entities) throws ConstraintCheckException {
 		Validate.notNull(entities, "Received null argument in AbstractManager#deleteBulk");
 		LOG.info("Trying to delete entities with id = [{}]", LoggingUtils.getIdCollection(entities));
 		for (T entity : entities) {
@@ -69,15 +66,18 @@ public abstract class AbstractManager<T extends Persistable> {
 	}
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public T update(T entity) {
+	public T update(@Valid T entity) throws ConstraintCheckException {
 		Validate.notNull(entity, "Received null argument in AbstractManager#update");
+		if (entity.getId() == null) {
+			throw new InvalidEntityStateException("Entity with null ID cannot be valid argument for update statement");
+		}
 		LOG.info("Updating entity of class [{}] and id [{}]", entity.getEntityName(), entity.getId());
 		getHome().update(entity);
 		return entity;
 	}
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public void delete(T entity) {
+	public void delete(T entity) throws ConstraintCheckException {
 		Validate.notNull(entity, "Received null argument in AbstractManager#delete");
 		LOG.info("Deleting entity of class [{}] with id [{}]", entity.getEntityName(), entity.getId());
 		getHome().delete(entity);

@@ -115,7 +115,7 @@ public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> impl
 
 	@Override
 	public void setRowKey(Object key) {
-		LOG.info("Set rowKey [{}]", key);
+		LOG.debug("Set rowKey [{}]", key);
 		this.rowKey = key;
 	}
 

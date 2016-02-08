@@ -6,10 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.entity.Author;
 import ua.softserve.bandr.entity.Book;
+import ua.softserve.bandr.persistence.exceptions.ConstraintCheckException;
 import ua.softserve.bandr.persistence.manager.AuthorManager;
 import ua.softserve.bandr.persistence.manager.BookManager;
-import ua.softserve.bandr.persistence.manager.ConstraintCheckException;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
@@ -37,17 +38,17 @@ public class BookCreateController {
 
 	//TODO remove duplicates. In some way.
 	public Collection<Author> autocomplete(FacesContext facesContext, UIComponent component, String prefix) {
-		return authorManager.getByName(prefix);
+		return authorManager.getByName(prefix == null ? "" : prefix);
 	}
 
 	public void save() {
-		LOG.info("Got a book with title [{}]", book.getTitle());
 		book.setAuthors(new HashSet<>(authors));
 		try {
 			bookManager.persist(book);
 		} catch (ConstraintCheckException e) {
-			LOG.error("UNHANDLED EXCEPTION", e);
-			LOG.info("Error when persisting book", e);
+			FacesContext.getCurrentInstance()
+					.addMessage("bookData:isbn",
+							new FacesMessage(String.format("Book with this ISBN %s already exists", book.getiSBN())));
 		}
 	}
 
@@ -58,8 +59,7 @@ public class BookCreateController {
 		}
 		List<Author> byName = authorManager.getByName(selectedAuthor);
 		if (byName.isEmpty()) {
-			LOG.info("Author is missing, notify user");
-			return;
+			FacesContext.getCurrentInstance().addMessage("authorAutocomplete:authorName", new FacesMessage("Author not found. Please select author from dropdown menu."));
 		} else {
 			authors.addAll(byName);
 		}

@@ -27,9 +27,9 @@ import java.util.Set;
 						"OR lower(CONCAT(a.firstName,' ', a.lastName)) like  lower(:namePlaceholder) " +
 						"OR lower(CONCAT(a.lastName,' ', a.firstName)) like lower(:namePlaceholder)"),
 		@NamedQuery(name = Author.GET_BY_FULL_NAME,//Should i check if reverse data is corret?
-				query = "SELECT A FROM Author a WHERE " +
+				query = "SELECT a FROM Author a WHERE " +
 						"LOWER(a.firstName) = LOWER(:firstName) AND " +
-						"LOWER(a.lastName) = LOWER(:lastName)"),
+						"(LOWER(a.lastName) = LOWER(:lastName) OR a.lastName is null)"),
 		@NamedQuery(name = Author.GET_RECORD_COUNT,
 				query = "SELECT count(a.id) FROM Author a"),
 		@NamedQuery(name = Author.GET_BY_BOOK,
@@ -41,7 +41,7 @@ import java.util.Set;
 		@NamedQuery(name = Author.GET_COUNT_BY_NAME,
 				query = "SELECT COUNT(a.id) FROM Author a " +
 						"WHERE a.firstName = :firstName AND " +
-						"a.lastName = :lastName")
+						"(a.lastName = :lastName OR a.lastName is null)")
 
 
 })

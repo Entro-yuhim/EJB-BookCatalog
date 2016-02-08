@@ -48,7 +48,7 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 	@Override
 	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public T getById(Long id) {
-		Validate.notNull(id, "Received null as arument to AbstractFacade#getById");
+		Validate.notNull(id, "Received null as argument to AbstractFacade#getById");
 		LOG.debug("Query database for entity [{}] with id [{}]", entityClass.getSimpleName(), id);
 		return entityManager.find(entityClass, id);
 	}
@@ -61,14 +61,14 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 	@SafeVarargs
 	protected final List<T> executeNamedQuery(String queryName, Pair<String, ?>... args) {
 		LOG.debug("Executing query [{}]", queryName);
-		TypedQuery<T> query = (TypedQuery<T>) getTypedNamedQuery(queryName);
+		TypedQuery<T> query = getTypedNamedQuery(queryName);
 		return executeQuery(query, args);
 	}
 
 	@SafeVarargs
 	protected final T executeNamedQueryToSingleResult(String queryName, Pair<String, ?>... args) {
 		LOG.debug("Executing query [{}]", queryName);
-		TypedQuery<T> query = (TypedQuery<T>) getTypedNamedQuery(queryName);
+		TypedQuery<T> query = getTypedNamedQuery(queryName);
 		setQueryParams(query, args);
 		return query.getSingleResult();
 	}
@@ -79,40 +79,37 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 											  Optional<Integer> firstResult, Optional<Integer> maxResults,
 											  Pair<String, ?>... args) {
 		LOG.debug("Executing query [{}]", queryName);
-		TypedQuery<T> query = (TypedQuery<T>) getTypedNamedQuery(queryName);
+		TypedQuery<T> query = getTypedNamedQuery(queryName);
 		return executeQuery(query, firstResult, maxResults, args);
 	}
 
 	@SafeVarargs
 	protected final List<T> executeQuery(TypedQuery<T> query, Pair<String, ?>... args) {
-		TypedQuery<T> query1 = query;
 		for (Pair<String, ?> arg : args) {
-			query1 = query1.setParameter(arg.getKey(), arg.getValue());
+			query = query.setParameter(arg.getKey(), arg.getValue());
 		}
-		return query1.getResultList();
+		return query.getResultList();
 	}
 
 	@SafeVarargs
 	protected final List<T> executeQuery(TypedQuery<T> query,
 										 Optional<Integer> firstResult, Optional<Integer> maxResults,
 										 Pair<String, ?>... args) {
-		TypedQuery<T> query1 = query;
 		for (Pair<String, ?> arg : args) {
-			query1 = query1.setParameter(arg.getKey(), arg.getValue());
+			query = query.setParameter(arg.getKey(), arg.getValue());
 		}
-		query1.setFirstResult(firstResult.or(0));
-		query1.setMaxResults(maxResults.or(10));
-		return query1.getResultList();
+		query.setFirstResult(firstResult.or(0));
+		query.setMaxResults(maxResults.or(10));
+		return query.getResultList();
 	}
 
 	protected final List<T> executeQuery(TypedQuery<T> query,
 										 Optional<Integer> firstResult, Optional<Integer> maxResults,
 										 Map<String, ?> args) {
-		TypedQuery<T> query1 = query;
-		setQueryParams(query1, args);
-		query1.setFirstResult(firstResult.or(0));
-		query1.setMaxResults(maxResults.or(10));
-		return query1.getResultList();
+		setQueryParams(query, args);
+		query.setFirstResult(firstResult.or(0));
+		query.setMaxResults(maxResults.or(10));
+		return query.getResultList();
 	}
 
 
@@ -138,7 +135,7 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 		return ((Number) entityManager.createNamedQuery(queryName).getSingleResult()).longValue();
 	}
 
-	protected <X> X executeCriteriaQueryToCount(CriteriaQuery<X> queryName, Map<String, String> filter) {//// TODO: 05.02.2016
+	protected <X> X executeCriteriaQueryToCount(CriteriaQuery<X> queryName, Map<String, String> filter) {
 		TypedQuery<X> query = entityManager.createQuery(queryName);
 		query = setQueryParams(query, filter);
 		return query.getSingleResult();
@@ -176,7 +173,7 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 		return predicates;
 	}
 
-	protected List<Order> getOrders(Map<String, Boolean> sortingOrder, CriteriaBuilder criteriaBuilder, Root<T> root) {
+	protected List<Order> getOrders(Map<String, Boolean> sortingOrder, CriteriaBuilder criteriaBuilder, Path<T> root) {
 		List<Order> sortingList = Lists.newArrayList();
 		for (Map.Entry<String, Boolean> sortingEntry : sortingOrder.entrySet()) {
 			Path<T> sortingPath = root.get(sortingEntry.getKey());
