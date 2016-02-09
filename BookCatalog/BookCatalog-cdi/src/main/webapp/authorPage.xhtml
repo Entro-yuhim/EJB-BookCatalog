@@ -4,8 +4,11 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 template="WEB-INF/templates/default.xhtml">
     <ui:define name="page-body">
+        <h:head>
+            <h:outputStylesheet library="stylesheets" name="richTable.css"/>
+        </h:head>
         <h1>
-            This page is currently being developed.
+            Manage authors
         </h1>
         <a4j:queue requestDelay="500" ignoreDupResponses="true"/>
         <h:form>
@@ -18,9 +21,11 @@
             <rich:extendedDataTable
                     id="richTable" value="#{authorListController.authors}"
                     var="record" rows="20"
+                    selectionMode="multipleKeyboardFree"
                     selection="#{authorListController.selection}"
+                    rowClass="basicRow"
                     styleClass="basicTable" keepSaved="true">
-                <ui:include src="tableColumn.xhtml">
+                <ui:include src="sortableColumn.xhtml">
                     <ui:param name="title" value="ID"/>
                     <ui:param name="bean" value="#{authorListController}"/>
                     <ui:param name="property" value="id"/>
@@ -53,6 +58,10 @@
                 </f:facet>
             </rich:extendedDataTable>
             <h:commandButton action="#{authorListController.deleteSelected}"/>
+            <div style="float:right">
+                <input type="button" value="Select All" onclick="selectAllRichTable()"/>
+                <input type="button" value="Unselect All" onclick="unselectAllRichTable()"/>
+            </div>
         </h:form>
 
         <rich:popupPanel id="createModal" modal="true" moveable="false" autosized="true">
@@ -64,32 +73,25 @@
                               style="color: inherit">X</h:outputLink>
             </f:facet>
             <p>
-                <h:form id="newAuthor">
-                    <rich:graphValidator value="#{authorCreateController}" id="ajaxValidation">
-                        <rich:messages for="ajaxValidation"/>
-                        <h:panelGrid columns="3">
-                            <h:outputLabel for="firstName" value="First Name"/>
-                            <h:inputText id="firstName" value="#{authorCreateController.author.firstName}">
-                                <f:validateRequired/>
-                            </h:inputText>
-                            <h:message for="firstName" errorClass="invalid"/>
-
-                            <h:outputLabel for="lastName" value="Last Name"/>
-                            <h:inputText id="lastName" value="#{authorCreateController.author.lastName}"/>
-                            <h:message for="lastName" errorClass="invalid"/>
-                        </h:panelGrid>
-
-                        <ui:remove>
-                            <!--TODO: restrict close on validation fail-->
-                        </ui:remove>
-                        <a4j:commandButton value="Save"
-                                           oncomplete="if (#{facesContext.maximumSeverity == null}) {#{rich:component('createModal')}.hide();}"
-                                           action="#{authorCreateController.save}"/>
-                        <a4j:commandButton value="Cancel"
-                                           onclick="#{rich:component('createModal')}.hide(); return false;"/>
-                    </rich:graphValidator>
-                </h:form>
+                <ui:include src="authorModification.xhtml">
+                    <ui:param name="authorController" value="#{authorCreateController}"/>
+                </ui:include>
             </p>
         </rich:popupPanel>
+        <h:outputScript>
+            function passSelectToAjax() {
+                $('[id*=selectedBook]').val($("[id*=bookNameInput]").val());
+            }
+
+            function selectAllRichTable() {
+                $('tbody[id*=richTable]').find('tr:not(.rf-edt-r-sel)').click();
+                return false;
+            }
+
+            function unselectAllRichTable() {
+                $('tbody[id*=richTable]').find('tr.rf-edt-r-sel').click();
+                return false;
+            }
+        </h:outputScript>
     </ui:define>
 </ui:composition>

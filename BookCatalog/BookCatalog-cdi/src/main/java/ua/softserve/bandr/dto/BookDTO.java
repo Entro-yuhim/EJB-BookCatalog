@@ -59,28 +59,11 @@ public class BookDTO implements EntityDTO {
 	public Object getKey() {
 		return this.id;
 	}
-//
-//	@Override
-//	public String toString() {
-//		return "BookDTO{" +
-//				"id=" + id +
-//				", title='" + title + '\'' +
-//				", authorNames='" + authorNames + '\'' +
-//				", rating=" + rating +
-//				'}';
-//	}
 
 	private static class AuthorNameConverter implements Function<Author, String> {
 		@Override
 		public String apply(Author input) {
-			return input.getFirstName() + " " + input.getLastName();
-		}
-	}
-
-	public static class BookToDTO implements Function<Book, BookDTO> {
-		@Override
-		public BookDTO apply(Book input) {
-			return new BookDTO(input);
+			return input.getFirstName() + " " + (input.getLastName() == null ? "" : input.getLastName());
 		}
 	}
 }

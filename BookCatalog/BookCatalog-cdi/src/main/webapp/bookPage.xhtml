@@ -4,49 +4,58 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 template="WEB-INF/templates/default.xhtml">
     <ui:define name="page-body">
-        <h1>
-            This page is currently being developed.
-        </h1>
-        <a4j:queue requestDelay="500" ignoreDupResponses="true" name="bookPageQueue"/>
+        <h:head>
+            <h:outputStylesheet library="stylesheets" name="richTable.css"/>
+        </h:head>
+        <a4j:queue requestDelay="500" ignoreDupResponses="true"/>
+        <h1>Manage Books</h1>
         <h:form>
-            <div style="margin-bottom: 10px;">
-                <h:commandButton title="Delete" action="bookCreate" value="Create"
-                                 style="float:left; margin-left: 7%;"/>
-                <h:commandButton title="Delete" action="#{bookListController.doStuff}" value="Delete"
-                                 style="float:right; margin-right: 7%;"/>
-            </div>
-            <rich:dataTable id="richTable" value="#{bookListController.books}" var="record" rows="20"
-                            styleClass="basicTable" keepSaved="true">
-                <rich:column>
-                    <f:facet name="header">
-                        <h:outputText value="ID"/>
-                    </f:facet>
-                    <h:outputText value="#{record.id}"/>
-                </rich:column>
+            <h:commandButton value="Create"
+                             style="float:left; margin-left: 7%;">
+                <rich:componentControl target="createModal" operation="show"/>
+            </h:commandButton>
+        </h:form>
+        <h:form>
+            <rich:extendedDataTable
+                    id="richTable" value="#{bookListController.books}"
+                    var="record" rows="20"
+                    selectionMode="multipleKeyboardFree"
+                    selection="#{bookListController.selection}"
+                    styleClass="basicTable" keepSaved="true"
+                    rowClass="basicRow">
+                <ui:include src="sortableColumn.xhtml">
+                    <ui:param name="title" value="ID"/>
+                    <ui:param name="bean" value="#{bookListController}"/>
+                    <ui:param name="property" value="id"/>
+                    <ui:param name="width" value="40px"/>
+                </ui:include>
                 <ui:include src="tableColumn.xhtml">
                     <ui:param name="title" value="Title"/>
                     <ui:param name="bean" value="#{bookListController}"/>
                     <ui:param name="property" value="title"/>
+                    <ui:param name="width" value="225px"/>
                 </ui:include>
                 <ui:include src="tableColumn.xhtml">
                     <ui:param name="title" value="Authors"/>
                     <ui:param name="bean" value="#{bookListController}"/>
                     <ui:param name="property" value="authorNames"/>
+                    <ui:param name="width" value="200px"/>
                 </ui:include>
                 <ui:include src="tableColumn.xhtml">
                     <ui:param name="title" value="Rating"/>
                     <ui:param name="bean" value="#{bookListController}"/>
                     <ui:param name="property" value="rating"/>
+                    <ui:param name="width" value="190px"/>
                 </ui:include>
-                <rich:column>
+                <rich:column width="70px">
                     <f:facet name="header">
                         <h:outputText value="Edit"/>
                     </f:facet>
-                        <h:button title="Edit" outcome="bookEdit" value="Edit">
-                            <f:param name="bookId" value="#{record.id}"/>
-                        </h:button>
+                    <h:button title="Edit" outcome="bookEdit" value="Edit">
+                        <f:param name="bookId" value="#{record.id}"/>
+                    </h:button>
                 </rich:column>
-                <rich:column>
+                <rich:column width="70px">
                     <f:facet name="header">
                         <h:outputText value="View"/>
                     </f:facet>
@@ -54,16 +63,44 @@
                         <f:param name="bookId" value="#{record.id}"/>
                     </h:button>
                 </rich:column>
-                <rich:column>
-                    <f:facet name="header">
-                        <h:outputText value="Delete"/>
-                    </f:facet>
-                    <h:selectBooleanCheckbox value="#{bookListController.checkedForAction[record.id]}"/>
-                </rich:column>
                 <f:facet name="footer">
                     <rich:dataScroller id="scroller"/>
                 </f:facet>
-            </rich:dataTable>
+            </rich:extendedDataTable>
+            <h:commandButton action="#{bookListController.deleteSelected}" value="Delete"/>
+            <div style="float:right">
+                <input type="button" value="Select All" onclick="selectAllRichTable()"/>
+                <input type="button" value="Unselect All" onclick="unselectAllRichTable()"/>
+            </div>
         </h:form>
+        <rich:popupPanel id="createModal" modal="true" moveable="false" autosized="true">
+            <f:facet name="header">
+                <h:outputText value="Create new book"/>
+            </f:facet>
+            <f:facet name="controls">
+                <h:outputLink value="#" onclick="#{rich:component('createModal')}.hide(); return false;"
+                              style="color: inherit">X</h:outputLink>
+            </f:facet>
+            <p>
+                <ui:include src="bookModification.xhtml">
+                    <ui:param name="bookController" value="#{bookCreateController}"/>
+                </ui:include>
+            </p>
+        </rich:popupPanel>
+        <h:outputScript>
+            function passSelectToAjax() {
+                $('[id*=selectedBook]').val($("[id*=bookNameInput]").val());
+            }
+
+            function selectAllRichTable() {
+                $('tbody[id*=richTable]').find('tr:not(.rf-edt-r-sel)').click();
+                return false;
+            }
+
+            function unselectAllRichTable() {
+                $('tbody[id*=richTable]').find('tr.rf-edt-r-sel').click();
+                return false;
+            }
+        </h:outputScript>
     </ui:define>
 </ui:composition>

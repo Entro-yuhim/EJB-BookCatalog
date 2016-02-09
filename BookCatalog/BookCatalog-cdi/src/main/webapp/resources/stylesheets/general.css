@@ -11,7 +11,8 @@
 
 .basicRow {
     font-size: 76px !important;
-    text-align:center;
+    text-align: center;
+    margin: auto;
 }
 
 body {

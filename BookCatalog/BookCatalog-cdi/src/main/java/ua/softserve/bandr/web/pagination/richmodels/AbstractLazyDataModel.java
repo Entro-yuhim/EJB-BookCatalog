@@ -57,6 +57,7 @@ public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> impl
 	}
 
 	private List<T> getList(SequenceRange sr) {
+		LOG.info("getList");
 		List<T> list;
 		if (cachedRange != null && sr.getFirstRow() == cachedRange.getFirstRow() && sr.getRows() == cachedRange.getRows()) {
 			list = cachedList;
