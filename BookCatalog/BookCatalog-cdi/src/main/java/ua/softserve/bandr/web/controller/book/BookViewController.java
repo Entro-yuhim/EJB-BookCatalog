@@ -57,7 +57,8 @@ public class BookViewController {
 		try {
 			reviewRESTClient.persistReview(reviewData);
 		} catch (WebServiceClientException e) {
-			FacesContext.getCurrentInstance().addMessage("", new FacesMessage());
+//			I really don't know what the hell can happen
+			FacesContext.getCurrentInstance().addMessage("newReview:reviewText", new FacesMessage("Something broke."));
 		}
 		this.reviews = reviewManager.getByBookId(bookId);
 		review = new Review();

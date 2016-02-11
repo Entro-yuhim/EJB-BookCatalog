@@ -33,7 +33,7 @@
             <h:outputLabel value="#{bookViewController.book.yearPublished}"/>
         </h:panelGrid>
         <rich:panel header="New review">
-            <h:form>
+            <h:form id="newReview">
                 <h:panelGrid columns="3">
                     <h:outputLabel for="username" value="Username"/>
                     <h:inputText id="username" value="#{bookViewController.review.username}"/>
@@ -49,6 +49,7 @@
                 <h:inputTextarea id="reviewText" value="#{bookViewController.review.reviewText}">
                     <f:validateRequired/>
                 </h:inputTextarea>
+                <h:message for="reviewText"/>
                 <a4j:commandButton action="#{bookViewController.save}" value="Save" render="reviews"
                                    oncomplete="clearInputData();"/>
             </h:form>
