@@ -30,12 +30,12 @@ public abstract class AbstractAuthorModificationController {
 	protected Set<Object> selected = Sets.newHashSet();
 	protected String addBookData;
 
+
 	@AssertTrue(message = "Author already exists in database.")
 	public boolean isAuthorUnique() {
 		boolean b = authorManager.willCauseCollision(author);
 		return !b;
 	}
-
 	public List<Book> autocomplete(String prefix) {
 		List<Book> bookByPrefix = bookManager.getBookByPrefix(prefix);
 		Iterables.removeIf(bookByPrefix, new BookAutocompletePredicate(author.getBooks()));

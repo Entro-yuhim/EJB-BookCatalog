@@ -2,13 +2,13 @@ package ua.softserve.bandr.web.controller.author;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ua.softserve.bandr.entity.Author;
 import ua.softserve.bandr.persistence.exceptions.ConstraintCheckException;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.validation.constraints.AssertTrue;
 import java.io.IOException;
 
 /**

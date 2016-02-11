@@ -8,6 +8,11 @@
         <f:viewAction action="#{bookViewController.init}"/>
     </f:metadata>
     <ui:define name="page-body">
+        <h:head>
+            <h:outputStylesheet library="stylesheets" name="jquery.rateyo.min.css"/>
+        </h:head>
+        <h:outputScript library="js" name="jquery.rateyo.min.js"/>
+
         <h:panelGrid columns="2">
             <h:outputLabel value="Title"/>
             <h:outputLabel value="#{bookViewController.book.title}"/>
@@ -39,12 +44,13 @@
                     <h:inputText id="username" value="#{bookViewController.review.username}"/>
                     <h:message for="username" errorClass="invalid"/>
 
-                    <h:outputLabel for="rating" value="Rate"/>
-                    <h:inputText id="rating" value="#{bookViewController.review.rating}">
+                    <h:outputLabel for="ratingData" value="Rate"/>
+                    <label id="newCommentRating"/>
+                    <h:inputText id="ratingData" value="#{bookViewController.review.rating}" style="display: none;">
                         <f:validateRequired/>
                         <f:validateDoubleRange minimum="1" maximum="5"/>
                     </h:inputText>
-                    <h:message for="rating" errorClass="invalid"/>
+                    <h:message for="ratingData" errorClass="invalid"/>
                 </h:panelGrid>
                 <h:inputTextarea id="reviewText" value="#{bookViewController.review.reviewText}">
                     <f:validateRequired/>
@@ -55,11 +61,12 @@
             </h:form>
         </rich:panel>
         <a4j:outputPanel id="reviews">
-            <rich:dataGrid value="#{bookViewController.reviews}" var="review" columns="1" elements="5">
+            <rich:dataGrid value="#{bookViewController.reviews}" var="review" columns="1" elements="5"
+                           style="width:100%">
                 <rich:panel>
                     <f:facet name="header">
                         <h:outputText value="#{review.username}"/>
-                        <h:outputLabel style="float:right" value="#{review.rating}"/>
+                        <h:outputLabel styleClass="rateYoFlag" style="float:right" value="#{review.rating}"/>
                         <ui:remove>
                             <!--TODO add rateYo-->
                         </ui:remove>
@@ -68,16 +75,62 @@
                     #{review.reviewText}
                 </rich:panel>
                 <f:facet name="footer">
-                    <rich:dataScroller fastStep="3"/>
+                    <rich:dataScroller fastStep="3" oncomplete="applyRating()"/>
                 </f:facet>
             </rich:dataGrid>
         </a4j:outputPanel>
         <h:outputScript>
             function clearInputData() {
-                $('[id*=username],[id*=rating],[id*=reviewText]').each(function () {
+                $('[id*=username],[id*=ratingData],[id*=reviewText]').each(function () {
                     $(this).val('');
+
+                });
+                $('#newCommentRating').rateYo('destroy');
+                $('#newCommentRating').rateYo({
+                    starWidth: "20px",
+                    fullStar:true,
+                    onSet: function(rate){
+                        //set hidden input with rateData
+                        $('[id*=ratingData]').val(rate);
+                    }
+                })
+            }
+
+            function applyRating() {
+                $('.rateYoFlag').each(function () {
+                    var rate = $(this).html();
+                    $(this).html("");
+                    $(this).rateYo({
+                        rating: rate,
+                        readOnly: true,
+                        starWidth: "15px"
+                    });
                 });
             }
         </h:outputScript>
+
+        <f:verbatim>
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $('.rateYoFlag').each(function () {
+                        var rate = $(this).html();
+                        $(this).html("");
+                        $(this).rateYo({
+                            rating: rate,
+                            readOnly: true,
+                            starWidth: "15px"
+                        });
+                    });
+                    $('#newCommentRating').rateYo({
+                        starWidth: "20px",
+                        fullStar:true,
+                        onSet: function(rate){
+                            //set hidden input with rateData
+                            $('[id*=ratingData]').val(rate);
+                        }
+                    })
+                });
+            </script>
+        </f:verbatim>
     </ui:define>
 </ui:composition>

@@ -61,8 +61,7 @@
                     <rich:dataScroller id="scroller"/>
                 </f:facet>
             </rich:extendedDataTable>
-            <a4j:commandButton value="doSomething" render="deleteModalPanel" id="sendDataToServer"
-
+            <a4j:commandButton value="Delete Selected" render="deleteModalPanel" id="sendDataToServer"
                                action="#{authorListController.doNothing}"
                                oncomplete="#{rich:component('deleteModal')}.show()"/>
             <div style="float:right">
@@ -165,10 +164,8 @@
                 $('tbody[id*=richTable]').find('tr.rf-edt-r-sel').click();
                 return false;
             }
-
-            function doStuff() {
-                console.log($('tbody[id*=richTable]').find('tr.rf-edt-r-sel').length);
-            }
         </h:outputScript>
+
+
     </ui:define>
 </ui:composition>

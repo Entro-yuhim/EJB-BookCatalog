@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.dto.AuthorDTO;
 import ua.softserve.bandr.persistence.exceptions.ConstraintCheckException;
 import ua.softserve.bandr.persistence.manager.AuthorManager;
-import ua.softserve.bandr.web.controller.ContainsSotrableTable;
+import ua.softserve.bandr.web.controller.ContainsSortableTable;
 import ua.softserve.bandr.web.pagination.AuthorDataModel;
 
 import javax.faces.bean.ManagedBean;
@@ -24,7 +24,7 @@ import java.util.Set;
  */
 @ManagedBean
 @ViewScoped
-public class AuthorListController extends ContainsSotrableTable {
+public class AuthorListController extends ContainsSortableTable {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AuthorListController.class);
 	private Set<Long> selection;

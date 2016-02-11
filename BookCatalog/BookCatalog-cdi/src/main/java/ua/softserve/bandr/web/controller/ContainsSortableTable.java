@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Created by bandr on 01.02.2016.
  */
-public abstract class ContainsSotrableTable {
+public abstract class ContainsSortableTable {
 
 	private Map<String, SortOrder> sortOrders = Maps.newHashMap();
 	private String sortProperty = "";

@@ -8,9 +8,8 @@ import org.richfaces.component.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.dto.BookDTO;
-import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.persistence.manager.BookManager;
-import ua.softserve.bandr.web.controller.ContainsSotrableTable;
+import ua.softserve.bandr.web.controller.ContainsSortableTable;
 import ua.softserve.bandr.web.pagination.BookDataModel;
 
 import javax.faces.bean.ManagedBean;
@@ -25,7 +24,7 @@ import java.util.Set;
  */
 @ManagedBean
 @ViewScoped
-public class BookListController extends ContainsSotrableTable {
+public class BookListController extends ContainsSortableTable {
 	private static final Logger LOG = LoggerFactory.getLogger(BookListController.class);
 
 	@Inject
