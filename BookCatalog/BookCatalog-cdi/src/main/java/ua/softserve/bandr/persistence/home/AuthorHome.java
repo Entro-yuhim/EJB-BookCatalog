@@ -6,7 +6,6 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
-//Should this be an actual Home JEE pattern?
 @Stateless
 public class AuthorHome extends AbstractHome<Author> {
 	@Override

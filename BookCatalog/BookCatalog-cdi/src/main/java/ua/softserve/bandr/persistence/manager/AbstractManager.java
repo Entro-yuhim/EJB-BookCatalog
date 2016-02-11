@@ -9,6 +9,7 @@ import ua.softserve.bandr.persistence.facade.AbstractFacadeInt;
 import ua.softserve.bandr.persistence.home.AbstractHome;
 import ua.softserve.bandr.persistence.exceptions.InvalidEntityStateException;
 import ua.softserve.bandr.utils.LoggingUtils;
+import ua.softserve.bandr.utils.ValidateArgument;
 
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -29,7 +30,7 @@ public abstract class AbstractManager<T extends Persistable> {
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void deleteBulk(List<T> entities) throws ConstraintCheckException {
-		Validate.notNull(entities, "Received null argument in AbstractManager#deleteBulk");
+		ValidateArgument.notNull(entities, "Received null argument in AbstractManager#deleteBulk");
 		LOG.info("Trying to delete entities with id = [{}]", LoggingUtils.getIdCollection(entities));
 		for (T entity : entities) {
 			delete(entity);
@@ -43,22 +44,22 @@ public abstract class AbstractManager<T extends Persistable> {
 
 	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public T getById(Long id) {
-		Validate.notNull(id, "Received null argument in AbstractManager#getById");
+		ValidateArgument.notNull(id, "Received null argument in AbstractManager#getById");
 		LOG.info("Getting entity by id [{}]", id);
 		return getFacade().getById(id);
 	}
 
 	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public List<T> getPaged(Integer startWith, Integer pageSize) {
-		Validate.notNull(startWith, "Received null startWith argument in AbstractManager#getPaged");
-		Validate.notNull(pageSize, "Received null pageSize argument in AbstractManager#getPaged");
+		ValidateArgument.notNull(startWith, "Received null startWith argument in AbstractManager#getPaged");
+		ValidateArgument.notNull(pageSize, "Received null pageSize argument in AbstractManager#getPaged");
 		LOG.info("Fetched entities for StartWith [{}] and PageSize [{}]", startWith, pageSize);
 		return getFacade().getPaged(startWith, pageSize);
 	}
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public Long persist(@Valid T entity) throws ConstraintCheckException {
-		Validate.notNull(entity, "Received null argument in AbstractManager#persist");
+		ValidateArgument.notNull(entity, "Received null argument in AbstractManager#persist");
 		LOG.debug("Trying to persist entity of class [{}]", entity.getEntityName());
 		getHome().persist(entity);
 		LOG.info("Persisted entity of class [{}] with id [{}]", entity.getEntityName(), entity.getId());
@@ -67,7 +68,7 @@ public abstract class AbstractManager<T extends Persistable> {
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public T update(@Valid T entity) throws ConstraintCheckException {
-		Validate.notNull(entity, "Received null argument in AbstractManager#update");
+		ValidateArgument.notNull(entity, "Received null argument in AbstractManager#update");
 		if (entity.getId() == null) {
 			throw new InvalidEntityStateException("Entity with null ID cannot be valid argument for update statement");
 		}
@@ -78,26 +79,27 @@ public abstract class AbstractManager<T extends Persistable> {
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void delete(T entity) throws ConstraintCheckException {
-		Validate.notNull(entity, "Received null argument in AbstractManager#delete");
+		ValidateArgument.notNull(entity, "Received null argument in AbstractManager#delete");
 		LOG.info("Deleting entity of class [{}] with id [{}]", entity.getEntityName(), entity.getId());
 		getHome().delete(entity);
 	}
 
 	public Long getRecordCount(Map<String, String> filter) {
-		Validate.notNull(filter, "Received null argument in AbstractManager#getRecordCount");
+		ValidateArgument.notNull(filter, "Received null argument in AbstractManager#getRecordCount");
 		return getFacade().getRecordCount(filter);
 	}
 
 	public List<T> getPagedFiltered(Integer firstRow, Integer numRows, Map<String, String> filter, Map<String, Boolean> sortingOrder) {
-		Validate.notNull(firstRow, "Received null firstRow argument in AbstractManager#getPagedFiltered");
-		Validate.notNull(numRows, "Received null numRows argument in AbstractManager#getPagedFiltered");
-		Validate.notNull(filter, "Received null filter argument in AbstractManager#getPagedFiltered");
-		Validate.notNull(sortingOrder, "Received null sortingOrder argument in AbstractManager#getPagedFiltered");
+		ValidateArgument.notNull(firstRow, "Received null firstRow argument in AbstractManager#getPagedFiltered");
+		ValidateArgument.notNull(numRows, "Received null numRows argument in AbstractManager#getPagedFiltered");
+		ValidateArgument.notNull(filter, "Received null filter argument in AbstractManager#getPagedFiltered");
+		ValidateArgument.notNull(sortingOrder, "Received null sortingOrder argument in AbstractManager#getPagedFiltered");
 		return  getFacade().getPagedFilteredSorted(firstRow, numRows, filter, sortingOrder);
 	}
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void deleteBulkById(List<Long> idList) {
+		ValidateArgument.notNull(idList, "Received null [idList] as argument in AbstractManager#deleteBulkById");
 		for (Long id : idList) {
 			getHome().delete(id);
 		}

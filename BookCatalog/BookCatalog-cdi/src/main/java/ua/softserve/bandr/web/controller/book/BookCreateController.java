@@ -24,12 +24,12 @@ public class BookCreateController extends AbstractBookModicicationController {
 	private AuthorManager authorManager;
 	private static final Logger LOG = LoggerFactory.getLogger(BookCreateController.class);
 
-	@Override
 	public void save() {
 		LOG.info("Saving new instance of Book");
 		try {
 			bookManager.persist(book);
 		} catch (ConstraintCheckException e) {
+			LOG.warn("Collision attempting to persist book with ISBN [{}]", book.getiSBN());
 			FacesContext.getCurrentInstance()
 					.addMessage("bookData:isbn",
 							new FacesMessage(String.format("Book with this ISBN %s already exists", book.getiSBN())));

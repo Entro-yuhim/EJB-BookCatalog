@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.entity.Persistable;
 import ua.softserve.bandr.persistence.facade.AbstractFacadeInt;
+import ua.softserve.bandr.utils.ValidateArgument;
 
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -48,7 +49,7 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 	@Override
 	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public T getById(Long id) {
-		Validate.notNull(id, "Received null as argument to AbstractFacade#getById");
+		ValidateArgument.notNull(id, "Received null as argument to AbstractFacade#getById");
 		LOG.debug("Query database for entity [{}] with id [{}]", entityClass.getSimpleName(), id);
 		return entityManager.find(entityClass, id);
 	}

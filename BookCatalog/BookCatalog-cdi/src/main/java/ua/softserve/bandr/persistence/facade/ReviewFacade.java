@@ -10,5 +10,6 @@ import java.util.List;
  */
 @Local
 public interface ReviewFacade extends AbstractFacadeInt<Review> {
-	List<Review> getByBookId(Long bookId);
+	List<Review>
+	getByBookId(Long bookId);
 }

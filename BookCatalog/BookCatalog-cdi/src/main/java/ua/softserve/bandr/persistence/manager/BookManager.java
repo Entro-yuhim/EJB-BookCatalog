@@ -1,6 +1,5 @@
 package ua.softserve.bandr.persistence.manager;
 
-import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.dto.BookRatingDTO;
@@ -12,16 +11,17 @@ import ua.softserve.bandr.persistence.facade.AbstractFacadeInt;
 import ua.softserve.bandr.persistence.facade.BookFacade;
 import ua.softserve.bandr.persistence.home.AbstractHome;
 import ua.softserve.bandr.persistence.home.BookHome;
+import ua.softserve.bandr.utils.ValidateArgument;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by bandr on 20.01.2016.
@@ -38,6 +38,7 @@ public class BookManager extends AbstractManager<Book> {
 
 	@Override
 	public Long persist(@Valid Book entity) throws ConstraintCheckException {
+		ValidateArgument.notNull(entity, "Received null [entity] argument in BookManager#persist");
 		if (isISBNPresent(entity.getiSBN())) {
 			throw new ConstraintCheckException("Book with such ISBN is already persisted.");
 		}
@@ -46,7 +47,7 @@ public class BookManager extends AbstractManager<Book> {
 
 	@Override
 	public Book update(@Valid Book entity) throws ConstraintCheckException {
-		Validate.notNull(entity, "Received null argument in BookManager#update");
+		ValidateArgument.notNull(entity, "Received null argument in BookManager#update");
 		if (entity.getId() == null) {
 			throw new InvalidEntityStateException("Entity with null ID cannot be valid argument for update statement");
 		}
@@ -72,19 +73,22 @@ public class BookManager extends AbstractManager<Book> {
 	}
 
 	public List<Book> getByAuthorId(Long id) {
-		Validate.notNull(id, "Received null argument in BookManager#getByAuthorId");
+		ValidateArgument.notNull(id, "Received null argument in BookManager#getByAuthorId");
 		return bookFacade.getAllByAuthor(id);
 	}
 
 	public List<Book> getBookByPrefix(String prefix) {
+		ValidateArgument.notNull(prefix, "Received null [prefix] argument in BookManager#getBookByPrefix");
 		return bookFacade.getByNameOrISBN(prefix);
 	}
 
 	public Book getBookByISBN(String isbn) {
+		ValidateArgument.notNull(isbn, "Received null [isbn] argument in BookManager#getBookByISBN");
 		return bookFacade.getByISBN(isbn);
 	}
 
 	public Book getByIdWithInitializedCollections(Long id) {
+		ValidateArgument.notNull(id, "Received null [isbn] argument in BookManager#getByIdWithInitializedCollections");
 		Book byId = super.getById(id);
 		byId.getReviews().size();
 		byId.getAuthors().size();
@@ -92,11 +96,13 @@ public class BookManager extends AbstractManager<Book> {
 	}
 
 	public Boolean isISBNPresent(String isbn) {
+		ValidateArgument.notNull(isbn, "Received null [isbn] argument in BookManager#isISBNPresent");
 		return bookFacade.isISBNPresent(isbn);
 	}
 
 	@Override
 	public List<Book> getPagedFiltered(Integer firstRow, Integer numRows, Map<String, String> filter, Map<String, Boolean> sortingOrder) {
+		//Validate for nulls in super call
 		List<Book> pagedFiltered = super.getPagedFiltered(firstRow, numRows, filter, sortingOrder);
 		for (Book book : pagedFiltered) {
 			book.getAuthors().size();
@@ -104,15 +110,15 @@ public class BookManager extends AbstractManager<Book> {
 		return pagedFiltered;
 	}
 
-	public Set<Book> removeAuthorFromBooks(Author author, Set<Book> books) {
-		for (Iterator<Book> bookIterator = books.iterator(); bookIterator.hasNext();) {
+	public Collection<Book> removeAuthorFromBooks(Author author, Collection<Book> books) {
+		for (Iterator<Book> bookIterator = books.iterator(); bookIterator.hasNext(); ) {
 			bookHome.removeAuthorFromBook(author, bookIterator.next());
 		}
 		return books;
 	}
 
-	public Set<Book> addAuthorToBooks(Author author, Set<Book> books) {
-		for (Iterator<Book> bookIterator = books.iterator(); bookIterator.hasNext();) {
+	public Collection<Book> addAuthorToBooks(Author author, Collection<Book> books) {
+		for (Iterator<Book> bookIterator = books.iterator(); bookIterator.hasNext(); ) {
 			bookHome.addAuthorToBook(author, bookIterator.next());
 		}
 		return books;

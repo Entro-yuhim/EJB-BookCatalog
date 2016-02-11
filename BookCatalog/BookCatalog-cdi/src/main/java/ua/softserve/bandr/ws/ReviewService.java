@@ -1,5 +1,6 @@
 package ua.softserve.bandr.ws;
 
+import ua.softserve.bandr.dto.ReviewDTO;
 import ua.softserve.bandr.entity.Review;
 import ua.softserve.bandr.persistence.exceptions.ConstraintCheckException;
 import ua.softserve.bandr.persistence.manager.ReviewManager;
@@ -33,11 +34,18 @@ public class ReviewService {
 		return Response.ok(reviewManager.getById(id)).build();
 	}
 
+	@GET
+	@Path("/byBook/{id:[0-9]+}")
+	public Response getByBookId(@Valid @PathParam("id") Long id) {
+		return Response.ok(reviewManager.getByBookId(id)).build();
+	}
+
 
 	@POST
 	@Path("/")
-	public Response saveReview(@Valid Review review) throws ConstraintCheckException {
-		reviewManager.persist(review);
+	public Response saveReview(@Valid ReviewDTO review) throws ConstraintCheckException {
+		Review newReview = review.getReviewData();
+		reviewManager.persistWithBookId(newReview, review.getBookId());
 		return Response.ok().build();
 	}
 

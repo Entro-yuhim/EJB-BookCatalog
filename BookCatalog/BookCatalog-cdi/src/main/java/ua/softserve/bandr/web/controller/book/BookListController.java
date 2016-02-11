@@ -37,7 +37,7 @@ public class BookListController extends ContainsSotrableTable {
 	public BookListController() {
 		getSortOrders().put("id", SortOrder.unsorted);
 		getSortOrders().put("title", SortOrder.unsorted);
-		getSortOrders().put("rating", SortOrder.unsorted);
+		getSortOrders().put("rating", SortOrder.ascending);
 	}
 
 

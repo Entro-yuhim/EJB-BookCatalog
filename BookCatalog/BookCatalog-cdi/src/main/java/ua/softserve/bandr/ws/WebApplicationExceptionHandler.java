@@ -12,8 +12,8 @@ import javax.ws.rs.ext.Provider;
  * Created by bandr on 26.01.2016.
  */
 @Provider
-public class NotAllowedHandler implements ExceptionMapper<WebApplicationException> {
-	private static final Logger LOG = LoggerFactory.getLogger(NotAllowedHandler.class);
+public class WebApplicationExceptionHandler implements ExceptionMapper<WebApplicationException> {
+	private static final Logger LOG = LoggerFactory.getLogger(WebApplicationExceptionHandler.class);
 
 	@Override
 	public Response toResponse(WebApplicationException exception) {

@@ -3,6 +3,7 @@ package ua.softserve.bandr.web.controller.book;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.richfaces.component.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +55,6 @@ public abstract class AbstractBookModicicationController {
 		authorModel = new AuthorAbstractLazyDataModel(book.getAuthors());
 	}
 
-	public abstract void save();
 
 	private String getFirstName(String addAuthorData) {
 		if (addAuthorData.split(" ").length < 1) {

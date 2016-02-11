@@ -8,6 +8,7 @@ import org.richfaces.component.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.dto.AuthorDTO;
+import ua.softserve.bandr.persistence.exceptions.ConstraintCheckException;
 import ua.softserve.bandr.persistence.manager.AuthorManager;
 import ua.softserve.bandr.web.controller.ContainsSotrableTable;
 import ua.softserve.bandr.web.pagination.AuthorDataModel;
@@ -50,7 +51,7 @@ public class AuthorListController extends ContainsSotrableTable {
 		this.authors = authors;
 	}
 
-	public void deleteSelected() {
+	public void deleteSelected() throws ConstraintCheckException {
 		LOG.info("asdfasfdas");
 		authorManager.deleteAllById(Collections2.transform(canBeDeleted, new Function<AuthorDTO, Long>() {
 			@Override

@@ -193,21 +193,4 @@ public class Book implements Persistable {
 	public Integer getRating() {
 		return rating;
 	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Book book = (Book) o;
-		if (this.id == null || book.id == null) {
-			return Objects.equal(iSBN, book.iSBN);
-		} else {
-			return this.id.equals(book.id);
-		}
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(iSBN);
-	}
 }

@@ -35,7 +35,6 @@ public class Review implements Persistable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "review_id_generator")
 	@SequenceGenerator(name = "review_id_generator", sequenceName = "review_id_seq", allocationSize = 1)
-	@JsonIgnore //Shouldn't accept or give id in JSON data
 	private Long id;
 
 	@Column(length = 255)

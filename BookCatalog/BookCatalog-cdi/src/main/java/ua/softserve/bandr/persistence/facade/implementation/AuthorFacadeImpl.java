@@ -5,6 +5,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.tuple.Pair;
 import ua.softserve.bandr.entity.Author;
 import ua.softserve.bandr.persistence.facade.AuthorFacade;
+import ua.softserve.bandr.utils.ValidateArgument;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -34,8 +35,8 @@ public class AuthorFacadeImpl extends AbstractFacade<Author> implements AuthorFa
 
 	@Override
 	public List<Author> getPaged(Integer startWith, Integer pageSize) {
-		Validate.notNull(startWith, "Received null startWith as argument to AuthorFacadeImpl#getPaged");
-		Validate.notNull(pageSize, "Received null pageSize as argument to AuthorFacadeImpl#getPaged");
+		ValidateArgument.notNull(startWith, "Received null startWith as argument to AuthorFacadeImpl#getPaged");
+		ValidateArgument.notNull(pageSize, "Received null pageSize as argument to AuthorFacadeImpl#getPaged");
 		return executeNamedQuery(Author.GET_ALL, Optional.of(startWith), Optional.of(pageSize));
 	}
 
