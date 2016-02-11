@@ -88,7 +88,7 @@ public class BookManager extends AbstractManager<Book> {
 	}
 
 	public Book getByIdWithInitializedCollections(Long id) {
-		ValidateArgument.notNull(id, "Received null [isbn] argument in BookManager#getByIdWithInitializedCollections");
+		ValidateArgument.notNull(id, "Received null [id] argument in BookManager#getByIdWithInitializedCollections");
 		Book byId = super.getById(id);
 		byId.getReviews().size();
 		byId.getAuthors().size();
@@ -111,6 +111,8 @@ public class BookManager extends AbstractManager<Book> {
 	}
 
 	public Collection<Book> removeAuthorFromBooks(Author author, Collection<Book> books) {
+		ValidateArgument.notNull(author);
+		ValidateArgument.notNull(books);
 		for (Iterator<Book> bookIterator = books.iterator(); bookIterator.hasNext(); ) {
 			bookHome.removeAuthorFromBook(author, bookIterator.next());
 		}

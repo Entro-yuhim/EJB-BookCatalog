@@ -62,6 +62,7 @@
                 </f:facet>
             </rich:extendedDataTable>
             <a4j:commandButton value="doSomething" render="deleteModalPanel" id="sendDataToServer"
+
                                action="#{authorListController.doNothing}"
                                oncomplete="#{rich:component('deleteModal')}.show()"/>
             <div style="float:right">
@@ -85,7 +86,9 @@
             </p>
         </rich:popupPanel>
         <a4j:outputPanel id="deleteModalPanel" ajaxRendered="true">
-            <rich:popupPanel id="deleteModal" modal="true" moveable="false" autosized="true">
+            <rich:popupPanel id="deleteModal" modal="true" moveable="false"
+                             rendered="#{not empty authorListController.cannotBeDeleted or not empty authorListController.canBeDeleted}"
+                             autosized="true">
                 <f:facet name="header">
                     <h:outputText value="Delete books"/>
                 </f:facet>
@@ -95,9 +98,9 @@
                 </f:facet>
                 <p>
                     <h:outputLabel rendered="#{not empty authorListController.cannotBeDeleted}"
-                            value="Following authors still have books associated with them and cannot be deleted:"/>
+                                   value="Following authors still have books associated with them and cannot be deleted:"/>
                     <h:dataTable rendered="#{not empty authorListController.cannotBeDeleted}"
-                            value="#{authorListController.cannotBeDeleted}" var="authorData">
+                                 value="#{authorListController.cannotBeDeleted}" var="authorData">
                         <h:column>
                             <f:facet name="header">
                                 <h:outputLabel value="ID"/>
@@ -117,8 +120,10 @@
                             <h:outputLabel value="#{authorData.lastName}"/>
                         </h:column>
                     </h:dataTable>
-                    <h:outputLabel value="Following authors will be deleted:" rendered="#{not empty authorListController.canBeDeleted}"/>
-                    <h:dataTable value="#{authorListController.canBeDeleted}" var="authorData2" rendered="#{not empty authorListController.canBeDeleted}">
+                    <h:outputLabel value="Following authors will be deleted:"
+                                   rendered="#{not empty authorListController.canBeDeleted}"/>
+                    <h:dataTable value="#{authorListController.canBeDeleted}" var="authorData2"
+                                 rendered="#{not empty authorListController.canBeDeleted}">
                         <h:column>
                             <f:facet name="header">
                                 <h:outputLabel value="ID"/>
@@ -140,7 +145,8 @@
                     </h:dataTable>
                     <h:form>
                         <h:commandButton action="#{authorListController.deleteSelected}" value="Yes"/>
-                        <h:commandButton onclick="#{rich:component('deleteModal')}.hide();" value="Cancel" immediate="true"/>
+                        <h:commandButton onclick="#{rich:component('deleteModal')}.hide();" value="Cancel"
+                                         immediate="true"/>
                     </h:form>
                 </p>
             </rich:popupPanel>
@@ -158,6 +164,10 @@
             function unselectAllRichTable() {
                 $('tbody[id*=richTable]').find('tr.rf-edt-r-sel').click();
                 return false;
+            }
+
+            function doStuff() {
+                console.log($('tbody[id*=richTable]').find('tr.rf-edt-r-sel').length);
             }
         </h:outputScript>
     </ui:define>

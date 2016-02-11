@@ -12,6 +12,7 @@ import ua.softserve.bandr.web.pagination.richmodels.AbstractLazyDataModel;
 
 import javax.inject.Inject;
 import javax.validation.constraints.AssertTrue;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -54,7 +55,7 @@ public abstract class AbstractAuthorModificationController {
 		bookModel = new BookAbstractLazyDataModel(author.getBooks());
 	}
 
-	public abstract void save();
+	public abstract void save() throws IOException;
 
 	public Author getAuthor() {
 		return author;

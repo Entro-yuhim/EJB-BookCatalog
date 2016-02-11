@@ -16,6 +16,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -41,9 +42,10 @@ public class AuthorEditController extends AbstractAuthorModificationController {
 	}
 
 	@Override
-	public void save() {
+	public void save() throws IOException {
 		try {
 			authorManager.update(author);
+			FacesContext.getCurrentInstance().getExternalContext().redirect("authorPage.jsf");
 		} catch (ConstraintCheckException e) {
 			FacesContext.getCurrentInstance().addMessage("authorData:ajaxValidation", new FacesMessage("Author with this first name and last name are already in database"));
 		}

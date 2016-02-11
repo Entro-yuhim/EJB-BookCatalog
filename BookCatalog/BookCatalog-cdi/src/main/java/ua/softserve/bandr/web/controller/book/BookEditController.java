@@ -43,7 +43,7 @@ public class BookEditController extends AbstractBookModicicationController {
 		LOG.info("Updating Book with id [{}] with new data", book.getId());
 		try {
 			bookManager.update(book);
-			FacesContext.getCurrentInstance().getExternalContext().dispatch("/bookPage.jsf");
+			FacesContext.getCurrentInstance().getExternalContext().redirect("bookPage.jsf");
 		} catch (ConstraintCheckException e) {
 			LOG.warn("Collision attempting to persist book object [{}]", book.getId());
 			FacesContext.getCurrentInstance()

@@ -9,6 +9,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import java.io.IOException;
 
 /**
  * Created by bandr on 05.02.2016.
@@ -23,13 +24,13 @@ public class AuthorCreateController extends AbstractAuthorModificationController
 	}
 
 	@Override
-	public void save() {
+	public void save() throws IOException {
 		try {
 			authorManager.persist(author);
+			FacesContext.getCurrentInstance().getExternalContext().redirect("authorPage.jsf");
 		} catch (ConstraintCheckException e) {
 			FacesContext.getCurrentInstance()
 					.addMessage("authorData:ajaxValidation", new FacesMessage("Author with this first name and last name are already in database"));
 		}
-		author = new Author();
 	}
 }
