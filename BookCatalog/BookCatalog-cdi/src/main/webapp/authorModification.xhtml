@@ -17,8 +17,11 @@
             <h:panelGrid columns="3">
                 <h:outputLabel for="firstName" value="First Name"/>
                 <h:inputText id="firstName" value="#{authorController.author.firstName}">
-                    <f:validateRequired />
-                    <f:validateRegex pattern="(([a-z])+)" />
+                    <f:validateRequired/>
+                    <ui:remove>
+                        <!--Causes some sort of richfaces-js bug. For whatever reason-->
+                        <f:validateRegex pattern="(([a-z])+)"/>
+                    </ui:remove>
                 </h:inputText>
                 <h:message for="firstName" errorClass="invalid"/>
 
