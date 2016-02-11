@@ -174,4 +174,12 @@ public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> impl
 	public void setWrappedData(Object data) {
 		LOG.info("Attempting to set wrapped data");
 	}
+
+	public List<T> getCachedList() {
+		return cachedList;
+	}
+
+	public void setCachedList(List<T> cachedList) {
+		this.cachedList = cachedList;
+	}
 }

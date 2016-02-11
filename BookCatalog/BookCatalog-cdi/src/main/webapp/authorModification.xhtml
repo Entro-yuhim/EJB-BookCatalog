@@ -17,7 +17,8 @@
             <h:panelGrid columns="3">
                 <h:outputLabel for="firstName" value="First Name"/>
                 <h:inputText id="firstName" value="#{authorController.author.firstName}">
-                    <f:validateRequired/>
+                    <f:validateRequired />
+                    <f:validateRegex pattern="(([a-z])+)" />
                 </h:inputText>
                 <h:message for="firstName" errorClass="invalid"/>
 

@@ -1,7 +1,9 @@
 package ua.softserve.bandr.persistence.manager;
 
+import com.google.common.collect.Sets;
 import org.apache.commons.lang3.Validate;
 import ua.softserve.bandr.entity.Author;
+import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.persistence.exceptions.ConstraintCheckException;
 import ua.softserve.bandr.persistence.exceptions.InvalidEntityStateException;
 import ua.softserve.bandr.persistence.facade.AbstractFacadeInt;
@@ -16,7 +18,7 @@ import javax.inject.Inject;
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
+import java.util.Set;
 
 /**
  * Created by bandr on 20.01.2016.
@@ -28,6 +30,8 @@ public class AuthorManager extends AbstractManager<Author> {
 	private AuthorHome authorHome;
 	@Inject
 	private AuthorFacade authorFacade;
+	@Inject
+	private BookManager bookManager;
 
 	@Override
 	protected AbstractHome<Author> getHome() {
@@ -50,16 +54,26 @@ public class AuthorManager extends AbstractManager<Author> {
 	}
 
 	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public Author update(@Valid Author entity) throws ConstraintCheckException {
 		Validate.notNull(entity, "Received null argument in AuthorManager#update");
 		if (entity.getId() == null) {
 			throw new InvalidEntityStateException("Entity with null ID cannot be valid argument for update statement");
 		}
-		Author inDB = getByFullName(entity.getFirstName(), entity.getLastName());
-		if (Objects.equals(entity.getId(), inDB.getId())) {
+		if (!willCauseCollision(entity)) {
+			updateBooks(entity, getById(entity.getId()));
 			return super.update(entity);
 		}
 		throw new ConstraintCheckException("Author with these firstName and lastName already exist.");
+	}
+
+	private Author updateBooks(Author mergeFrom, Author mergeTo) throws ConstraintCheckException {
+		mergeFrom.getBooks().size();
+		Set<Book> removed = Sets.difference(mergeTo.getBooks(), mergeFrom.getBooks());
+		Set<Book> added = Sets.difference(mergeFrom.getBooks(), mergeTo.getBooks());
+		bookManager.removeAuthorFromBooks(mergeFrom, removed);
+		bookManager.addAuthorToBooks(mergeFrom, added);
+		return mergeTo;
 	}
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -69,6 +83,7 @@ public class AuthorManager extends AbstractManager<Author> {
 		return author;
 	}
 
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public Author getByFullName(String firstName, String lastName) {
 		return authorFacade.getByFullName(firstName, lastName);
 	}
@@ -111,8 +126,14 @@ public class AuthorManager extends AbstractManager<Author> {
 		return authorFacade.getByBookId(id);
 	}
 
-	public boolean isAuthorUnique(Author author) {
-		return authorFacade.authorExists(author.getFirstName(), author.getLastName());
+	public boolean willCauseCollision(Author author) {
+		Author byFullName = authorFacade.getByFullName(author.getFirstName(), author.getLastName());
+		return !(byFullName == null || byFullName.getId().equals(author.getId()));
+	}
+
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public boolean canBeDeleted(Long id) {
+		return getById(id).getBooks().size() == 0;
 	}
 }
 

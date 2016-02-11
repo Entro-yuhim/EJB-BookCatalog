@@ -14,6 +14,7 @@ public class BookDTO implements EntityDTO {
 	private Long id;
 	private String title;
 	private String authorNames;
+	private String iSBN;
 	private Integer rating;
 
 	public BookDTO(Book book) {
@@ -21,6 +22,7 @@ public class BookDTO implements EntityDTO {
 		this.title = book.getTitle();
 		this.authorNames = StringUtils.join(Iterables.transform(book.getAuthors(), new AuthorNameConverter()), ", ");
 		this.rating = book.getRating();
+		this.iSBN = book.getiSBN();
 	}
 
 	public Long getId() {
@@ -53,6 +55,14 @@ public class BookDTO implements EntityDTO {
 
 	public void setRating(Integer rating) {
 		this.rating = rating;
+	}
+
+	public String getiSBN() {
+		return iSBN;
+	}
+
+	public void setiSBN(String iSBN) {
+		this.iSBN = iSBN;
 	}
 
 	@Override

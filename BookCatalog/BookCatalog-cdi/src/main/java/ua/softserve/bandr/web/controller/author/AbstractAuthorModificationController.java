@@ -31,7 +31,8 @@ public abstract class AbstractAuthorModificationController {
 
 	@AssertTrue(message = "Author already exists in database.")
 	public boolean isAuthorUnique() {
-		return !authorManager.isAuthorUnique(author);
+		boolean b = authorManager.willCauseCollision(author);
+		return !b;
 	}
 
 	public List<Book> autocomplete(String prefix) {

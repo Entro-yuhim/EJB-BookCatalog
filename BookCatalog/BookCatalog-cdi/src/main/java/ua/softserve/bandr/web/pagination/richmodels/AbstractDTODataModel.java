@@ -22,7 +22,6 @@ public abstract class AbstractDTODataModel<U extends Persistable, T extends Enti
 	private static final Logger LOG = LoggerFactory.getLogger((AbstractDTODataModel.class));
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public List<T> getDataList(int firstRow, int numRows, Map<String, String> filter, Map<String, SortOrder> sorting) {
 		LOG.debug("Getting data list with first row [{}] and size [{}]. Filter [{}] and sorting [{}]", firstRow, numRows, filter, sorting);
 		return getDTOTransformer().getDTOList(getPersistablesList(firstRow, numRows, filter, sorting));

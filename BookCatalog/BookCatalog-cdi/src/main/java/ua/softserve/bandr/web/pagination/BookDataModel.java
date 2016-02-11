@@ -30,18 +30,10 @@ public class BookDataModel extends AbstractDTODataModel<Book, BookDTO> {
 	@Inject
 	private BookManager bookManager;
 
-	private Map<Long, Boolean> checkedData = new HashMap<>();
-
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public List<Book> getPersistablesList(Integer firstRow, Integer numRows, Map<String, String> filter, Map<String, SortOrder> sortingMap) {
-		//Hack to remove checked between pages. Should I change this to be a feature instead?
-		invalidateCheckedMap();
 		return bookManager.getPagedFiltered(firstRow, numRows, filter, convertSortingToOrder(sortingMap));
-	}
-
-	private void invalidateCheckedMap() {
-		checkedData = new HashMap<>();
 	}
 
 	@Override
@@ -52,13 +44,5 @@ public class BookDataModel extends AbstractDTODataModel<Book, BookDTO> {
 	@Override
 	public Long getTotalCount(Map<String, String> filter) {
 		return bookManager.getRecordCount(filter);
-	}
-
-	public Map<Long, Boolean> getCheckedData() {
-		return checkedData;
-	}
-
-	public void setCheckedData(Map<Long, Boolean> checkedData) {
-		this.checkedData = checkedData;
 	}
 }

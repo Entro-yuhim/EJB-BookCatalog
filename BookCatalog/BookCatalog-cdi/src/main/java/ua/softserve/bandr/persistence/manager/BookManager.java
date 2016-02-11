@@ -4,6 +4,7 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.dto.BookRatingDTO;
+import ua.softserve.bandr.entity.Author;
 import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.persistence.exceptions.ConstraintCheckException;
 import ua.softserve.bandr.persistence.exceptions.InvalidEntityStateException;
@@ -17,7 +18,10 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.validation.Valid;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by bandr on 20.01.2016.
@@ -46,7 +50,7 @@ public class BookManager extends AbstractManager<Book> {
 		if (entity.getId() == null) {
 			throw new InvalidEntityStateException("Entity with null ID cannot be valid argument for update statement");
 		}
-		if (isISBNPresent(entity.getiSBN()) && entity.getId().equals(getBookByISBN(entity.getiSBN()).getId())) {
+		if (isISBNPresent(entity.getiSBN()) && !entity.getId().equals(getBookByISBN(entity.getiSBN()).getId())) {
 			throw new ConstraintCheckException("Book with such ISBN is already persisted.");
 		}
 		return super.update(entity);
@@ -89,5 +93,28 @@ public class BookManager extends AbstractManager<Book> {
 
 	public Boolean isISBNPresent(String isbn) {
 		return bookFacade.isISBNPresent(isbn);
+	}
+
+	@Override
+	public List<Book> getPagedFiltered(Integer firstRow, Integer numRows, Map<String, String> filter, Map<String, Boolean> sortingOrder) {
+		List<Book> pagedFiltered = super.getPagedFiltered(firstRow, numRows, filter, sortingOrder);
+		for (Book book : pagedFiltered) {
+			book.getAuthors().size();
+		}
+		return pagedFiltered;
+	}
+
+	public Set<Book> removeAuthorFromBooks(Author author, Set<Book> books) {
+		for (Iterator<Book> bookIterator = books.iterator(); bookIterator.hasNext();) {
+			bookHome.removeAuthorFromBook(author, bookIterator.next());
+		}
+		return books;
+	}
+
+	public Set<Book> addAuthorToBooks(Author author, Set<Book> books) {
+		for (Iterator<Book> bookIterator = books.iterator(); bookIterator.hasNext();) {
+			bookHome.addAuthorToBook(author, bookIterator.next());
+		}
+		return books;
 	}
 }

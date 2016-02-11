@@ -67,7 +67,10 @@ public class AuthorFacadeImpl extends AbstractFacade<Author> implements AuthorFa
 
 	@Override
 	public Author getByFullName(String firstName, String lastName) {
-		return executeNamedQueryToSingleResult(Author.GET_BY_FULL_NAME, Pair.of("firstName", firstName), Pair.of("lastName", lastName));
+		if (authorExists(firstName, lastName)) {
+			return executeNamedQueryToSingleResult(Author.GET_BY_FULL_NAME, Pair.of("firstName", firstName), Pair.of("lastName", lastName));
+		}
+		return null;
 	}
 
 	@Override

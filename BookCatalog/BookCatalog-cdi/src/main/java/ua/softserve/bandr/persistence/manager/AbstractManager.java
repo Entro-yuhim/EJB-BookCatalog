@@ -93,7 +93,7 @@ public abstract class AbstractManager<T extends Persistable> {
 		Validate.notNull(numRows, "Received null numRows argument in AbstractManager#getPagedFiltered");
 		Validate.notNull(filter, "Received null filter argument in AbstractManager#getPagedFiltered");
 		Validate.notNull(sortingOrder, "Received null sortingOrder argument in AbstractManager#getPagedFiltered");
-		return getFacade().getPagedFilteredSorted(firstRow, numRows, filter, sortingOrder);
+		return  getFacade().getPagedFilteredSorted(firstRow, numRows, filter, sortingOrder);
 	}
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)

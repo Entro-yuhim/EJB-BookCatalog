@@ -1,5 +1,6 @@
 package ua.softserve.bandr.entity;
 
+import com.google.common.base.Objects;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.CascadeType;
@@ -75,7 +76,7 @@ public class Author implements Persistable {
 			"b.id = ba.book_id " +
 			"WHERE ba.author_id = id)")
 	private Integer rating; // maybe Double ? - something to consider
-	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "authors")
+	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "authors")
 	private Set<Book> books = new HashSet<>();
 
 	@Override
@@ -118,5 +119,19 @@ public class Author implements Persistable {
 	@Override
 	public String getEntityName() {
 		return "Author";
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Author author = (Author) o;
+		return Objects.equal(firstName, author.firstName) &&
+				Objects.equal(lastName, author.lastName);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(firstName, lastName);
 	}
 }

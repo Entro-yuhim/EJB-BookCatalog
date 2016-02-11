@@ -29,23 +29,27 @@
                     <ui:param name="title" value="ID"/>
                     <ui:param name="bean" value="#{authorListController}"/>
                     <ui:param name="property" value="id"/>
+                    <ui:param name="width" value="40px"/>
                 </ui:include>
                 <ui:include src="tableColumn.xhtml">
                     <ui:param name="title" value="First Name"/>
                     <ui:param name="bean" value="#{authorListController}"/>
                     <ui:param name="property" value="firstName"/>
+                    <ui:param name="width" value="250px"/>
                 </ui:include>
                 <ui:include src="tableColumn.xhtml">
                     <ui:param name="title" value="Last Name"/>
                     <ui:param name="bean" value="#{authorListController}"/>
                     <ui:param name="property" value="lastName"/>
+                    <ui:param name="width" value="230px"/>
                 </ui:include>
                 <ui:include src="tableColumn.xhtml">
                     <ui:param name="title" value="Rating"/>
                     <ui:param name="bean" value="#{authorListController}"/>
                     <ui:param name="property" value="rating"/>
+                    <ui:param name="width" value="230px"/>
                 </ui:include>
-                <rich:column>
+                <rich:column width="50px">
                     <f:facet name="header">
                         <h:outputText value="Edit"/>
                     </f:facet>
@@ -57,7 +61,9 @@
                     <rich:dataScroller id="scroller"/>
                 </f:facet>
             </rich:extendedDataTable>
-            <h:commandButton action="#{authorListController.deleteSelected}"/>
+            <a4j:commandButton value="doSomething" render="deleteModalPanel" id="sendDataToServer"
+                               action="#{authorListController.doNothing}"
+                               oncomplete="#{rich:component('deleteModal')}.show()"/>
             <div style="float:right">
                 <input type="button" value="Select All" onclick="selectAllRichTable()"/>
                 <input type="button" value="Unselect All" onclick="unselectAllRichTable()"/>
@@ -78,6 +84,67 @@
                 </ui:include>
             </p>
         </rich:popupPanel>
+        <a4j:outputPanel id="deleteModalPanel" ajaxRendered="true">
+            <rich:popupPanel id="deleteModal" modal="true" moveable="false" autosized="true">
+                <f:facet name="header">
+                    <h:outputText value="Delete books"/>
+                </f:facet>
+                <f:facet name="controls">
+                    <h:outputLink value="#" onclick="#{rich:component('deleteModal')}.hide(); return false;"
+                                  style="color: inherit">X</h:outputLink>
+                </f:facet>
+                <p>
+                    <h:outputLabel rendered="#{not empty authorListController.cannotBeDeleted}"
+                            value="Following authors still have books associated with them and cannot be deleted:"/>
+                    <h:dataTable rendered="#{not empty authorListController.cannotBeDeleted}"
+                            value="#{authorListController.cannotBeDeleted}" var="authorData">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputLabel value="ID"/>
+                            </f:facet>
+                            <h:outputLabel value="#{authorData.id}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputLabel value="First Name"/>
+                            </f:facet>
+                            <h:outputLabel value="#{authorData.firstName}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputLabel value="Last Name"/>
+                            </f:facet>
+                            <h:outputLabel value="#{authorData.lastName}"/>
+                        </h:column>
+                    </h:dataTable>
+                    <h:outputLabel value="Following authors will be deleted:" rendered="#{not empty authorListController.canBeDeleted}"/>
+                    <h:dataTable value="#{authorListController.canBeDeleted}" var="authorData2" rendered="#{not empty authorListController.canBeDeleted}">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputLabel value="ID"/>
+                            </f:facet>
+                            <h:outputLabel value="#{authorData2.id}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputLabel value="First Name"/>
+                            </f:facet>
+                            <h:outputLabel value="#{authorData2.firstName}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputLabel value="Last Name"/>
+                            </f:facet>
+                            <h:outputLabel value="#{authorData2.lastName}"/>
+                        </h:column>
+                    </h:dataTable>
+                    <h:form>
+                        <h:commandButton action="#{authorListController.deleteSelected}" value="Yes"/>
+                        <h:commandButton onclick="#{rich:component('deleteModal')}.hide();" value="Cancel" immediate="true"/>
+                    </h:form>
+                </p>
+            </rich:popupPanel>
+        </a4j:outputPanel>
         <h:outputScript>
             function passSelectToAjax() {
                 $('[id*=selectedBook]').val($("[id*=bookNameInput]").val());

@@ -1,6 +1,9 @@
 package ua.softserve.bandr.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.base.Objects;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.CascadeType;
@@ -100,18 +103,13 @@ public class Book implements Persistable {
 
 	@Formula("(SELECT round(avg(r.rating)) FROM review r WHERE r.book_id = id)")
 	private Integer rating;
-//
-//	@Lob
-//	@Column(nullable = false)
-//	@JsonIgnore
-//	private String description;
 
-	@ManyToMany(cascade = CascadeType.MERGE)
+	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
 	@JoinTable(name = "book_author",
 			joinColumns = @JoinColumn(name = "book_id",
 					foreignKey = @ForeignKey(name = "book_author_fk")),
 			inverseJoinColumns = @JoinColumn(name = "author_id",
-					foreignKey = @ForeignKey(name = "author_book_fk", foreignKeyDefinition = "ON DELETE No Action"))
+					foreignKey = @ForeignKey(name = "author_book_fk", foreignKeyDefinition = "ON DELETE RESTRICT"))
 	)
 	@JsonIgnore
 	private Set<Author> authors = new HashSet<>();
@@ -194,5 +192,22 @@ public class Book implements Persistable {
 
 	public Integer getRating() {
 		return rating;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Book book = (Book) o;
+		if (this.id == null || book.id == null) {
+			return Objects.equal(iSBN, book.iSBN);
+		} else {
+			return this.id.equals(book.id);
+		}
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(iSBN);
 	}
 }

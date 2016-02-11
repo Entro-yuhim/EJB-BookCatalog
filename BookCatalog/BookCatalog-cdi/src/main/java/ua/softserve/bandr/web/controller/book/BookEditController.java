@@ -33,12 +33,13 @@ public class BookEditController extends AbstractBookModicicationController {
 
 
 	private Long id;
-	private Book book = new Book();
 
 	public void init() {
 		this.book = bookManager.getByIdWithInitializedCollections(id);
 		authorModel = new AuthorAbstractLazyDataModel(this.book.getAuthors());
 	}
+
+
 
 	@Override
 	public void save() {

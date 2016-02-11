@@ -48,17 +48,11 @@
                     <ui:param name="width" value="190px"/>
                 </ui:include>
                 <rich:column width="70px">
-                    <f:facet name="header">
-                        <h:outputText value="Edit"/>
-                    </f:facet>
                     <h:button title="Edit" outcome="bookEdit" value="Edit">
                         <f:param name="bookId" value="#{record.id}"/>
                     </h:button>
                 </rich:column>
                 <rich:column width="70px">
-                    <f:facet name="header">
-                        <h:outputText value="View"/>
-                    </f:facet>
                     <h:button title="View" outcome="bookView" value="View">
                         <f:param name="bookId" value="#{record.id}"/>
                     </h:button>
@@ -67,9 +61,12 @@
                     <rich:dataScroller id="scroller"/>
                 </f:facet>
             </rich:extendedDataTable>
-            <h:commandButton action="#{bookListController.deleteSelected}" value="Delete"/>
+
+            <a4j:commandButton value="doSomething" render="deleteModalPanel" id="sendDataToServer"
+                               action="#{bookListController.doNothing}"
+                               oncomplete="#{rich:component('deleteModal')}.show()"/>
             <div style="float:right">
-                <input type="button" value="Select All" onclick="selectAllRichTable()"/>
+                <input type="button" id="selectAll" value="Select All" onclick="selectAllRichTable()"/>
                 <input type="button" value="Unselect All" onclick="unselectAllRichTable()"/>
             </div>
         </h:form>
@@ -85,6 +82,43 @@
                 <ui:include src="bookModification.xhtml">
                     <ui:param name="bookController" value="#{bookCreateController}"/>
                 </ui:include>
+            </p>
+        </rich:popupPanel>
+        <rich:popupPanel id="deleteModal" modal="true" moveable="false" autosized="true">
+            <f:facet name="header">
+                <h:outputText value="Delete books"/>
+            </f:facet>
+            <f:facet name="controls">
+                <h:outputLink value="#" onclick="#{rich:component('deleteModal')}.hide(); return false;"
+                              style="color: inherit">X</h:outputLink>
+            </f:facet>
+            <p>
+                <a4j:outputPanel id="deleteModalPanel">
+                    <h:dataTable value="#{bookListController.selectedValues}" var="bookData">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputLabel value="ID"/>
+                            </f:facet>
+                            <h:outputLabel value="#{bookData.id}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputLabel value="Title"/>
+                            </f:facet>
+                            <h:outputLabel value="#{bookData.title}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputLabel value="ISBN"/>
+                            </f:facet>
+                            <h:outputLabel value="#{bookData.iSBN}"/>
+                        </h:column>
+                    </h:dataTable>
+                </a4j:outputPanel>
+                <h:form>
+                    <h:commandButton action="#{bookListController.deleteSelected}" value="Yes"/>
+                    <h:commandButton onclick="#{rich:component('deleteModal')}.hide();" value="Cancel"/>
+                </h:form>
             </p>
         </rich:popupPanel>
         <h:outputScript>

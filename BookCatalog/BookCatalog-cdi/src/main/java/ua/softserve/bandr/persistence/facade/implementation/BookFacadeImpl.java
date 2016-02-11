@@ -15,7 +15,9 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Fetch;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
@@ -54,9 +56,9 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 		CriteriaBuilder criteriaBuilder = getCriteriaBuilder();
 		CriteriaQuery<Long> baseQuery = criteriaBuilder.createQuery(Long.class);
 		Root<Book> book = baseQuery.from(Book.class);
-		Join<Book, Author> bookAuthor = book.join("authors");
-		List<Predicate> predicates = buildFullBookPredicates(filter, criteriaBuilder, book, bookAuthor);
-		CriteriaQuery<Long> bookCriteriaQuery = baseQuery.select(criteriaBuilder.countDistinct(book))
+		Fetch<Book, Author> bookAuthor = book.fetch("authors", JoinType.LEFT);
+		List<Predicate> predicates = buildFullBookPredicates(filter, criteriaBuilder, book, (Join<Book, Author>) bookAuthor);
+		CriteriaQuery<Long> bookCriteriaQuery = baseQuery.select(criteriaBuilder.count(book))
 				.where(predicates.toArray(new Predicate[predicates.size()]));
 		return executeCriteriaQueryToCount(bookCriteriaQuery, filter);
 	}
@@ -82,10 +84,9 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 		CriteriaBuilder criteriaBuilder = getCriteriaBuilder();
 		CriteriaQuery<Book> criteria = criteriaBuilder.createQuery(Book.class);
 		Root<Book> book = criteria.from(Book.class);
-		Join<Book, Author> bookAuthor = book.join("authors");
-		List<Predicate> predicates = buildFullBookPredicates(filterData, criteriaBuilder, book, bookAuthor);
+		Fetch<Book, Author> bookAuthor = book.fetch("authors", JoinType.LEFT);
+		List<Predicate> predicates = buildFullBookPredicates(filterData, criteriaBuilder, book, (Join<Book, Author>) bookAuthor);
 		CriteriaQuery<Book> finalQuery = criteria.select(book)
-				.distinct(true)
 				.where(predicates.toArray(new Predicate[predicates.size()]));
 		List<Order> sortingList = getOrders(sortingOrder, criteriaBuilder, book);
 		return executeQuery(finalQuery.orderBy(sortingList), Optional.of(startWith), Optional.of(pageSize), filterData);
