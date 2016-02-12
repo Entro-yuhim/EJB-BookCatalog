@@ -4,6 +4,7 @@ package ua.softserve.bandr.persistence.facade;
 import ua.softserve.bandr.entity.Author;
 
 import javax.ejb.Local;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -18,4 +19,6 @@ public interface AuthorFacade extends AbstractFacadeInt<Author> {
 	Author getByFullName(String firstName, String lastName);
 
 	public Boolean authorExists(String firstName, String lastName);
+
+	List<Author> getAllWithIds(Collection<Long> idCollection);
 }

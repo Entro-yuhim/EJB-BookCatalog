@@ -14,8 +14,6 @@ public interface AbstractFacadeInt<T extends Persistable> {
 
 	T getById(Long id);
 
-	List<T> getPaged(Integer startWith, Integer pageSize);
-
 	List<T> getPagedFilteredSorted(Integer startWith, Integer pageSize, Map<String, String> filterText, Map<String, Boolean> sortingOrder);
 
 	Long getRecordCount(Map<String, String> filter);

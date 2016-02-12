@@ -1,14 +1,50 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core"
-                template="WEB-INF/templates/default.xhtml">
-    <f:metadata>
-        <f:viewParam name="bookId" value="#{bookEditController.id}"/>
-        <f:viewAction action="#{bookEditController.init}"/>
-    </f:metadata>
-    <ui:define name="page-body">
-        <ui:include src="bookModification.xhtml">
-            <ui:param name="bookController" value="#{bookEditController}"/>
-        </ui:include>
-    </ui:define>
-</ui:composition>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:rich="http://richfaces.org/rich" xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j">
+<h:head></h:head>
+<f:metadata>
+    <f:viewAction action="#{bookEditController.init}"/>
+</f:metadata>
+<h:body>
+    <div style="margin:auto; width:800px;">
+        <rich:panel>
+            <h:form>
+                <rich:pickList id="authorPicklist" value="#{bookEditController.authorsSelected}" var="author"
+                               listHeight="200px">
+                    <f:selectItems value="#{bookEditController.authorsAutocomplete}"/>
+                    <f:converter converterId="authorConverter"/>
+                    <f:ajax event="change"></f:ajax>
+                    <rich:column>
+                        <f:facet name="header">First Name</f:facet>
+                        #{author.firstName}
+                    </rich:column>
+                    <rich:column>
+                        <f:facet name="header">Last Name</f:facet>
+                        #{author.lastName}
+                    </rich:column>
+                </rich:pickList>
+
+                <rich:pickList id="pickListBooks" value="#{bookEditController.authorsSelected}"
+                               converter="#{authorConverter1}" var="book" sourceCaption="Avaible books:"
+                               targetCaption="Books chosen: " listWidth="280px" listHeight="200px">
+                    <f:selectItems value="#{bookEditController.authorsAutocomplete}"/>
+                    <f:ajax event="change"> </f:ajax>
+                    <rich:column>
+                        <f:facet name="header">Book name</f:facet>
+                        <h:outputText value="#{book.firstName}"/>
+                    </rich:column>
+                    <rich:column>
+                        <f:facet name="header">ISBN</f:facet>
+                        <h:outputText value="#{book.lastName}"/>
+                    </rich:column>
+
+                </rich:pickList>
+                <a4j:commandButton value="Apply" execute="@form" action="#{bookEditController.removeAuthors}"/>
+            </h:form>
+        </rich:panel>
+    </div>
+</h:body>
+</html>

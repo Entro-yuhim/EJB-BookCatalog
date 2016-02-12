@@ -31,6 +31,9 @@ import java.util.Set;
 				query = "SELECT a FROM Author a WHERE " +
 						"LOWER(a.firstName) = LOWER(:firstName) AND " +
 						"(LOWER(a.lastName) = LOWER(:lastName) OR a.lastName is null)"),
+		@NamedQuery(name = Author.GET_ALL_BY_ID,
+						query = "SELECT a FROM Author a " +
+								"WHERE a.id IN :idList"),
 		@NamedQuery(name = Author.GET_RECORD_COUNT,
 				query = "SELECT count(a.id) FROM Author a"),
 		@NamedQuery(name = Author.GET_BY_BOOK,
@@ -42,14 +45,14 @@ import java.util.Set;
 		@NamedQuery(name = Author.GET_COUNT_BY_NAME,
 				query = "SELECT COUNT(a.id) FROM Author a " +
 						"WHERE a.firstName = :firstName AND " +
-						"(a.lastName = :lastName OR a.lastName is null)")
+						"(a.lastName = :lastName OR a.lastName is null)")   // todo case sensitive ?
 
 
 })
 @Table(name = "author",
 		uniqueConstraints = @UniqueConstraint(name = "unique_author",
 				columnNames = {"first_name", "last_name"}))
-public class Author implements Persistable {
+public class Author implements Persistable {  // todo variable sorting
 
 	public static final String GET_ALL = "Author.getAll";
 	public static final String GET_BY_NAME = "Author.getByName";
@@ -59,6 +62,7 @@ public class Author implements Persistable {
 	public static final String GET_BY_BOOK = "Author.getByBook";
 	public static final String DELETE_BY_ID = "Author.deleteById";
 	public static final String GET_COUNT_BY_NAME = "Author.getCountByName";
+	public static final String GET_ALL_BY_ID = "Author.getAllById";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_id_generator")

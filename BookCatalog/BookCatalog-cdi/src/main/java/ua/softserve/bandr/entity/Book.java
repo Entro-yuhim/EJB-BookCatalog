@@ -68,7 +68,7 @@ import java.util.Set;
 						"GROUP BY subq.rating " +
 						"ORDER BY subq.rating")
 })
-public class Book implements Persistable {
+public class Book implements Persistable {  // todo variable sorting
 	public static final String GET_ALL = "Book.getAll";
 	public static final String GET_BY_AUTHOR_NAME = "Book.getByAuthorName";
 	public static final String GET_BY_AUTHOR_ID = "Book.getByAuthorId";
@@ -98,18 +98,18 @@ public class Book implements Persistable {
 	private String publisher;
 
 	@Column(name = "create_date", updatable = false, insertable = false)
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.DATE)    // todo TIMESTAMP ?
 	private Date createDate;
 
 	@Formula("(SELECT round(avg(r.rating)) FROM review r WHERE r.book_id = id)")
-	private Integer rating;
+	private Integer rating; // todo Double ?
 
 	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
 	@JoinTable(name = "book_author",
 			joinColumns = @JoinColumn(name = "book_id",
 					foreignKey = @ForeignKey(name = "book_author_fk")),
 			inverseJoinColumns = @JoinColumn(name = "author_id",
-					foreignKey = @ForeignKey(name = "author_book_fk", foreignKeyDefinition = "ON DELETE RESTRICT"))
+					foreignKey = @ForeignKey(name = "author_book_fk", foreignKeyDefinition = "ON DELETE RESTRICT")) // todo: orphan row?
 	)
 	@JsonIgnore
 	private Set<Author> authors = new HashSet<>();

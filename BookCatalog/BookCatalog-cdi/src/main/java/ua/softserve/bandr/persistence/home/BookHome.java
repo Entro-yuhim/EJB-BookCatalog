@@ -21,18 +21,18 @@ public class BookHome extends AbstractHome<Book> {
 	}
 
 	@TransactionAttribute(TransactionAttributeType.MANDATORY)
-	public Book addAuthorToBook(Author author, Book book) {
-		Book book1 = entityManager.find(Book.class, book.getId());
-		author = entityManager.merge(author);
-		book1.getAuthors().size();
+	public Book addAuthorToBook(Author author, Book book) { // todo refactoring
+		Book book1 = entityManager.find(Book.class, book.getId());  // todo NPE
+		author = entityManager.merge(author);   // todo really need?
+		book1.getAuthors().size();  // todo really need?
 		book1.getAuthors().add(author);
 		return book1;
 	}
 
 	@TransactionAttribute(TransactionAttributeType.MANDATORY)
-	public Book removeAuthorFromBook(Author author, Book book) {
+	public Book removeAuthorFromBook(Author author, Book book) {    // todo refactoring
 		Book book1 = entityManager.find(Book.class, book.getId());
-		Set<Author> authors = book1.getAuthors();
+		Set<Author> authors = book1.getAuthors();   // todo NPE
 		//using iterator to remove concurrent access issues with hibernate.
 		for (Iterator<Author> iterator = authors.iterator(); iterator.hasNext(); ) {
 			Author author1 = iterator.next();

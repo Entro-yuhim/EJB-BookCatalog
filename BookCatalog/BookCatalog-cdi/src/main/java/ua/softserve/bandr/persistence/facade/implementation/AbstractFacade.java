@@ -34,9 +34,10 @@ import java.util.Map;
  * When using vararg methods, take notice of types required.
  * </b>
  */
+// todo @TransactionAttribute?
 public abstract class AbstractFacade<T extends Persistable> implements AbstractFacadeInt<T> {
 
-	protected AbstractFacade(Class<T> entityClass) {
+	protected AbstractFacade(Class<T> entityClass) {    // todo why here ?
 		this.entityClass = entityClass;
 	}
 

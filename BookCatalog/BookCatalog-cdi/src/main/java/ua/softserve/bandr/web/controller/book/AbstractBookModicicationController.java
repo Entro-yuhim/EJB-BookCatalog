@@ -42,7 +42,7 @@ public abstract class AbstractBookModicicationController {
 		return byName;
 	}
 
-	public void removeAuthors() {
+	public void removeAuthors1() {
 		LOG.info("Removing selected books from author [{}]", selected);
 		Iterables.removeIf(book.getAuthors(), new AuthorPredicate(selected));
 		authorModel = new AuthorAbstractLazyDataModel(book.getAuthors());

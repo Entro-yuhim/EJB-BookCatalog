@@ -6,7 +6,7 @@ package ua.softserve.bandr.persistence.exceptions;
 public class ConstraintCheckException extends Exception {
 	private static final long serialVersionUID = -8640780571327221775L;
 
-	public ConstraintCheckException() {
+	public ConstraintCheckException() { // todo ?
 	}
 
 	public ConstraintCheckException(String message) {

@@ -49,14 +49,6 @@ public abstract class AbstractManager<T extends Persistable> {
 		return getFacade().getById(id);
 	}
 
-	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
-	public List<T> getPaged(Integer startWith, Integer pageSize) {
-		ValidateArgument.notNull(startWith, "Received null startWith argument in AbstractManager#getPaged");
-		ValidateArgument.notNull(pageSize, "Received null pageSize argument in AbstractManager#getPaged");
-		LOG.info("Fetched entities for StartWith [{}] and PageSize [{}]", startWith, pageSize);
-		return getFacade().getPaged(startWith, pageSize);
-	}
-
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public Long persist(@Valid T entity) throws ConstraintCheckException {
 		ValidateArgument.notNull(entity, "Received null argument in AbstractManager#persist");

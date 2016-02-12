@@ -27,7 +27,7 @@ import java.util.Map;
  * Created by bandr on 20.01.2016.
  */
 @Stateless
-@TransactionAttribute(TransactionAttributeType.REQUIRED)
+@TransactionAttribute(TransactionAttributeType.REQUIRED) // todo why?
 public class BookManager extends AbstractManager<Book> {
 	@Inject
 	private BookHome bookHome;
@@ -42,7 +42,7 @@ public class BookManager extends AbstractManager<Book> {
 		if (isISBNPresent(entity.getiSBN())) {
 			throw new ConstraintCheckException("Book with such ISBN is already persisted.");
 		}
-		return super.persist(entity);
+		return super.persist(entity);   // todo: some Exception can be here
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class BookManager extends AbstractManager<Book> {
 		if (isISBNPresent(entity.getiSBN()) && !entity.getId().equals(getBookByISBN(entity.getiSBN()).getId())) {
 			throw new ConstraintCheckException("Book with such ISBN is already persisted.");
 		}
-		return super.update(entity);
+		return super.update(entity); // todo: some Exception can be here
 	}
 
 	@Override
@@ -90,8 +90,8 @@ public class BookManager extends AbstractManager<Book> {
 	public Book getByIdWithInitializedCollections(Long id) {
 		ValidateArgument.notNull(id, "Received null [id] argument in BookManager#getByIdWithInitializedCollections");
 		Book byId = super.getById(id);
-		byId.getReviews().size();
-		byId.getAuthors().size();
+		byId.getReviews().size();   // todo really need?
+		byId.getAuthors().size();   // todo really need?
 		return byId;
 	}
 
@@ -120,6 +120,7 @@ public class BookManager extends AbstractManager<Book> {
 	}
 
 	public Collection<Book> addAuthorToBooks(Author author, Collection<Book> books) {
+		//todo
 		for (Iterator<Book> bookIterator = books.iterator(); bookIterator.hasNext(); ) {
 			bookHome.addAuthorToBook(author, bookIterator.next());
 		}

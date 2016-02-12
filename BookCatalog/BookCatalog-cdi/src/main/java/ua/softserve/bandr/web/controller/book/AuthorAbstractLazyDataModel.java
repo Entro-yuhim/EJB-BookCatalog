@@ -30,7 +30,7 @@ final class AuthorAbstractLazyDataModel extends AbstractLazyDataModel<Author> {
 
 	@Override
 	public Object getKey(Author author) {
-		return author.getId();
+		return author == null? 0 : author.getId();
 	}
 
 	@Override

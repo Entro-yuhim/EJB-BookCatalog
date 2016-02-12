@@ -6,7 +6,7 @@ package ua.softserve.bandr.persistence.exceptions;
 public class InvalidEntityStateException extends RuntimeException {
 	private static final long serialVersionUID = 5422167090948802695L;
 
-	public InvalidEntityStateException() {
+	public InvalidEntityStateException() { // todo ?
 	}
 
 	public InvalidEntityStateException(String message) {

@@ -16,6 +16,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -34,14 +35,6 @@ public class AuthorFacadeImpl extends AbstractFacade<Author> implements AuthorFa
 	}
 
 	@Override
-	public List<Author> getPaged(Integer startWith, Integer pageSize) {
-		ValidateArgument.notNull(startWith, "Received null startWith as argument to AuthorFacadeImpl#getPaged");
-		ValidateArgument.notNull(pageSize, "Received null pageSize as argument to AuthorFacadeImpl#getPaged");
-		return executeNamedQuery(Author.GET_ALL, Optional.of(startWith), Optional.of(pageSize));
-	}
-
-	@Override
-	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public Long getRecordCount(Map<String, String> filter) {
 		if (filter == null || filter.isEmpty()) {
 			return executeNamedQueryToCount(Author.GET_RECORD_COUNT);
@@ -93,5 +86,10 @@ public class AuthorFacadeImpl extends AbstractFacade<Author> implements AuthorFa
 				.setParameter("firstName", firstName.trim())
 				.setParameter("lastName", lastName.trim())
 				.getSingleResult().longValue() > 0;
+	}
+
+	@Override
+	public List<Author> getAllWithIds(Collection<Long> idCollection) {
+		return executeNamedQuery(Author.GET_ALL_BY_ID, Pair.of("idList", idCollection));
 	}
 }

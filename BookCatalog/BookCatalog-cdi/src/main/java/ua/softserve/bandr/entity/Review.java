@@ -26,7 +26,7 @@ import javax.validation.constraints.NotNull;
 		@NamedQuery(name = Review.DELETE_BY_ID, query = "DELETE FROM Review r WHERE r.id = :id")
 
 })
-public class Review implements Persistable {
+public class Review implements Persistable {     // todo variable sorting
 	public static final String GET_ALL = "Reviews.getAll";
 	public static final String GET_BY_BOOK = "Reviews.getByBook";
 	public static final String GET_RECORD_COUNT = "Reviews.getRecordCount";

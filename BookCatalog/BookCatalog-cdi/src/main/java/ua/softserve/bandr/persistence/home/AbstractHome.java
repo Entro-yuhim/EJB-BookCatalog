@@ -22,7 +22,7 @@ public abstract class AbstractHome<T extends Persistable> {
 
 	public Long persist(T entity) {
 		ValidateArgument.notNull(entity, "Received null as argument in AbstractHome#persist");
-		entityManager.persist(entity);
+		entityManager.persist(entity);// todo: some Exception can be here
 		LOG.debug("Persisted entity of class = [{}] with id = [{}]", entity.getEntityName(), entity.getId());
 		return entity.getId();
 	}
@@ -33,17 +33,18 @@ public abstract class AbstractHome<T extends Persistable> {
 		if (entity.getId() == null) {
 			throw new InvalidEntityStateException("Attempted to update entity with null id.");
 		}
-		return entityManager.merge(entity);
+		return entityManager.merge(entity); // todo: some Exception can be here
 	}
-	public abstract void delete(Long id);
+	public abstract void delete(Long id);   // return id
 
-	protected void executeDeleteQuery(String queryName, Long id) {
+	protected void executeDeleteQuery(String queryName, Long id) {  // todo null check
 		entityManager.createNamedQuery(queryName).setParameter("id", id).executeUpdate();
 	}
 
-	public void delete(T entity) {
+	public void delete(T entity) {// return id
+		// return id
 		ValidateArgument.notNull(entity, "Received null as argument in AbstractHome#delete");
 		LOG.debug("Attempting to remove entity = [{}] with id = [{}]", entity.getEntityName(), entity.getId());
-		entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
+		entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));    // todo: some Exception can be here
 	}
 }

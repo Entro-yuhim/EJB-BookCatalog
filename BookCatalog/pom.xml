@@ -36,6 +36,7 @@
         <!-- JBoss dependency versions -->
 
 
+        <!--<version.org.richfaces>4.5.12.Final</version.org.richfaces>-->
         <version.org.richfaces>4.5.7.Final</version.org.richfaces>
         <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
 

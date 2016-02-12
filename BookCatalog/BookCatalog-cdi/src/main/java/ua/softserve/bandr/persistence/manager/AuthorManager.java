@@ -110,7 +110,6 @@ public class AuthorManager extends AbstractManager<Author> {
 			authorHome.delete(authorDB);
 		}
 		throw new ConstraintCheckException("Author still has books.");
-		/* fixme Should do something if validation fails; */
 	}
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -135,6 +134,10 @@ public class AuthorManager extends AbstractManager<Author> {
 	public boolean canBeDeleted(Long id) {
 		ValidateArgument.notNull(id, "Received null [id] argument in AuthorManager#canBeDeleted");
 		return getById(id).getBooks().isEmpty();
+	}
+
+	public List<Author> getAllById(Collection<Long> idCollection) {
+		return authorFacade.getAllWithIds(idCollection);
 	}
 
 	private static class BookEquator implements Equator<Book> {

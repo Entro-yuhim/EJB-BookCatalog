@@ -9,11 +9,15 @@ import ua.softserve.bandr.persistence.facade.ReviewFacade;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import java.util.List;
 import java.util.Map;
 
 @LocalBean
 @Stateless
+// todo @TransactionAttribute?
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class ReviewFacadeImpl extends AbstractFacade<Review> implements ReviewFacade {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ReviewFacadeImpl.class);
@@ -29,11 +33,6 @@ public class ReviewFacadeImpl extends AbstractFacade<Review> implements ReviewFa
 		return reviews;
 	}
 
-	@Override
-	public List<Review> getPaged(Integer startWith, Integer pageSize) {
-		LOG.debug("Got paged reviews, first restult at {} max results {}", startWith, pageSize);
-		return executeNamedQuery(Review.GET_ALL, Optional.of(startWith), Optional.of(pageSize));
-	}
 	//Not used
 	@Override
 	public List<Review> getPagedFilteredSorted(Integer startWith, Integer pageSize, Map<String, String> filterText, Map<String, Boolean> sortingOrder) {

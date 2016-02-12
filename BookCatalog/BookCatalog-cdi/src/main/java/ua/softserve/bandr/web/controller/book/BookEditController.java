@@ -1,29 +1,19 @@
 package ua.softserve.bandr.web.controller.book;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import org.richfaces.component.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.entity.Author;
-import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.persistence.exceptions.ConstraintCheckException;
-import ua.softserve.bandr.persistence.manager.AuthorManager;
-import ua.softserve.bandr.persistence.manager.BookManager;
-import ua.softserve.bandr.web.pagination.richmodels.AbstractLazyDataModel;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
+import javax.faces.event.ValueChangeEvent;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by bandr on 01.02.2016.
@@ -32,11 +22,23 @@ import java.util.Set;
 @ViewScoped
 public class BookEditController extends AbstractBookModicicationController {
 	private static final Logger LOG = LoggerFactory.getLogger(BookEditController.class);
-	private Long id;
+	private Long id = 26L;
+
+	private String authorFilter = "";
+
+	private List<Author> authorsAutocomplete = Lists.newArrayList();
+	private List<Author> authorsSelected = Lists.newArrayList();
 
 	public void init() {
 		this.book = bookManager.getByIdWithInitializedCollections(id);
 		authorModel = new AuthorAbstractLazyDataModel(this.book.getAuthors());
+		updateAuthorList("");
+		authorsSelected.addAll(book.getAuthors());
+		authorsAutocomplete.addAll(authorsSelected);
+	}
+
+	private void updateAuthorList(String filter) {
+		authorsAutocomplete = Lists.newArrayList(authorManager.getByName(filter == null ? "" : filter));
 	}
 
 	public void save() throws IOException {
@@ -52,6 +54,31 @@ public class BookEditController extends AbstractBookModicicationController {
 		}
 	}
 
+	public void removeAuthors() {
+		//List<Author> allById = authorManager.getAllById(authorsSelected);
+		LOG.info("");
+		book.setAuthors(Sets.newHashSet(authorsSelected));
+		authorModel = new AuthorAbstractLazyDataModel(book.getAuthors());
+
+	}
+
+	public List<Author> getAuthorsAutocomplete() {
+		return authorsAutocomplete;
+	}
+
+	public void setAuthorsAutocomplete(List<Author> authorsAutocomplete) {
+		this.authorsAutocomplete = authorsAutocomplete;
+	}
+
+	public List<Author> getAuthorsSelected() {
+		LOG.info("List is populated: [{}]", authorsSelected.isEmpty());
+		return authorsSelected;
+	}
+
+	public void setAuthorsSelected(List<Author> authorsSelected) {
+		this.authorsSelected = authorsSelected;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -60,4 +87,18 @@ public class BookEditController extends AbstractBookModicicationController {
 		this.id = id;
 	}
 
+	public String getAuthorFilter() {
+		return authorFilter;
+	}
+
+	public void setAuthorFilter(String authorFilter) {
+		this.authorFilter = authorFilter;
+	}
+
+	public void filterChange(ValueChangeEvent valueChangeEvent) {
+		Object newValue = valueChangeEvent.getNewValue();
+		if (newValue != null && !"".equals(newValue) && newValue instanceof String) {
+			updateAuthorList((String) newValue);
+		}
+	}
 }
