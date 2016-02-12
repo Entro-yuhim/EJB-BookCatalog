@@ -27,14 +27,12 @@ public class BookEditController extends AbstractBookModicicationController {
 	private String authorFilter = "";
 
 	private List<Author> authorsAutocomplete = Lists.newArrayList();
-	private List<Author> authorsSelected = Lists.newArrayList();
+	private List<Long> authorsSelected = Lists.newArrayList();
 
 	public void init() {
 		this.book = bookManager.getByIdWithInitializedCollections(id);
 		authorModel = new AuthorAbstractLazyDataModel(this.book.getAuthors());
 		updateAuthorList("");
-		authorsSelected.addAll(book.getAuthors());
-		authorsAutocomplete.addAll(authorsSelected);
 	}
 
 	private void updateAuthorList(String filter) {
@@ -56,10 +54,10 @@ public class BookEditController extends AbstractBookModicicationController {
 
 	public void removeAuthors() {
 		//List<Author> allById = authorManager.getAllById(authorsSelected);
-		LOG.info("");
-		book.setAuthors(Sets.newHashSet(authorsSelected));
+		LOG.info("RemoveAuthors");
+		LOG.info("[{}]", authorsSelected);
+		//book.setAuthors(Sets.newHashSet(authorsSelected));
 		authorModel = new AuthorAbstractLazyDataModel(book.getAuthors());
-
 	}
 
 	public List<Author> getAuthorsAutocomplete() {
@@ -70,12 +68,12 @@ public class BookEditController extends AbstractBookModicicationController {
 		this.authorsAutocomplete = authorsAutocomplete;
 	}
 
-	public List<Author> getAuthorsSelected() {
+	public List<Long> getAuthorsSelected() {
 		LOG.info("List is populated: [{}]", authorsSelected.isEmpty());
 		return authorsSelected;
 	}
 
-	public void setAuthorsSelected(List<Author> authorsSelected) {
+	public void setAuthorsSelected(List<Long> authorsSelected) {
 		this.authorsSelected = authorsSelected;
 	}
 
