@@ -91,17 +91,17 @@
     </h:form>
     <h:outputScript>
         function passSelectToAjax() {
-        $('[id*=selectedBook]').val($("[id*=bookNameInput]").val());
+            $('${selectedBook}').val($("[id*=bookNameInput]").val());
         }
 
         function selectAllRichTable() {
-        $('tbody[id*=richTable]').find('tr:not(.rf-edt-r-sel)').click();
-        return false;
+            $('tbody[id*=richTable]').find('tr:not(.rf-edt-r-sel)').click();
+            return false;
         }
 
         function unselectAllRichTable() {
-        $('tbody[id*=richTable]').find('tr.rf-edt-r-sel').click();
-        return false;
+            $('tbody[id*=richTable]').find('tr.rf-edt-r-sel').click();
+            return false;
         }
     </h:outputScript>
 </ui:composition>

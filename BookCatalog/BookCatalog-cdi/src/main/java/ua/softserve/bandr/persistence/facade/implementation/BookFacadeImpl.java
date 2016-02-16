@@ -115,6 +115,7 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 		return executeNamedQuery(Book.GET_BY_NAME_OR_ISBN, Pair.of("title", pref), Pair.of("isbn", pref));
 	}
 
+	@Override
 	public Book getByISBN(String isbn) {
 		return executeNamedQueryToSingleResult(Book.GET_BY_NAME_OR_ISBN, Pair.of("title", isbn), Pair.of("isbn", isbn));
 	}
