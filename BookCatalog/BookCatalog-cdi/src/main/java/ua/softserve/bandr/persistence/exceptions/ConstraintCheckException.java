@@ -3,11 +3,8 @@ package ua.softserve.bandr.persistence.exceptions;
 /**
  * Created by bandr on 04.02.2016.
  */
-public class ConstraintCheckException extends Exception {
+public class ConstraintCheckException extends PersistenceException {
 	private static final long serialVersionUID = -8640780571327221775L;
-
-	public ConstraintCheckException() {
-	}
 
 	public ConstraintCheckException(String message) {
 		super(message);

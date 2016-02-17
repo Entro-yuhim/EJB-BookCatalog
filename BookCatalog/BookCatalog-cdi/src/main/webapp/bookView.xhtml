@@ -42,22 +42,26 @@
                 <h:panelGrid columns="3">
                     <h:outputLabel for="username" value="Username"/>
                     <h:inputText id="username" value="#{bookViewController.review.username}"/>
-                    <h:message for="username" errorClass="invalid"/>
+                    <rich:message for="username" errorClass="invalid" showDetail="true"/>
 
                     <h:outputLabel for="ratingData" value="Rate"/>
-                    <label id="newCommentRating"/>
-                    <h:inputText id="ratingData" value="#{bookViewController.review.rating}" style="display: none;">
-                        <f:validateRequired/>
+                    <h:inputText id="ratingData" value="#{bookViewController.review.rating}"
+                                 validatorMessage="Please add rating to your review" requiredMessage="Please set rating"
+                                 label="Rating">
                         <f:validateDoubleRange minimum="1" maximum="5"/>
+                        <f:validateRequired/>
                     </h:inputText>
-                    <h:message for="ratingData" errorClass="invalid"/>
+                    <rich:message for="ratingData" errorClass="invalid" showDetail="true"/>
                 </h:panelGrid>
-                <h:inputTextarea id="reviewText" value="#{bookViewController.review.reviewText}">
+
+                <h:inputTextarea id="reviewText" value="#{bookViewController.review.reviewText}"
+                                 requiredMessage="Please, input review text" style="resize: none">
                     <f:validateRequired/>
                 </h:inputTextarea>
-                <h:message for="reviewText"/>
-                <a4j:commandButton action="#{bookViewController.save}" value="Save" render="reviews"
-                                   oncomplete="clearInputData();"/>
+                <rich:message for="reviewText"/>
+
+                <a4j:commandButton action="#{bookViewController.save}" value="Save" render="reviews newReview" showDetail="true"
+                                   resetValues="true"/>
             </h:form>
         </rich:panel>
         <a4j:outputPanel id="reviews">
@@ -88,8 +92,8 @@
                 $('#newCommentRating').rateYo('destroy');
                 $('#newCommentRating').rateYo({
                     starWidth: "20px",
-                    fullStar:true,
-                    onSet: function(rate){
+                    fullStar: true,
+                    onSet: function (rate) {
                         //set hidden input with rateData
                         $('[id*=ratingData]').val(rate);
                     }
@@ -123,8 +127,8 @@
                     });
                     $('#newCommentRating').rateYo({
                         starWidth: "20px",
-                        fullStar:true,
-                        onSet: function(rate){
+                        fullStar: true,
+                        onSet: function (rate) {
                             //set hidden input with rateData
                             $('[id*=ratingData]').val(rate);
                         }

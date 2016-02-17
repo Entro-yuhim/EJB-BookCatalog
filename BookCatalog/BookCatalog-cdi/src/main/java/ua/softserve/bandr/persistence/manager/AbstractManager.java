@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.entity.Persistable;
 import ua.softserve.bandr.persistence.exceptions.ConstraintCheckException;
+import ua.softserve.bandr.persistence.exceptions.PersistenceException;
 import ua.softserve.bandr.persistence.facade.AbstractFacadeInt;
 import ua.softserve.bandr.persistence.home.AbstractHome;
 import ua.softserve.bandr.persistence.exceptions.InvalidEntityStateException;
@@ -29,7 +30,7 @@ public abstract class AbstractManager<T extends Persistable> {
 	protected abstract AbstractFacadeInt<T> getFacade();
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public void deleteBulk(List<T> entities) throws ConstraintCheckException {
+	public void deleteBulk(List<T> entities) throws PersistenceException {
 		ValidateArgument.notNull(entities, "Received null argument in AbstractManager#deleteBulk");
 		LOG.info("Trying to delete entities with id = [{}]", LoggingUtils.getIdCollection(entities));
 		for (T entity : entities) {
@@ -58,7 +59,7 @@ public abstract class AbstractManager<T extends Persistable> {
 	}
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public Long persist(@Valid T entity) throws ConstraintCheckException {
+	public Long persist(@Valid T entity) throws PersistenceException {
 		ValidateArgument.notNull(entity, "Received null argument in AbstractManager#persist");
 		LOG.debug("Trying to persist entity of class [{}]", entity.getEntityName());
 		getHome().persist(entity);
@@ -67,7 +68,7 @@ public abstract class AbstractManager<T extends Persistable> {
 	}
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public T update(@Valid T entity) throws ConstraintCheckException {
+	public T update(@Valid T entity) throws PersistenceException {
 		ValidateArgument.notNull(entity, "Received null argument in AbstractManager#update");
 		if (entity.getId() == null) {
 			throw new InvalidEntityStateException("Entity with null ID cannot be valid argument for update statement");
@@ -78,7 +79,7 @@ public abstract class AbstractManager<T extends Persistable> {
 	}
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public void delete(T entity) throws ConstraintCheckException {
+	public void delete(T entity) throws PersistenceException {
 		ValidateArgument.notNull(entity, "Received null argument in AbstractManager#delete");
 		LOG.info("Deleting entity of class [{}] with id [{}]", entity.getEntityName(), entity.getId());
 		getHome().delete(entity);

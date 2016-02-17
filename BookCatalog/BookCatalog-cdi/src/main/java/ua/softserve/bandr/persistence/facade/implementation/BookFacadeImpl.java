@@ -15,9 +15,8 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Fetch;
+import javax.persistence.criteria.From;
 import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
@@ -28,8 +27,8 @@ import java.util.Map;
 
 @Stateless
 @LocalBean
-
 //TODO: make escaping data a separate method.
+@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 
 	public BookFacadeImpl() {
@@ -42,13 +41,11 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 	}
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public List<Book> getPaged(Integer startWith, Integer pageSize) {
 		return executeNamedQuery(Book.GET_ALL, Optional.of(startWith), Optional.of(pageSize));
 	}
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public Long getRecordCount(Map<String, String> filter) {
 		if (filter == null || filter.isEmpty()) {
 			return executeNamedQueryToCount(Book.GET_RECORD_COUNT);
@@ -56,36 +53,32 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 		CriteriaBuilder criteriaBuilder = getCriteriaBuilder();
 		CriteriaQuery<Long> baseQuery = criteriaBuilder.createQuery(Long.class);
 		Root<Book> book = baseQuery.from(Book.class);
-		Fetch<Book, Author> bookAuthor = book.fetch("authors", JoinType.LEFT);
-		List<Predicate> predicates = buildFullBookPredicates(filter, criteriaBuilder, book, (Join<Book, Author>) bookAuthor);
+		List<Predicate> predicates = buildFullBookPredicates(filter, criteriaBuilder, book);
 		CriteriaQuery<Long> bookCriteriaQuery = baseQuery.select(criteriaBuilder.count(book))
 				.where(predicates.toArray(new Predicate[predicates.size()]));
 		return executeCriteriaQueryToCount(bookCriteriaQuery, filter);
 	}
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public List<Book> getAllByAuthor(String authorFilter) {
 		return executeNamedQuery(Book.GET_BY_AUTHOR_NAME,
 				Pair.of("authorNamePlaceholder", authorFilter));
 	}
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public List<Book> getBooksByRating(int rating) {
 		return executeNamedQuery(Book.GET_BY_RATING, Pair.of("rating", rating));
 	}
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public List<Book> getPagedFilteredSorted(Integer startWith, Integer pageSize,
 											 Map<String, String> filterData, Map<String, Boolean> sortingOrder) {
 		//Do something about order in which sorting is applied. not necessary right now, but might be in future;
 		CriteriaBuilder criteriaBuilder = getCriteriaBuilder();
 		CriteriaQuery<Book> criteria = criteriaBuilder.createQuery(Book.class);
 		Root<Book> book = criteria.from(Book.class);
-		Fetch<Book, Author> bookAuthor = book.fetch("authors", JoinType.LEFT);
-		List<Predicate> predicates = buildFullBookPredicates(filterData, criteriaBuilder, book, (Join<Book, Author>) bookAuthor);
+
+		List<Predicate> predicates = buildFullBookPredicates(filterData, criteriaBuilder, book);
 		CriteriaQuery<Book> finalQuery = criteria.select(book)
 				.where(predicates.toArray(new Predicate[predicates.size()]));
 		List<Order> sortingList = getOrders(sortingOrder, criteriaBuilder, book);
@@ -94,7 +87,6 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public List<BookRatingDTO> getBookCountByRating() {
 		List<Object[]> data = entityManager.createNamedQuery(Book.GET_COUNT_BY_RATING).getResultList();
 		List<BookRatingDTO> dtoList = new ArrayList<>();
@@ -157,12 +149,13 @@ public class BookFacadeImpl extends AbstractFacade<Book> implements BookFacade {
 		}
 	}
 
-	private List<Predicate> buildFullBookPredicates(Map<String, String> filter, CriteriaBuilder criteriaBuilder, Path book, Join<Book, Author> bookAuthor) {
+	private List<Predicate> buildFullBookPredicates(Map<String, String> filter, CriteriaBuilder criteriaBuilder, From<Book, Book> book) {
 		Map<String, String> bookParamFilter = Maps.newHashMap();
 		Map<String, String> authorParamFilter = Maps.newHashMap();
 		separateFiltersForBook(filter, bookParamFilter, authorParamFilter);
 		List<Predicate> predicates = buildPredicates(bookParamFilter, criteriaBuilder, book);
 		if (!authorParamFilter.isEmpty()) {
+			Join<Book, Author> bookAuthor = book.join("authors");
 			predicates.add(getAuthorPredicate(authorParamFilter, criteriaBuilder, bookAuthor));
 		}
 		return predicates;

@@ -6,9 +6,6 @@ package ua.softserve.bandr.ws.client;
 public class WebServiceClientException extends Exception {
 	private static final long serialVersionUID = 2416712023588739184L;
 
-	public WebServiceClientException() {
-	}
-
 	public WebServiceClientException(String message) {
 		super(message);
 	}

@@ -1,10 +1,12 @@
 package ua.softserve.bandr.dto;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
-import org.apache.commons.lang3.StringUtils;
+import com.google.common.collect.Lists;
 import ua.softserve.bandr.entity.Author;
 import ua.softserve.bandr.entity.Book;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by bandr on 29.01.2016.
@@ -13,16 +15,21 @@ public class BookDTO implements EntityDTO {
 	private static final long serialVersionUID = -4613984916560535321L;
 	private Long id;
 	private String title;
-	private String authorNames;
+	private List<AuthorDTO> authorNames;
 	private String iSBN;
+	private Date dateCreated;
 	private Integer rating;
 
 	public BookDTO(Book book) {
 		this.id = book.getId();
 		this.title = book.getTitle();
-		this.authorNames = StringUtils.join(Iterables.transform(book.getAuthors(), new AuthorNameConverter()), ", ");
 		this.rating = book.getRating();
 		this.iSBN = book.getiSBN();
+		this.dateCreated = book.getCreateDate();
+		authorNames = Lists.newArrayList();
+		for (Author a : book.getAuthors()) {
+			authorNames.add(new AuthorDTO(a));
+		}
 	}
 
 	public Long getId() {
@@ -41,11 +48,11 @@ public class BookDTO implements EntityDTO {
 		this.title = title;
 	}
 
-	public String getAuthorNames() {
+	public List<AuthorDTO> getAuthorNames() {
 		return authorNames;
 	}
 
-	public void setAuthorNames(String authorNames) {
+	public void setAuthorNames(List<AuthorDTO> authorNames) {
 		this.authorNames = authorNames;
 	}
 
@@ -63,6 +70,14 @@ public class BookDTO implements EntityDTO {
 
 	public void setiSBN(String iSBN) {
 		this.iSBN = iSBN;
+	}
+
+	public Date getDateCreated() {
+		return dateCreated;
+	}
+
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
 	}
 
 	@Override

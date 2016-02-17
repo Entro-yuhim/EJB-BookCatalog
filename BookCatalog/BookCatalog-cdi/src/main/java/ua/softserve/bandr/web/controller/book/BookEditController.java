@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.entity.Author;
 import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.persistence.exceptions.ConstraintCheckException;
+import ua.softserve.bandr.persistence.exceptions.PersistenceException;
 import ua.softserve.bandr.persistence.manager.AuthorManager;
 import ua.softserve.bandr.persistence.manager.BookManager;
 import ua.softserve.bandr.web.pagination.richmodels.AbstractLazyDataModel;
@@ -33,13 +34,14 @@ import java.util.Set;
 public class BookEditController extends AbstractBookModicicationController {
 	private static final Logger LOG = LoggerFactory.getLogger(BookEditController.class);
 	private Long id;
+	private String value;
 
 	public void init() {
 		this.book = bookManager.getByIdWithInitializedCollections(id);
 		authorModel = new AuthorAbstractLazyDataModel(this.book.getAuthors());
 	}
 
-	public void save() throws IOException {
+	public void save() throws IOException, PersistenceException {
 		LOG.info("Updating Book with id [{}] with new data", book.getId());
 		try {
 			bookManager.update(book);
@@ -60,4 +62,11 @@ public class BookEditController extends AbstractBookModicicationController {
 		this.id = id;
 	}
 
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
 }

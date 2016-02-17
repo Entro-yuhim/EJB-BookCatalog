@@ -34,9 +34,10 @@ import java.util.Map;
  * When using vararg methods, take notice of types required.
  * </b>
  */
+@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 public abstract class AbstractFacade<T extends Persistable> implements AbstractFacadeInt<T> {
 
-	protected AbstractFacade(Class<T> entityClass) {
+	protected AbstractFacade(Class<T> entityClass) {    // todo why here ?
 		this.entityClass = entityClass;
 	}
 
@@ -47,14 +48,12 @@ public abstract class AbstractFacade<T extends Persistable> implements AbstractF
 	protected EntityManager entityManager;
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public T getById(Long id) {
 		ValidateArgument.notNull(id, "Received null as argument to AbstractFacade#getById");
 		LOG.debug("Query database for entity [{}] with id [{}]", entityClass.getSimpleName(), id);
 		return entityManager.find(entityClass, id);
 	}
 
-	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	protected CriteriaBuilder getCriteriaBuilder() {
 		return entityManager.getCriteriaBuilder();
 	}

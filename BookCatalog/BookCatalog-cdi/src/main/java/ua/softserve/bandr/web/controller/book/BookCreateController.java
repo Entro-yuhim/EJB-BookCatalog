@@ -3,6 +3,7 @@ package ua.softserve.bandr.web.controller.book;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.persistence.exceptions.ConstraintCheckException;
+import ua.softserve.bandr.persistence.exceptions.PersistenceException;
 import ua.softserve.bandr.persistence.manager.AuthorManager;
 import ua.softserve.bandr.persistence.manager.BookManager;
 
@@ -24,7 +25,7 @@ public class BookCreateController extends AbstractBookModicicationController {
 	private AuthorManager authorManager;
 	private static final Logger LOG = LoggerFactory.getLogger(BookCreateController.class);
 
-	public void save() {
+	public void save() throws PersistenceException {
 		LOG.info("Saving new instance of Book");
 		try {
 			bookManager.persist(book);

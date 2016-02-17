@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ua.softserve.bandr.dto.ReviewDTO;
+import ua.softserve.bandr.ws.dto.ReviewDTO;
 import ua.softserve.bandr.entity.Author;
 import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.entity.Review;
@@ -53,7 +53,7 @@ public class BookViewController {
 	public void save() {
 		LOG.info("Saving new comment");
 		review.setBook(this.book);
-		ReviewDTO reviewData = new ReviewDTO(review);
+		ReviewDTO reviewData = ReviewDTO.fromEntity(review);
 		try {
 			reviewRESTClient.persistReview(reviewData);
 		} catch (WebServiceClientException e) {

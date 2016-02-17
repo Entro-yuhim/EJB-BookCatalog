@@ -7,6 +7,7 @@ import ua.softserve.bandr.entity.Author;
 import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.persistence.exceptions.ConstraintCheckException;
 import ua.softserve.bandr.persistence.exceptions.InvalidEntityStateException;
+import ua.softserve.bandr.persistence.exceptions.PersistenceException;
 import ua.softserve.bandr.persistence.facade.AbstractFacadeInt;
 import ua.softserve.bandr.persistence.facade.BookFacade;
 import ua.softserve.bandr.persistence.home.AbstractHome;
@@ -18,16 +19,16 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.validation.Valid;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by bandr on 20.01.2016.
  */
 @Stateless
-@TransactionAttribute(TransactionAttributeType.REQUIRED)
+@TransactionAttribute(TransactionAttributeType.REQUIRED) // todo why?
 public class BookManager extends AbstractManager<Book> {
 	@Inject
 	private BookHome bookHome;
@@ -37,7 +38,7 @@ public class BookManager extends AbstractManager<Book> {
 	private static final Logger LOG = LoggerFactory.getLogger(BookManager.class);
 
 	@Override
-	public Long persist(@Valid Book entity) throws ConstraintCheckException {
+	public Long persist(@Valid Book entity) throws PersistenceException {
 		ValidateArgument.notNull(entity, "Received null [entity] argument in BookManager#persist");
 		if (isISBNPresent(entity.getiSBN())) {
 			throw new ConstraintCheckException("Book with such ISBN is already persisted.");
@@ -46,7 +47,7 @@ public class BookManager extends AbstractManager<Book> {
 	}
 
 	@Override
-	public Book update(@Valid Book entity) throws ConstraintCheckException {
+	public Book update(@Valid Book entity) throws PersistenceException {
 		ValidateArgument.notNull(entity, "Received null argument in BookManager#update");
 		if (entity.getId() == null) {
 			throw new InvalidEntityStateException("Entity with null ID cannot be valid argument for update statement");
@@ -110,18 +111,28 @@ public class BookManager extends AbstractManager<Book> {
 		return pagedFiltered;
 	}
 
-	public Collection<Book> removeAuthorFromBooks(Author author, Collection<Book> books) {
+	public Set<Book> removeAuthorFromBooks(Author author, Set<Book> books) throws PersistenceException {
 		ValidateArgument.notNull(author);
 		ValidateArgument.notNull(books);
-		for (Iterator<Book> bookIterator = books.iterator(); bookIterator.hasNext(); ) {
-			bookHome.removeAuthorFromBook(author, bookIterator.next());
+		for (Iterator<Book> bookIterator = books.iterator(); bookIterator.hasNext(); ) { // todo ?
+			Book b = getById(bookIterator.next().getId());
+			for (Iterator<Author> authorIterator = b.getAuthors().iterator(); authorIterator.hasNext(); ) {
+				if (authorIterator.next().getId().equals(author.getId())) {
+					bookIterator.remove();
+				}
+			}
+			update(b);
 		}
 		return books;
 	}
 
-	public Collection<Book> addAuthorToBooks(Author author, Collection<Book> books) {
+	public Set<Book> addAuthorToBooks(Author author, Set<Book> books) throws PersistenceException {
+		ValidateArgument.notNull(author);
+		ValidateArgument.notNull(books);
 		for (Iterator<Book> bookIterator = books.iterator(); bookIterator.hasNext(); ) {
-			bookHome.addAuthorToBook(author, bookIterator.next());
+			Book b = getById(bookIterator.next().getId());
+			b.getAuthors().add(author);
+			update(b);
 		}
 		return books;
 	}

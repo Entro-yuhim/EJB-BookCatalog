@@ -1,9 +1,6 @@
 package ua.softserve.bandr.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.common.base.Objects;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.CascadeType;
@@ -68,7 +65,7 @@ import java.util.Set;
 						"GROUP BY subq.rating " +
 						"ORDER BY subq.rating")
 })
-public class Book implements Persistable {
+public class Book implements Persistable {  // todo variable sorting
 	public static final String GET_ALL = "Book.getAll";
 	public static final String GET_BY_AUTHOR_NAME = "Book.getByAuthorName";
 	public static final String GET_BY_AUTHOR_ID = "Book.getByAuthorId";
@@ -76,10 +73,10 @@ public class Book implements Persistable {
 	public static final String GET_COUNT_BY_RATING = "Book.ratingDistribution";
 	public static final String GET_COUNT_BY_ISBN = "Book.getCountByISBN";
 	public static final String GET_RECORD_COUNT = "Book.getRecordCount";
-	private static final long serialVersionUID = -7196067339640930752L;
 	public static final String DELETE_BY_ID = "Book.deleteById";
 	public static final String GET_BY_NAME_OR_ISBN = "Book.getByNameOrISBN";
 
+	private static final long serialVersionUID = -7196067339640930752L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_id_generator")
 	@SequenceGenerator(name = "book_id_generator", sequenceName = "book_id_seq", allocationSize = 1)
@@ -98,7 +95,7 @@ public class Book implements Persistable {
 	private String publisher;
 
 	@Column(name = "create_date", updatable = false, insertable = false)
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)    // todo TIMESTAMP ? - fix data/table
 	private Date createDate;
 
 	@Formula("(SELECT round(avg(r.rating)) FROM review r WHERE r.book_id = id)")

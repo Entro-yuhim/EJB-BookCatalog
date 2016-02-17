@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.entity.Author;
 import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.persistence.exceptions.ConstraintCheckException;
+import ua.softserve.bandr.persistence.exceptions.PersistenceException;
 import ua.softserve.bandr.persistence.manager.AuthorManager;
 import ua.softserve.bandr.persistence.manager.BookManager;
 import ua.softserve.bandr.web.pagination.richmodels.AbstractLazyDataModel;
@@ -43,7 +44,7 @@ public class AuthorEditController extends AbstractAuthorModificationController {
 	}
 
 	@Override
-	public void save() throws IOException {
+	public void save() throws IOException, PersistenceException {
 		try {
 			authorManager.update(author);
 			FacesContext.getCurrentInstance().getExternalContext().redirect("authorPage.jsf");

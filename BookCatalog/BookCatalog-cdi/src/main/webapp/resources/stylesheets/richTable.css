@@ -1,8 +1,16 @@
 .rf-edt-c {
     height: 33px;
-
 }
 
 .rf-edt-c-cnt {
     font-size: 12px !important;
+}
+
+.rf-edt-r-sel {
+    background-color: white;
+    font-weight: normal;
+}
+
+.rf-edt-r-act {
+    font-weight: normal;
 }

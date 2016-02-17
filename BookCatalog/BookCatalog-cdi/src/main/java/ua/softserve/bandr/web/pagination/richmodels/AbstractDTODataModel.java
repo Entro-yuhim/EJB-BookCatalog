@@ -19,14 +19,13 @@ import java.util.Map;
  */
 public abstract class AbstractDTODataModel<U extends Persistable, T extends EntityDTO> extends AbstractLazyDataModel<T> implements Arrangeable {
 
-	private static final Logger LOG = LoggerFactory.getLogger((AbstractDTODataModel.class));
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractDTODataModel.class);
 
 	@Override
 	public List<T> getDataList(int firstRow, int numRows, Map<String, String> filter, Map<String, SortOrder> sorting) {
 		LOG.debug("Getting data list with first row [{}] and size [{}]. Filter [{}] and sorting [{}]", firstRow, numRows, filter, sorting);
 		return getDTOTransformer().getDTOList(getPersistablesList(firstRow, numRows, filter, sorting));
 	}
-
 
 	protected abstract List<U> getPersistablesList(Integer firstRow, Integer numRows, Map<String, String> filter, Map<String, SortOrder> sortingMap);
 

@@ -1,9 +1,10 @@
 package ua.softserve.bandr.ws;
 
-import ua.softserve.bandr.dto.ReviewDTO;
 import ua.softserve.bandr.entity.Review;
 import ua.softserve.bandr.persistence.exceptions.ConstraintCheckException;
+import ua.softserve.bandr.persistence.exceptions.PersistenceException;
 import ua.softserve.bandr.persistence.manager.ReviewManager;
+import ua.softserve.bandr.ws.dto.ReviewDTO;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -43,33 +44,62 @@ public class ReviewService {
 
 	@POST
 	@Path("/")
-	public Response saveReview(@Valid ReviewDTO review) throws ConstraintCheckException {
+	public Response saveReview(@Valid ReviewDTO review) {
 		Review newReview = review.getReviewData();
-		reviewManager.persistWithBookId(newReview, review.getBookId());
+		try {
+			reviewManager.persistWithBookId(newReview, review.getBookId());
+		} catch (PersistenceException e) {
+			Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
 		return Response.ok().build();
 	}
 
 	@POST
 	@Path("/{id:[0-9]+}")
-	public Response updateReview(@Valid Review review, @PathParam("id") Long id) throws ConstraintCheckException {
+	public Response updateReview(@Valid ReviewDTO reviewDTO, @PathParam("id") Long id) {
+		if (reviewDTO.getId() != null || reviewDTO.getBookId() != null) {
+			return Response.status(Response.Status.CONFLICT).build();
+		}
+
+		Review review = reviewDTO.getReviewData();
+		review.setId(id);
+		try {
+			reviewManager.update(review);
+		} catch (PersistenceException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+		return Response.ok(ReviewDTO.fromEntity(review)).build();
+	}
+
+	@POST
+	@Path("/{id:[0-9]+}")
+	public Response updateReview(@Valid Review review, @PathParam("id") Long id) {
 		Review present = reviewManager.getById(id);
 		if (present == null) {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		}
 		review.setId(present.getId());
 		review.setBook(present.getBook());
-		reviewManager.update(review);
+		try {
+			reviewManager.update(review);
+		} catch (PersistenceException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
 		return Response.ok().build();
 	}
 
 	@DELETE
 	@Path("/{id:[0-9]}")
-	public Response removeReview(@PathParam("id") Long id) throws ConstraintCheckException {
+	public Response removeReview(@PathParam("id") Long id) {
 		Review review = reviewManager.getById(id);
 		if (review == null) {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		}
-		reviewManager.delete(review);
+		try {
+			reviewManager.delete(review);
+		} catch (PersistenceException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
 		return Response.status(Response.Status.NO_CONTENT).build();
 	}
 }

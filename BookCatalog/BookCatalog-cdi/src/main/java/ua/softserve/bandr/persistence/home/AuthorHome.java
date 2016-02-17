@@ -9,8 +9,9 @@ import javax.ejb.TransactionAttributeType;
 @Stateless
 public class AuthorHome extends AbstractHome<Author> {
 	@Override
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public void delete(Long id) {
+	@TransactionAttribute(TransactionAttributeType.MANDATORY)
+	public Long delete(Long id) {
 		executeDeleteQuery(Author.DELETE_BY_ID, id);
+		return id;
 	}
 }

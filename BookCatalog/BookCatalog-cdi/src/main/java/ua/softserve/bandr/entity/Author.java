@@ -1,6 +1,5 @@
 package ua.softserve.bandr.entity;
 
-import com.google.common.base.Objects;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.CascadeType;
@@ -14,7 +13,10 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,7 +44,7 @@ import java.util.Set;
 		@NamedQuery(name = Author.GET_COUNT_BY_NAME,
 				query = "SELECT COUNT(a.id) FROM Author a " +
 						"WHERE a.firstName = :firstName AND " +
-						"(a.lastName = :lastName OR a.lastName is null)")
+						"(a.lastName = :lastName OR a.lastName is null)")   // todo case sensitive ?
 
 
 })
@@ -55,11 +57,11 @@ public class Author implements Persistable {
 	public static final String GET_BY_NAME = "Author.getByName";
 	public static final String GET_BY_FULL_NAME = "Author.getByFullName";
 	public static final String GET_RECORD_COUNT = "Author.getCount";
-	private static final long serialVersionUID = -3297680484923478344L;
 	public static final String GET_BY_BOOK = "Author.getByBook";
 	public static final String DELETE_BY_ID = "Author.deleteById";
 	public static final String GET_COUNT_BY_NAME = "Author.getCountByName";
 
+	private static final long serialVersionUID = -3297680484923478344L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_id_generator")
 	@SequenceGenerator(name = "author_id_generator", sequenceName = "author_id_seq", allocationSize = 1)
@@ -68,6 +70,9 @@ public class Author implements Persistable {
 	private String firstName;
 	@Column(name = "last_name")
 	private String lastName;
+	@Column(name = "create_date")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createDate;
 
 	@Formula("(SELECT round(avg(r.rating)) FROM review r " +
 			"JOIN book b ON " +
@@ -116,22 +121,16 @@ public class Author implements Persistable {
 		return rating;
 	}
 
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
 	@Override
 	public String getEntityName() {
 		return "Author";
 	}
-
-//	@Override
-//	public boolean equals(Object o) {
-//		if (this == o) return true;
-//		if (o == null || getClass() != o.getClass()) return false;
-//		Author author = (Author) o;
-//		return Objects.equal(firstName, author.firstName) &&
-//				Objects.equal(lastName, author.lastName);
-//	}
-//
-//	@Override
-//	public int hashCode() {
-//		return Objects.hashCode(firstName, lastName);
-//	}
 }

@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.dto.AuthorDTO;
 import ua.softserve.bandr.persistence.exceptions.ConstraintCheckException;
+import ua.softserve.bandr.persistence.exceptions.PersistenceException;
 import ua.softserve.bandr.persistence.manager.AuthorManager;
 import ua.softserve.bandr.web.controller.ContainsSortableTable;
 import ua.softserve.bandr.web.pagination.AuthorDataModel;
@@ -17,6 +18,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -51,8 +53,8 @@ public class AuthorListController extends ContainsSortableTable {
 		this.authors = authors;
 	}
 
-	public void deleteSelected() throws ConstraintCheckException {
-		LOG.info("asdfasfdas");
+	public void deleteSelected() throws PersistenceException {
+		LOG.info("Deleting selected");
 		authorManager.deleteAllById(Collections2.transform(canBeDeleted, new Function<AuthorDTO, Long>() {
 			@Override
 			public Long apply(AuthorDTO input) {

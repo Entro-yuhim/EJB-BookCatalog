@@ -13,7 +13,8 @@ import javax.ejb.TransactionAttributeType;
 public class ReviewHome extends AbstractHome<Review> {
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public void delete(Long id) {
+	public Long delete(Long id) {
 		executeDeleteQuery(Review.DELETE_BY_ID, id);
+		return id;
 	}
 }

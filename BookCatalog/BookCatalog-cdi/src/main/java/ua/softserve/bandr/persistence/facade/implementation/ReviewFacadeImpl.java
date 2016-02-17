@@ -9,11 +9,14 @@ import ua.softserve.bandr.persistence.facade.ReviewFacade;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import java.util.List;
 import java.util.Map;
 
 @LocalBean
 @Stateless
+@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 public class ReviewFacadeImpl extends AbstractFacade<Review> implements ReviewFacade {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ReviewFacadeImpl.class);

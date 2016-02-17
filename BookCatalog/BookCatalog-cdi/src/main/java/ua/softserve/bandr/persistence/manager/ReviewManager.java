@@ -3,6 +3,7 @@ package ua.softserve.bandr.persistence.manager;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.Validate;
 import ua.softserve.bandr.entity.Review;
+import ua.softserve.bandr.persistence.exceptions.PersistenceException;
 import ua.softserve.bandr.persistence.facade.AbstractFacadeInt;
 import ua.softserve.bandr.persistence.facade.ReviewFacade;
 import ua.softserve.bandr.persistence.home.AbstractHome;
@@ -20,6 +21,7 @@ import java.util.Map;
  * Created by bandr on 20.01.2016.
  */
 @Stateless
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class ReviewManager extends AbstractManager<Review> {
 	@Inject
 	private ReviewHome reviewHome;
@@ -48,12 +50,19 @@ public class ReviewManager extends AbstractManager<Review> {
 		return reviewFacade.getByBookId(bookId);
 	}
 
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public Long persistWithBookId(Review review, Long bookId) {
+	public Review persistWithBookId(Review review, Long bookId) throws PersistenceException {
 		ValidateArgument.notNull(review, "Received null argument(review) in ReviewManager#persistWithBookId");
 		ValidateArgument.notNull(bookId, "Received null argument(bookId) in ReviewManager#persistWithBookId");
 		review.setBook(bookManager.getById(bookId));
 		reviewHome.persist(review);
-		return review.getId();
+		return review;
+	}
+
+	public Review updateWithBookId(Review review, Long bookId) throws PersistenceException {
+		ValidateArgument.notNull(review, "Received null argument(review) in ReviewManager#updateWithBookId");
+		ValidateArgument.notNull(bookId, "Received null argument(bookId) in ReviewManager#updateWithBookId");
+
+		reviewHome.update(review);
+		return review;
 	}
 }

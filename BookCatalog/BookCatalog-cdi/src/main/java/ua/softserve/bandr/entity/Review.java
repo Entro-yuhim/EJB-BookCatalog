@@ -30,8 +30,9 @@ public class Review implements Persistable {
 	public static final String GET_ALL = "Reviews.getAll";
 	public static final String GET_BY_BOOK = "Reviews.getByBook";
 	public static final String GET_RECORD_COUNT = "Reviews.getRecordCount";
-	private static final long serialVersionUID = 4070328724532468249L;
 	public static final String DELETE_BY_ID = "Reviews.deleteById";
+
+	private static final long serialVersionUID = 4070328724532468249L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "review_id_generator")
 	@SequenceGenerator(name = "review_id_generator", sequenceName = "review_id_seq", allocationSize = 1)

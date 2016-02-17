@@ -1,6 +1,6 @@
 package ua.softserve.bandr.ws.client;
 
-import ua.softserve.bandr.dto.ReviewDTO;
+import ua.softserve.bandr.ws.dto.ReviewDTO;
 import ua.softserve.bandr.entity.Review;
 
 import javax.ejb.Stateless;
@@ -16,7 +16,8 @@ import javax.ws.rs.core.Response;
  */
 @Stateless
 public class ReviewClient {
-	private static final String SERVER_TARGET_PATH = "http://localhost:8080/bandr-ejb/webservice";
+	private static final String SERVER_TARGET_PATH = "http://localhost:8080/BookCatalog/webservice";
+
 	public Review getReviewById(Long id) {
 		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target(SERVER_TARGET_PATH + "/review/").path("/{reviewId}");
@@ -29,7 +30,7 @@ public class ReviewClient {
 		WebTarget target = client.target(SERVER_TARGET_PATH + "/review");
 		Response post = target.request().post(Entity.entity(review, MediaType.APPLICATION_JSON));
 		if (post.getStatus() != 200) {
-			throw new WebServiceClientException();
+			throw new WebServiceClientException("Stuff blows up");
 		}
 	}
 }

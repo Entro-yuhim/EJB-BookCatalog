@@ -6,6 +6,8 @@ import ua.softserve.bandr.entity.Author;
  * Created by bandr on 02.02.2016.
  */
 public class AuthorDTO implements EntityDTO {
+	private static final long serialVersionUID = 5135030710117458349L;
+
 	private Long id;
 	private String firstName;
 	private String lastName;
@@ -49,8 +51,6 @@ public class AuthorDTO implements EntityDTO {
 		this.lastName = author.getLastName();
 		this.rating = author.getRating();
 	}
-
-	private static final long serialVersionUID = 5135030710117458349L;
 
 	@Override
 	public Object getKey() {

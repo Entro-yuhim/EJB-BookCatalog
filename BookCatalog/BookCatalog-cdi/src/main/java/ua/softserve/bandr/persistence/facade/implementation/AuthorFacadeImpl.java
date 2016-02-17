@@ -41,7 +41,6 @@ public class AuthorFacadeImpl extends AbstractFacade<Author> implements AuthorFa
 	}
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public Long getRecordCount(Map<String, String> filter) {
 		if (filter == null || filter.isEmpty()) {
 			return executeNamedQueryToCount(Author.GET_RECORD_COUNT);

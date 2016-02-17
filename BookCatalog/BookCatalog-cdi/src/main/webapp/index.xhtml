@@ -29,7 +29,11 @@
                 <p>#{ratingCount.rating} stars</p>
             </rich:column>
             <rich:column style="width: 30%; margin:auto">
-                <p>#{ratingCount.count} books</p>
+                <p>
+                    <h:link outcome="bookPage" title="#{ratingCount.count} books" value="#{ratingCount.count} books">
+                        <f:param name="bookRating" value="#{ratingCount.rating}"/>
+                    </h:link>
+                </p>
             </rich:column>
         </rich:dataTable>
 

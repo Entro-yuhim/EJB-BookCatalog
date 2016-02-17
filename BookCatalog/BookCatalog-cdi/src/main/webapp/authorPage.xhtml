@@ -23,19 +23,20 @@
                     var="record" rows="20"
                     selectionMode="multipleKeyboardFree"
                     selection="#{authorListController.selection}"
+                    onselectionchange="triggerCheckbox()"
                     rowClass="basicRow"
                     styleClass="basicTable" keepSaved="true">
                 <ui:include src="sortableColumn.xhtml">
                     <ui:param name="title" value="ID"/>
                     <ui:param name="bean" value="#{authorListController}"/>
                     <ui:param name="property" value="id"/>
-                    <ui:param name="width" value="40px"/>
+                    <ui:param name="width" value="37px"/>
                 </ui:include>
                 <ui:include src="tableColumn.xhtml">
                     <ui:param name="title" value="First Name"/>
                     <ui:param name="bean" value="#{authorListController}"/>
                     <ui:param name="property" value="firstName"/>
-                    <ui:param name="width" value="250px"/>
+                    <ui:param name="width" value="240px"/>
                 </ui:include>
                 <ui:include src="tableColumn.xhtml">
                     <ui:param name="title" value="Last Name"/>
@@ -47,7 +48,7 @@
                     <ui:param name="title" value="Rating"/>
                     <ui:param name="bean" value="#{authorListController}"/>
                     <ui:param name="property" value="rating"/>
-                    <ui:param name="width" value="230px"/>
+                    <ui:param name="width" value="215px"/>
                 </ui:include>
                 <rich:column width="50px">
                     <f:facet name="header">
@@ -56,6 +57,11 @@
                     <h:button title="Edit" outcome="authorEdit" value="Edit">
                         <f:param name="authorId" value="#{record.id}"/>
                     </h:button>
+                </rich:column>
+                <rich:column width="30px">
+                    <label>
+                        <input type="checkbox" onClick="this.checked=!this.checked"/>
+                    </label>
                 </rich:column>
                 <f:facet name="footer">
                     <rich:dataScroller id="scroller"/>
@@ -79,9 +85,26 @@
                               style="color: inherit">X</h:outputLink>
             </f:facet>
             <p>
-                <ui:include src="authorModification.xhtml">
-                    <ui:param name="authorController" value="#{authorCreateController}"/>
-                </ui:include>
+                <h:form id="authorData">
+                    <rich:graphValidator value="#{authorCreateController}" id="ajaxValidation">
+                        <a4j:commandButton value="Save" action="#{authorCreateController.save}"/>
+                        <rich:messages for="ajaxValidation"/>
+                        <h:panelGrid columns="3">
+                            <h:outputLabel for="firstName" value="First Name"/>
+                            <h:inputText id="firstName" value="#{authorCreateController.author.firstName}" validatorMessage="Please, enter valid first name">
+                                <f:validateRequired/>
+                                <f:validateRegex pattern="([A-Za-z ]+)"/>
+                            </h:inputText>
+                            <rich:message for="firstName" errorClass="invalid"/>
+
+                            <h:outputLabel for="lastName" value="Last Name"/>
+                            <h:inputText id="lastName" value="#{authorCreateController.author.lastName}" validatorMessage="Please enter valid last name">
+                                <f:validateRegex pattern="([A-Za-z ]*)"/>
+                            </h:inputText>
+                            <rich:message for="lastName" errorClass="invalid"/>
+                        </h:panelGrid>
+                    </rich:graphValidator>
+                </h:form>
             </p>
         </rich:popupPanel>
         <a4j:outputPanel id="deleteModalPanel" ajaxRendered="true">
@@ -164,8 +187,11 @@
                 $('tbody[id*=richTable]').find('tr.rf-edt-r-sel').click();
                 return false;
             }
+
+            function triggerCheckbox() {
+                $checkbox = $('.rf-edt-r-act').find('[type=checkbox]');
+                $checkbox.prop('checked', !$checkbox.prop('checked'));
+            }
         </h:outputScript>
-
-
     </ui:define>
 </ui:composition>

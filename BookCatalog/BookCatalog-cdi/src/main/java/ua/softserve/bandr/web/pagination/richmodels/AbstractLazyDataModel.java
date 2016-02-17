@@ -41,7 +41,6 @@ public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> impl
 	public abstract Long getTotalCount(Map<String, String> filter);
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void walk(FacesContext context, DataVisitor visitor, Range range, Object argument) {
 		LOG.debug("Walk");
 		SequenceRange sr = (SequenceRange) range;
@@ -73,7 +72,6 @@ public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> impl
 		/* TODO check how to properly invalidate this cache.
 		* Is it even necessary?
 		* */
-
 		cachedRange = null;
 		cachedRowCount = null;
 		cachedList = Lists.newArrayList();
@@ -181,5 +179,13 @@ public abstract class AbstractLazyDataModel<T> extends ExtendedDataModel<T> impl
 
 	public void setCachedList(List<T> cachedList) {
 		this.cachedList = cachedList;
+	}
+
+	public Map<String, String> getCachedFilter() {
+		return cachedFilter;
+	}
+
+	public void setCachedFilter(Map<String, String> cachedFilter) {
+		this.cachedFilter = cachedFilter;
 	}
 }

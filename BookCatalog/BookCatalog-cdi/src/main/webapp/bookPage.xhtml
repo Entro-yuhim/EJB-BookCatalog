@@ -3,6 +3,10 @@
                 xmlns:rich="http://richfaces.org/rich" xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 template="WEB-INF/templates/default.xhtml">
+    <f:metadata>
+        <f:viewParam name="bookRating" value="#{bookListController.filterValues['rating']}"/>
+        <f:viewAction action="#{bookListController.init}"/>
+    </f:metadata>
     <ui:define name="page-body">
         <h:head>
             <h:outputStylesheet library="stylesheets" name="richTable.css"/>
@@ -21,13 +25,14 @@
                     var="record" rows="20"
                     selectionMode="multipleKeyboardFree"
                     selection="#{bookListController.selection}"
+                    onselectionchange="triggerCheckbox()"
                     styleClass="basicTable" keepSaved="true"
                     rowClass="basicRow">
                 <ui:include src="sortableColumn.xhtml">
                     <ui:param name="title" value="ID"/>
                     <ui:param name="bean" value="#{bookListController}"/>
                     <ui:param name="property" value="id"/>
-                    <ui:param name="width" value="40px"/>
+                    <ui:param name="width" value="30px"/>
                 </ui:include>
                 <ui:include src="tableColumn.xhtml">
                     <ui:param name="title" value="Title"/>
@@ -35,27 +40,32 @@
                     <ui:param name="property" value="title"/>
                     <ui:param name="width" value="225px"/>
                 </ui:include>
-                <ui:include src="tableColumn.xhtml">
+                <ui:include src="authorListColumn.xhtml">
                     <ui:param name="title" value="Authors"/>
                     <ui:param name="bean" value="#{bookListController}"/>
                     <ui:param name="property" value="authorNames"/>
-                    <ui:param name="width" value="200px"/>
+                    <ui:param name="width" value="195px"/>
                 </ui:include>
                 <ui:include src="tableColumn.xhtml">
                     <ui:param name="title" value="Rating"/>
                     <ui:param name="bean" value="#{bookListController}"/>
                     <ui:param name="property" value="rating"/>
-                    <ui:param name="width" value="190px"/>
+                    <ui:param name="width" value="185px"/>
                 </ui:include>
-                <rich:column width="70px">
+                <rich:column width="65px">
                     <h:button title="Edit" outcome="bookEdit" value="Edit">
                         <f:param name="bookId" value="#{record.id}"/>
                     </h:button>
                 </rich:column>
-                <rich:column width="70px">
+                <rich:column width="65px">
                     <h:button title="View" outcome="bookView" value="View">
                         <f:param name="bookId" value="#{record.id}"/>
                     </h:button>
+                </rich:column>
+                <rich:column width="30px">
+                    <label>
+                        <input type="checkbox" onClick="this.checked=!this.checked"/>
+                    </label>
                 </rich:column>
                 <f:facet name="footer">
                     <rich:dataScroller id="scroller"/>
@@ -134,6 +144,11 @@
             function unselectAllRichTable() {
                 $('tbody[id*=richTable]').find('tr.rf-edt-r-sel').click();
                 return false;
+            }
+
+            function triggerCheckbox() {
+                $checkbox = $('.rf-edt-r-act').find('[type=checkbox]');
+                $checkbox.prop('checked', !$checkbox.prop('checked'));
             }
         </h:outputScript>
     </ui:define>

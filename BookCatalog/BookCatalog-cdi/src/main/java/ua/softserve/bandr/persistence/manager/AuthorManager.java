@@ -7,6 +7,7 @@ import ua.softserve.bandr.entity.Author;
 import ua.softserve.bandr.entity.Book;
 import ua.softserve.bandr.persistence.exceptions.ConstraintCheckException;
 import ua.softserve.bandr.persistence.exceptions.InvalidEntityStateException;
+import ua.softserve.bandr.persistence.exceptions.PersistenceException;
 import ua.softserve.bandr.persistence.facade.AbstractFacadeInt;
 import ua.softserve.bandr.persistence.facade.AuthorFacade;
 import ua.softserve.bandr.persistence.home.AbstractHome;
@@ -19,12 +20,15 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by bandr on 20.01.2016.
  */
 @Stateless
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class AuthorManager extends AbstractManager<Author> {
 
 	@Inject
@@ -45,8 +49,7 @@ public class AuthorManager extends AbstractManager<Author> {
 	}
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public Long persist(@Valid Author entity) throws ConstraintCheckException {
+	public Long persist(@Valid Author entity) throws PersistenceException {
 		ValidateArgument.notNull(entity, "Received null argument in AuthorManager#persist");
 		if (authorFacade.authorExists(entity.getFirstName(), entity.getLastName())) {
 			throw new ConstraintCheckException("Author already exists.");
@@ -55,8 +58,7 @@ public class AuthorManager extends AbstractManager<Author> {
 	}
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public Author update(@Valid Author entity) throws ConstraintCheckException {
+	public Author update(@Valid Author entity) throws PersistenceException {
 		ValidateArgument.notNull(entity, "Received null argument in AuthorManager#update");
 		if (entity.getId() == null) {
 			throw new InvalidEntityStateException("Entity with null ID cannot be valid argument for update statement");
@@ -68,16 +70,15 @@ public class AuthorManager extends AbstractManager<Author> {
 		throw new ConstraintCheckException("Author with these firstName and lastName already exist.");
 	}
 
-	private Author updateBooks(Author mergeFrom, Author mergeTo) throws ConstraintCheckException {
+	private Author updateBooks(Author mergeFrom, Author mergeTo) throws PersistenceException {
 		mergeFrom.getBooks().size();
 		Collection<Book> removed = CollectionUtils.removeAll(mergeTo.getBooks(), mergeFrom.getBooks(), new BookEquator());
 		Collection<Book> added = CollectionUtils.removeAll(mergeFrom.getBooks(), mergeTo.getBooks(), new BookEquator());
-		bookManager.removeAuthorFromBooks(mergeFrom, removed);
-		bookManager.addAuthorToBooks(mergeFrom, added);
+		bookManager.removeAuthorFromBooks(mergeFrom, new HashSet<>(removed));
+		bookManager.addAuthorToBooks(mergeFrom, new HashSet<>(added));
 		return mergeTo;
 	}
 
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public Author getByIdWithInitializedCollections(Long id) {
 		ValidateArgument.notNull(id, "Received null argument in AuthorManager#getByIdWithInitializedCollections");
 		Author author = super.getById(id);
@@ -85,14 +86,12 @@ public class AuthorManager extends AbstractManager<Author> {
 		return author;
 	}
 
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public Author getByFullName(String firstName, String lastName) {
 		ValidateArgument.notNull(firstName, "Received null argument[firstName] in AuthorManager#getByFullName");
 		return authorFacade.getByFullName(firstName, lastName);
 	}
 
 	@Override
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void delete(Author author) throws ConstraintCheckException {
 		ValidateArgument.notNull(author, "Received impossible null argument[author] in AuthorManager#delete(Author)");
 		Author authorDB = authorFacade.getById(author.getId());
@@ -102,19 +101,16 @@ public class AuthorManager extends AbstractManager<Author> {
 		authorHome.delete(author.getId());
 	}
 
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public void delete(Long id) throws ConstraintCheckException {
+	public void delete(Long id) throws PersistenceException {
 		ValidateArgument.notNull(id, "Received impossible null[id] argument in AuthorManager#delete(Long)");
 		Author authorDB = authorFacade.getById(id);
 		if (authorDB.getBooks().isEmpty()) {
 			authorHome.delete(authorDB);
 		}
 		throw new ConstraintCheckException("Author still has books.");
-		/* fixme Should do something if validation fails; */
 	}
 
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public void deleteAllById(Collection<Long> idCollection) throws ConstraintCheckException {
+	public void deleteAllById(Collection<Long> idCollection) throws PersistenceException {
 		ValidateArgument.notNull(idCollection, "Received impossible null[idCollection] argument in AuthorManager#deleteAllById(Collection)");
 		for (Long id : idCollection) {
 			delete(id);

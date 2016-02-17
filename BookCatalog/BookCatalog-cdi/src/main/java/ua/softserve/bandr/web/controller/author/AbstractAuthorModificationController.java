@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.entity.Author;
 import ua.softserve.bandr.entity.Book;
+import ua.softserve.bandr.persistence.exceptions.PersistenceException;
 import ua.softserve.bandr.persistence.manager.AuthorManager;
 import ua.softserve.bandr.persistence.manager.BookManager;
 import ua.softserve.bandr.web.pagination.richmodels.AbstractLazyDataModel;
@@ -55,7 +56,7 @@ public abstract class AbstractAuthorModificationController {
 		bookModel = new BookAbstractLazyDataModel(author.getBooks());
 	}
 
-	public abstract void save() throws IOException;
+	public abstract void save() throws IOException, PersistenceException;
 
 	public Author getAuthor() {
 		return author;

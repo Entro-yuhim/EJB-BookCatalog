@@ -20,7 +20,16 @@
                 <a4j:ajax render="richTable@body scroller" event="keyup"/>
             </h:inputText>
         </f:facet>
-        <h:outputText value="#{record[property]}"/>
+        <h:panelGrid columns="1">
+            <ui:repeat value="#{record[property]}" var="var">
+                <h:outputLabel value="#{var.firstName}"/>
+            </ui:repeat>
+        </h:panelGrid>
+        <ui:remove>
+            <h:button title="Edit" outcome="authorEdit" value="Edit">
+                <f:param name="authorId" value="#{record.id}"/>
+            </h:button>
+        </ui:remove>
     </rich:column>
 </ui:composition>
 </html>

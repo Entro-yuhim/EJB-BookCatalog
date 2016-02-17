@@ -3,6 +3,7 @@ package ua.softserve.bandr.web.controller.author;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.persistence.exceptions.ConstraintCheckException;
+import ua.softserve.bandr.persistence.exceptions.PersistenceException;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -24,7 +25,7 @@ public class AuthorCreateController extends AbstractAuthorModificationController
 	}
 
 	@Override
-	public void save() throws IOException {
+	public void save() throws IOException, PersistenceException {
 		try {
 			authorManager.persist(author);
 			FacesContext.getCurrentInstance().getExternalContext().redirect("authorPage.jsf");

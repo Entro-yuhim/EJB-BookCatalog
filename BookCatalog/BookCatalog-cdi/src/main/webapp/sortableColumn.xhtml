@@ -11,7 +11,7 @@
         <f:facet name="header">
             <h:outputLabel value="#{title}"/>
             <h:commandLink action="#{bean.toggleSort}">
-                #{bean.sortOrders[property]}
+                <h:outputLabel value=" #{bean.sortOrders[property]}" rendered="#{bean.sortOrders[property] != null}"/>
                 <a4j:ajax render="richTable"/>
                 <f:setPropertyActionListener target="#{bean.sortProperty}" value="#{property}"/>
             </h:commandLink>

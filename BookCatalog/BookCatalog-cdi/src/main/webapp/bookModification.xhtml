@@ -66,7 +66,8 @@
             <input type="button" value="Unselect All" onclick="unselectAllRichTable()"/>
         </div>
     </h:form>
-    <h:form>
+    <h:form id="bookNameForm">
+        <h:messages/>
         <rich:autocomplete id="bookName"
                            mode="cachedAjax"
                            autocomplete="true"
@@ -83,15 +84,17 @@
                 #{author.lastName}
             </rich:column>
         </rich:autocomplete>
+        <rich:message for="bookName"/>
     </h:form>
     <h:form>
         <h:inputHidden id="selectedBook" value="#{bookEditController.addAuthorData}"/>
         <a4j:commandButton value="Add" render="outputTable" execute="@form" onclick="passSelectToAjax()"
+                           oncomplete="if(#{!facesContext.validationFailed}) clearAuthorInput()"
                            action="#{bookEditController.addAuthor}"/>
     </h:form>
     <h:outputScript>
         function passSelectToAjax() {
-            $('${selectedBook}').val($("[id*=bookNameInput]").val());
+            $('[id*=selectedBook]').val($("[id*=bookNameInput]").val());
         }
 
         function selectAllRichTable() {
@@ -102,6 +105,10 @@
         function unselectAllRichTable() {
             $('tbody[id*=richTable]').find('tr.rf-edt-r-sel').click();
             return false;
+        }
+
+        function clearAuthorInput() {
+            $
         }
     </h:outputScript>
 </ui:composition>

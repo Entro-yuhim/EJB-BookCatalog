@@ -1,11 +1,15 @@
-package ua.softserve.bandr.dto;
+package ua.softserve.bandr.ws.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import ua.softserve.bandr.entity.Review;
 
 /**
  * Created by bandr on 11.02.2016.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ReviewDTO {
 	private Long id;
 	private String username;
@@ -16,12 +20,16 @@ public class ReviewDTO {
 	public ReviewDTO() {
 	}
 
-	public ReviewDTO(Review review) {
+	private ReviewDTO(Review review) {
 		this.id = review.getId();
 		this.username = review.getUsername();
 		this.reviewText = review.getReviewText();
 		this.bookId = review.getBook().getId();
 		this.rating = review.getRating();
+	}
+
+	public static ReviewDTO fromEntity(Review review) {
+		return new ReviewDTO(review);
 	}
 
 	public Long getId() {

@@ -1,10 +1,7 @@
 package ua.softserve.bandr.web.controller.book;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.richfaces.component.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.softserve.bandr.entity.Author;
@@ -13,18 +10,18 @@ import ua.softserve.bandr.persistence.manager.AuthorManager;
 import ua.softserve.bandr.persistence.manager.BookManager;
 import ua.softserve.bandr.web.pagination.richmodels.AbstractLazyDataModel;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
  * Created by bandr on 09.02.2016.
  */
 public abstract class AbstractBookModicicationController {
+	public static final String AUTHOR_NAME_INPUT = "bookNameForm:bookName";
 	@Inject
 	protected BookManager bookManager;
 	@Inject
@@ -50,20 +47,25 @@ public abstract class AbstractBookModicicationController {
 
 	public void addAuthor() {
 		LOG.info("Add books");
-		Author selectedBook = authorManager.getByFullName(getFirstName(addAuthorData), getLastName(addAuthorData));
-		book.getAuthors().add(selectedBook);
-		authorModel = new AuthorAbstractLazyDataModel(book.getAuthors());
+		Author selectedAuthor = authorManager.getByFullName(getFirstName(addAuthorData), getLastName(addAuthorData));
+		if (selectedAuthor == null) {
+			LOG.info("Adding error msg to [{}]", AUTHOR_NAME_INPUT);
+			FacesContext.getCurrentInstance().addMessage(AUTHOR_NAME_INPUT, new FacesMessage("Author not found, please input first and last name of author"));
+		} else {
+			book.getAuthors().add(selectedAuthor);
+			authorModel = new AuthorAbstractLazyDataModel(book.getAuthors());
+		}
 	}
 
 
-	private String getFirstName(String addAuthorData) {
+	private static String getFirstName(String addAuthorData) {
 		if (addAuthorData.split(" ").length < 1) {
 			return "";
 		}
 		return addAuthorData.split(" ")[0];
 	}
 
-	private String getLastName(String addAuthorData) {
+	private static String getLastName(String addAuthorData) {
 		if (addAuthorData.split(" ").length < 2) {
 			return "";
 		}
